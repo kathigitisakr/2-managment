@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Θέματα Εξετάσεων 2024-2025 | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #faf8f5; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 12px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .exam-badge { background: #ed8936; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; display: inline-block; margin-top: 10px; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 12px; margin: 20px 0; overflow: hidden; }
+        .progress { background: linear-gradient(90deg, #1a365d, #4299e1); height: 100%; transition: width 0.3s; border-radius: 10px; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; font-weight: 600; }
+        .stats span { padding: 8px 16px; border-radius: 20px; }
+        .correct-count { background: #c6f6d5; color: #276749; }
+        .wrong-count { background: #fed7d7; color: #c53030; }
+        .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid #1a365d; }
+        .question-number { color: #ed8936; font-weight: 600; margin-bottom: 10px; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; color: #1a365d; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { border-color: #4299e1; background: #ebf8ff; }
+        .option.correct { border-color: #38a169; background: #c6f6d5; }
+        .option.wrong { border-color: #e53e3e; background: #fed7d7; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #c6f6d5; color: #276749; }
+        .feedback.wrong { background: #fed7d7; color: #c53030; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .nav-btn.prev { background: #e2e8f0; color: #4a5568; }
+        .nav-btn.next { background: #1a365d; color: white; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #1a365d, #4299e1); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .score-text { font-size: 2.5rem; font-weight: bold; color: white; }
+        .restart-btn { background: #ed8936; color: white; padding: 15px 40px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; margin-top: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3182ce; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        <header>
+            <h1>📝 Θέματα Εξετάσεων</h1>
+            <p>Ερωτήσεις από εξετάσεις 2024-2025</p>
+            <span class="exam-badge">Πραγματικά θέματα</span>
+        </header>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div class="stats">
+            <span class="correct-count">✓ Σωστές: <span id="correctCount">0</span></span>
+            <span class="wrong-count">✗ Λάθος: <span id="wrongCount">0</span></span>
+        </div>
+        <div id="quizContainer"></div>
+        <div id="resultsContainer" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Σύμφωνα με το μοντέλο Hersey-Blanchard, ποιο στυλ ηγεσίας είναι κατάλληλο για εργαζόμενο με υψηλή ικανότητα αλλά χαμηλή δέσμευση;",
+                options: ["S1 - Καθοδήγηση (Telling)", "S2 - Πώληση (Selling)", "S3 - Συμμετοχή (Participating)", "S4 - Ανάθεση (Delegating)"],
+                correct: 2,
+                explanation: "M3 (ικανός αλλά απρόθυμος) χρειάζεται S3 - Συμμετοχή: υποστήριξη και ενθάρρυνση, όχι καθοδήγηση."
+            },
+            {
+                question: "Ο κύκλος PDCA αποτελείται από τα βήματα:",
+                options: ["Plan-Do-Check-Act", "Prepare-Design-Control-Assess", "Problem-Define-Create-Apply", "Plan-Develop-Create-Analyze"],
+                correct: 0,
+                explanation: "PDCA = Plan (Σχεδίασε), Do (Κάνε), Check (Έλεγξε), Act (Δράσε)."
+            },
+            {
+                question: "Η θεωρία των προσδοκιών του Vroom βασίζεται στη φόρμουλα:",
+                options: ["Μ = Α + Ι + Ε", "Μ = Π × Σ × Σθ", "Μ = Ε / Α", "Μ = Σ + Π + Α"],
+                correct: 1,
+                explanation: "Μ = Προσδοκία × Συντελεστικότητα × Σθένος"
+            },
+            {
+                question: "Στην πυραμίδα του Maslow, οι ανάγκες αυτοπραγμάτωσης βρίσκονται:",
+                options: ["Στη βάση", "Στο δεύτερο επίπεδο", "Στο τρίτο επίπεδο", "Στην κορυφή"],
+                correct: 3,
+                explanation: "Η αυτοπραγμάτωση είναι η υψηλότερη ανάγκη στην κορυφή της πυραμίδας."
+            },
+            {
+                question: "Οι παράγοντες υγιεινής του Herzberg:",
+                options: ["Παρακινούν τους εργαζόμενους", "Αποτρέπουν τη δυσαρέσκεια αλλά δεν παρακινούν", "Είναι εσωτερικοί παράγοντες", "Αφορούν την αυτοπραγμάτωση"],
+                correct: 1,
+                explanation: "Οι παράγοντες υγιεινής (μισθός, συνθήκες) αποτρέπουν δυσαρέσκεια αλλά δεν δημιουργούν κίνητρα."
+            },
+            {
+                question: "Το Balanced Scorecard περιλαμβάνει:",
+                options: ["2 διαστάσεις", "3 διαστάσεις", "4 διαστάσεις", "5 διαστάσεις"],
+                correct: 2,
+                explanation: "4 διαστάσεις: Οικονομική, Πελατών, Εσωτερικών διαδικασιών, Μάθησης & Ανάπτυξης."
+            },
+            {
+                question: "Η ανάλυση SWOT περιλαμβάνει:",
+                options: ["Μόνο εσωτερικούς παράγοντες", "Μόνο εξωτερικούς παράγοντες", "Εσωτερικούς και εξωτερικούς παράγοντες", "Μόνο οικονομικούς δείκτες"],
+                correct: 2,
+                explanation: "S,W = εσωτερικοί, O,T = εξωτερικοί παράγοντες."
+            },
+            {
+                question: "Στο μοντέλο του Fiedler, ο ηγέτης υψηλού LPC είναι:",
+                options: ["Προσανατολισμένος στο έργο", "Προσανατολισμένος στις σχέσεις", "Αυταρχικός", "Απαθής"],
+                correct: 1,
+                explanation: "Υψηλό LPC = προσανατολισμός στις σχέσεις. Χαμηλό LPC = προσανατολισμός στο έργο."
+            },
+            {
+                question: "Η θεωρία Path-Goal του House περιλαμβάνει:",
+                options: ["2 στυλ ηγεσίας", "3 στυλ ηγεσίας", "4 στυλ ηγεσίας", "5 στυλ ηγεσίας"],
+                correct: 2,
+                explanation: "4 στυλ: Κατευθυντική, Υποστηρικτική, Συμμετοχική, Προσανατολισμένη στο επίτευγμα."
+            },
+            {
+                question: "Οι μη-προγραμματισμένες αποφάσεις αφορούν:",
+                options: ["Ρουτίνας προβλήματα", "Νέα, μοναδικά προβλήματα", "Καθημερινές λειτουργίες", "Τυποποιημένες διαδικασίες"],
+                correct: 1,
+                explanation: "Μη-προγραμματισμένες = νέες, μοναδικές καταστάσεις που απαιτούν κρίση."
+            },
+            {
+                question: "Ο προληπτικός έλεγχος (feedforward) εφαρμόζεται:",
+                options: ["Μετά την ολοκλήρωση", "Κατά τη διάρκεια", "Πριν την έναρξη", "Σε περιπτώσεις κρίσης μόνο"],
+                correct: 2,
+                explanation: "Feedforward = ΠΡΙΝ, Concurrent = ΚΑΤΑ, Feedback = ΜΕΤΑ."
+            },
+            {
+                question: "Η μέθοδος Delphi χρησιμοποιεί:",
+                options: ["Πρόσωπο με πρόσωπο συζήτηση", "Ανώνυμη γνωμοδότηση ειδικών", "Ψηφοφορία πλειοψηφίας", "Αυτόματη λήψη αποφάσεων"],
+                correct: 1,
+                explanation: "Delphi: ανώνυμοι γύροι ερωτηματολογίων σε ειδικούς μέχρι σύγκλιση."
+            },
+            {
+                question: "Το MBO (Management by Objectives) εισήγαγε ο:",
+                options: ["Maslow", "Herzberg", "Peter Drucker", "Fayol"],
+                correct: 2,
+                explanation: "Ο Peter Drucker εισήγαγε το MBO το 1954."
+            },
+            {
+                question: "Στο Blake-Mouton Grid, το στυλ 9,9 σημαίνει:",
+                options: ["Χαμηλό ενδιαφέρον για ανθρώπους και παραγωγή", "Υψηλό ενδιαφέρον και για ανθρώπους και για παραγωγή", "Υψηλό μόνο για παραγωγή", "Υψηλό μόνο για ανθρώπους"],
+                correct: 1,
+                explanation: "9,9 (Team Management) = μέγιστο ενδιαφέρον και για παραγωγή και για ανθρώπους."
+            },
+            {
+                question: "Η θεωρία ERG του Alderfer περιλαμβάνει:",
+                options: ["2 επίπεδα αναγκών", "3 επίπεδα αναγκών", "5 επίπεδα αναγκών", "7 επίπεδα αναγκών"],
+                correct: 1,
+                explanation: "ERG: Existence (Ύπαρξη), Relatedness (Σχέσεις), Growth (Ανάπτυξη)."
+            }
+        ];
+
+        let currentQuestion = 0, correctAnswers = 0, wrongAnswers = 0;
+        let answered = new Array(questions.length).fill(false);
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Ερώτηση ${currentQuestion + 1} από ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">${q.options.map((opt, i) => `<div class="option" data-index="${i}">${opt}</div>`).join('')}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Προηγούμενη</button>
+                        <button class="nav-btn next" onclick="nextQuestion()">${currentQuestion === questions.length - 1 ? 'Αποτελέσματα' : 'Επόμενη →'}</button>
+                    </div>
+                </div>`;
+            document.querySelectorAll('.option').forEach(opt => opt.addEventListener('click', () => selectOption(parseInt(opt.dataset.index))));
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function selectOption(index) {
+            if (answered[currentQuestion]) return;
+            const q = questions[currentQuestion];
+            answered[currentQuestion] = true;
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === index && index !== q.correct) opt.classList.add('wrong');
+            });
+            const feedback = document.getElementById('feedback');
+            if (index === q.correct) { correctAnswers++; feedback.className = 'feedback show correct'; feedback.innerHTML = '✓ Σωστό! ' + q.explanation; }
+            else { wrongAnswers++; feedback.className = 'feedback show wrong'; feedback.innerHTML = '✗ Λάθος. ' + q.explanation; }
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('wrongCount').textContent = wrongAnswers;
+        }
+
+        function nextQuestion() { if (currentQuestion < questions.length - 1) { currentQuestion++; renderQuestion(); } else showResults(); }
+        function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; renderQuestion(); } }
+
+        function showResults() {
+            const pct = Math.round((correctAnswers / questions.length) * 100);
+            let msg = pct >= 90 ? '🏆 Άριστη προετοιμασία!' : pct >= 70 ? '👍 Καλή πορεία!' : pct >= 50 ? '📚 Χρειάζεσαι περισσότερη μελέτη.' : '💪 Επανάληψη θεωρίας!';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="score-circle"><span class="score-text">${pct}%</span></div>
+                <h2>${msg}</h2><p>Σωστές: ${correctAnswers}/${questions.length}</p>
+                <button class="restart-btn" onclick="location.reload()">🔄 Ξανά</button><br><br>
+                <a href="../index.html" class="back-link">← Αρχική</a>`;
+        }
+        renderQuestion();
+    </script>
+</body>
+</html>

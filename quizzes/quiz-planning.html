@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Προγραμματισμού | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #faf8f5; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #276749 0%, #38a169 100%); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 12px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 12px; margin: 20px 0; overflow: hidden; }
+        .progress { background: linear-gradient(90deg, #38a169, #68d391); height: 100%; transition: width 0.3s; border-radius: 10px; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; font-weight: 600; }
+        .stats span { padding: 8px 16px; border-radius: 20px; }
+        .correct-count { background: #c6f6d5; color: #276749; }
+        .wrong-count { background: #fed7d7; color: #c53030; }
+        .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .question-number { color: #38a169; font-weight: 600; margin-bottom: 10px; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; color: #1a365d; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { border-color: #38a169; background: #f0fff4; }
+        .option.selected { border-color: #3182ce; background: #ebf8ff; }
+        .option.correct { border-color: #38a169; background: #c6f6d5; }
+        .option.wrong { border-color: #e53e3e; background: #fed7d7; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #c6f6d5; color: #276749; }
+        .feedback.wrong { background: #fed7d7; color: #c53030; }
+        .theory-toggle { background: #ebf8ff; color: #3182ce; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: 600; }
+        .theory-box { background: #f0f9ff; border-left: 4px solid #3182ce; padding: 20px; margin-top: 15px; border-radius: 0 8px 8px 0; display: none; }
+        .theory-box.show { display: block; }
+        .theory-box h4 { color: #1a365d; margin-bottom: 10px; }
+        .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .keyword { background: #fbd38d; color: #744210; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; }
+        .sos-badge { background: #e53e3e; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 8px; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .nav-btn.prev { background: #e2e8f0; color: #4a5568; }
+        .nav-btn.next { background: #38a169; color: white; }
+        .nav-btn:hover { transform: translateY(-2px); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #38a169, #68d391); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .score-text { font-size: 2.5rem; font-weight: bold; color: white; }
+        .results h2 { color: #1a365d; margin-bottom: 15px; }
+        .restart-btn { background: #1a365d; color: white; padding: 15px 40px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; margin-top: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3182ce; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        
+        <header>
+            <h1>📋 Quiz Προγραμματισμού</h1>
+            <p>SWOT, PEST, MBO & Στρατηγικός Σχεδιασμός</p>
+        </header>
+
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div class="stats">
+            <span class="correct-count">✓ Σωστές: <span id="correctCount">0</span></span>
+            <span class="wrong-count">✗ Λάθος: <span id="wrongCount">0</span></span>
+        </div>
+        <div id="quizContainer"></div>
+        <div id="resultsContainer" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Στην ανάλυση SWOT, τα Strengths και Weaknesses αφορούν:",
+                options: ["Το εξωτερικό περιβάλλον", "Το εσωτερικό περιβάλλον του οργανισμού", "Τον ανταγωνισμό", "Τους πελάτες"],
+                correct: 1,
+                explanation: "S και W = εσωτερικά, O και T = εξωτερικά.",
+                theory: { title: "Ανάλυση SWOT", sos: false, content: "Strengths (Δυνάμεις) και Weaknesses (Αδυναμίες) είναι εσωτερικοί παράγοντες. Opportunities (Ευκαιρίες) και Threats (Απειλές) είναι εξωτερικοί.", keywords: ["SWOT", "Εσωτερικό", "Εξωτερικό"] }
+            },
+            {
+                question: "Τι σημαίνει το ακρωνύμιο PEST στην ανάλυση μάκρο-περιβάλλοντος;",
+                options: ["People, Economy, Society, Technology", "Political, Economic, Social, Technological", "Planning, Execution, Strategy, Tactics", "Performance, Efficiency, Standards, Targets"],
+                correct: 1,
+                explanation: "PEST: Political, Economic, Social, Technological factors.",
+                theory: { title: "Ανάλυση PEST/PESTEL", sos: false, content: "Πολιτικοί, Οικονομικοί, Κοινωνικοί, Τεχνολογικοί παράγοντες. PESTEL προσθέτει Environmental και Legal.", keywords: ["PEST", "PESTEL", "Μάκρο-περιβάλλον"] }
+            },
+            {
+                question: "Ποια είναι η σωστή σειρά των βημάτων του Προγραμματισμού;",
+                options: ["Στόχοι → Ανάλυση → Εναλλακτικές → Επιλογή → Εφαρμογή → Έλεγχος", "Ανάλυση → Εναλλακτικές → Στόχοι → Έλεγχος → Εφαρμογή", "Έλεγχος → Στόχοι → Ανάλυση → Εφαρμογή", "Εφαρμογή → Στόχοι → Έλεγχος → Ανάλυση"],
+                correct: 0,
+                explanation: "Καθορισμός στόχων → Ανάλυση κατάστασης → Εναλλακτικές → Επιλογή → Εφαρμογή → Έλεγχος",
+                theory: { title: "Βήματα Προγραμματισμού", sos: false, content: "6 βήματα: 1) Καθορισμός στόχων, 2) Ανάλυση τρέχουσας κατάστασης, 3) Ανάπτυξη εναλλακτικών, 4) Επιλογή, 5) Εφαρμογή, 6) Έλεγχος αποτελεσμάτων.", keywords: ["Βήματα", "Διαδικασία", "Σχεδιασμός"] }
+            },
+            {
+                question: "Το MBO (Management by Objectives) αναπτύχθηκε από:",
+                options: ["Maslow", "Herzberg", "Peter Drucker", "Fayol"],
+                correct: 2,
+                explanation: "Ο Peter Drucker εισήγαγε το MBO το 1954.",
+                theory: { title: "Διοίκηση με Στόχους (MBO)", sos: false, content: "Κοινός καθορισμός στόχων μεταξύ διοίκησης και εργαζομένων. Οι στόχοι πρέπει να είναι SMART.", keywords: ["MBO", "Drucker", "SMART", "Στόχοι"] }
+            },
+            {
+                question: "Τι σημαίνει το ακρωνύμιο SMART για τους στόχους;",
+                options: ["Simple, Measured, Achievable, Real, Timely", "Specific, Measurable, Achievable, Relevant, Time-bound", "Strategic, Managed, Acceptable, Realistic, Targeted", "Standard, Meaningful, Accurate, Reasonable, Tested"],
+                correct: 1,
+                explanation: "SMART: Specific, Measurable, Achievable, Relevant, Time-bound.",
+                theory: { title: "SMART Στόχοι", sos: false, content: "Specific (Συγκεκριμένοι), Measurable (Μετρήσιμοι), Achievable (Εφικτοί), Relevant (Σχετικοί), Time-bound (Χρονικά οριοθετημένοι).", keywords: ["SMART", "Στοχοθεσία", "MBO"] }
+            },
+            {
+                question: "Το Benchmarking είναι:",
+                options: ["Η τιμωρία εργαζομένων", "Η σύγκριση με τις καλύτερες πρακτικές άλλων οργανισμών", "Η αξιολόγηση μαθητών", "Ο προγραμματισμός προϋπολογισμού"],
+                correct: 1,
+                explanation: "Benchmarking = σύγκριση και υιοθέτηση βέλτιστων πρακτικών.",
+                theory: { title: "Benchmarking", sos: false, content: "Συστηματική σύγκριση διαδικασιών και επιδόσεων με κορυφαίους οργανισμούς. Στόχος η βελτίωση μέσω μάθησης από τους καλύτερους.", keywords: ["Benchmarking", "Βέλτιστες πρακτικές", "Σύγκριση"] }
+            },
+            {
+                question: "Στον στρατηγικό σχεδιασμό, το 'όραμα' (vision) αναφέρεται σε:",
+                options: ["Τι κάνει ο οργανισμός σήμερα", "Πού θέλει να φτάσει ο οργανισμός στο μέλλον", "Τα ετήσια κέρδη", "Τον αριθμό εργαζομένων"],
+                correct: 1,
+                explanation: "Το όραμα είναι η μελλοντική επιθυμητή κατάσταση του οργανισμού.",
+                theory: { title: "Όραμα vs Αποστολή", sos: false, content: "Όραμα: που θέλουμε να είμαστε (μέλλον). Αποστολή: γιατί υπάρχουμε, τι κάνουμε (παρόν).", keywords: ["Όραμα", "Αποστολή", "Vision", "Mission"] }
+            },
+            {
+                question: "Ποιο είναι εξωτερικό στοιχείο στην ανάλυση SWOT;",
+                options: ["Εξειδικευμένο προσωπικό", "Παλιός εξοπλισμός", "Νέα εκπαιδευτική νομοθεσία", "Οργανωτική κουλτούρα"],
+                correct: 2,
+                explanation: "Η νομοθεσία είναι εξωτερικός παράγοντας (Opportunity ή Threat).",
+                theory: { title: "SWOT - Εξωτερικοί Παράγοντες", sos: false, content: "Εξωτερικοί: νομοθεσία, οικονομία, ανταγωνισμός, τεχνολογία, δημογραφία, κοινωνικές αλλαγές.", keywords: ["Opportunities", "Threats", "Εξωτερικό περιβάλλον"] }
+            },
+            {
+                question: "Στην εκπαίδευση, ένας SMART στόχος θα ήταν:",
+                options: ["Να γίνουμε καλύτερο σχολείο", "Να βελτιωθεί η επίδοση", "Αύξηση του ποσοστού προαγωγής κατά 5% μέχρι τον Ιούνιο", "Να είμαστε πιο αποτελεσματικοί"],
+                correct: 2,
+                explanation: "Ο τρίτος είναι συγκεκριμένος, μετρήσιμος και χρονικά οριοθετημένος.",
+                theory: { title: "SMART στην Εκπαίδευση", sos: false, content: "Παράδειγμα: Μείωση διαρροής μαθητών κατά 10% μέχρι το τέλος του σχολικού έτους.", keywords: ["Εκπαιδευτικοί στόχοι", "SMART", "Μετρήσιμοι"] }
+            },
+            {
+                question: "Ο επιχειρησιακός προγραμματισμός (operational planning) αφορά:",
+                options: ["Μακροπρόθεσμους στρατηγικούς στόχους 5-10 ετών", "Βραχυπρόθεσμες καθημερινές λειτουργίες", "Μόνο οικονομικά θέματα", "Μόνο προσλήψεις"],
+                correct: 1,
+                explanation: "Επιχειρησιακός = καθημερινές λειτουργίες, Στρατηγικός = μακροπρόθεσμα.",
+                theory: { title: "Επίπεδα Προγραμματισμού", sos: false, content: "Στρατηγικός (5+ έτη), Τακτικός (1-3 έτη), Επιχειρησιακός (ημερήσιος/εβδομαδιαίος).", keywords: ["Στρατηγικός", "Τακτικός", "Επιχειρησιακός"] }
+            },
+            {
+                question: "Η ανάλυση 'gap analysis' εξετάζει:",
+                options: ["Τα κενά στον προϋπολογισμό", "Τη διαφορά μεταξύ τρέχουσας και επιθυμητής κατάστασης", "Τις απουσίες προσωπικού", "Τα κενά στο ωρολόγιο πρόγραμμα"],
+                correct: 1,
+                explanation: "Gap analysis: Πού είμαστε vs Πού θέλουμε να είμαστε.",
+                theory: { title: "Gap Analysis", sos: false, content: "Εργαλείο που βοηθά να εντοπίσουμε τι χρειάζεται για να φτάσουμε από την τρέχουσα στην επιθυμητή κατάσταση.", keywords: ["Gap analysis", "Χάσμα", "Στρατηγικός σχεδιασμός"] }
+            },
+            {
+                question: "Το 'σενάριο σχεδιασμού' (scenario planning) χρησιμοποιείται για:",
+                options: ["Γράψιμο θεατρικών έργων", "Προετοιμασία για διαφορετικά πιθανά μέλλοντα", "Σύνταξη προϋπολογισμού", "Αξιολόγηση εργαζομένων"],
+                correct: 1,
+                explanation: "Scenario planning: ετοιμασία για πολλαπλά πιθανά σενάρια μέλλοντος.",
+                theory: { title: "Scenario Planning", sos: false, content: "Ανάπτυξη πολλαπλών σεναρίων για το μέλλον (αισιόδοξο, απαισιόδοξο, ρεαλιστικό) και σχεδιασμός ανάλογων στρατηγικών.", keywords: ["Σενάρια", "Αβεβαιότητα", "Μέλλον"] }
+            }
+        ];
+
+        let currentQuestion = 0, correctAnswers = 0, wrongAnswers = 0;
+        let answered = new Array(questions.length).fill(false);
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Ερώτηση ${currentQuestion + 1} από ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">${q.options.map((opt, i) => `<div class="option" data-index="${i}">${opt}</div>`).join('')}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="theory-toggle" onclick="document.getElementById('theoryBox').classList.toggle('show')">📚 Δες τη Θεωρία</button>
+                    <div class="theory-box" id="theoryBox">
+                        <h4>${q.theory.title} ${q.theory.sos ? '<span class="sos-badge">SOS</span>' : ''}</h4>
+                        <p>${q.theory.content}</p>
+                        <div class="keywords">${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}</div>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Προηγούμενη</button>
+                        <button class="nav-btn next" onclick="nextQuestion()">${currentQuestion === questions.length - 1 ? 'Αποτελέσματα' : 'Επόμενη →'}</button>
+                    </div>
+                </div>`;
+            document.querySelectorAll('.option').forEach(opt => opt.addEventListener('click', () => selectOption(parseInt(opt.dataset.index))));
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function selectOption(index) {
+            if (answered[currentQuestion]) return;
+            const q = questions[currentQuestion];
+            answered[currentQuestion] = true;
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === index && index !== q.correct) opt.classList.add('wrong');
+            });
+            const feedback = document.getElementById('feedback');
+            if (index === q.correct) { correctAnswers++; feedback.className = 'feedback show correct'; feedback.innerHTML = '✓ Σωστό! ' + q.explanation; }
+            else { wrongAnswers++; feedback.className = 'feedback show wrong'; feedback.innerHTML = '✗ Λάθος. ' + q.explanation; }
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('wrongCount').textContent = wrongAnswers;
+        }
+
+        function nextQuestion() { if (currentQuestion < questions.length - 1) { currentQuestion++; renderQuestion(); } else showResults(); }
+        function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; renderQuestion(); } }
+
+        function showResults() {
+            const pct = Math.round((correctAnswers / questions.length) * 100);
+            let msg = pct >= 90 ? '🏆 Εξαιρετικά!' : pct >= 70 ? '👍 Πολύ καλά!' : pct >= 50 ? '📚 Χρειάζεσαι επανάληψη.' : '💪 Διάβασε ξανά!';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="score-circle"><span class="score-text">${pct}%</span></div>
+                <h2>${msg}</h2><p>Σωστές: ${correctAnswers}/${questions.length}</p>
+                <button class="restart-btn" onclick="location.reload()">🔄 Ξανά</button><br><br>
+                <a href="../index.html" class="back-link">← Αρχική</a>`;
+        }
+        renderQuestion();
+    </script>
+</body>
+</html>

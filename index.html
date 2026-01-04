@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Μάνατζμεντ Εκπαίδευσης - MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+        }
+
+        header .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Quick Nav */
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: -2rem auto 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .quick-nav a {
+            background: white;
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-nav a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 2.5rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .card h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .card .tag {
+            display: inline-block;
+            background: var(--bg-paper);
+            color: var(--text-muted);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card .tag.sos {
+            background: #fed7d7;
+            color: #c53030;
+            font-weight: 600;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .card-link:hover {
+            gap: 0.8rem;
+        }
+
+        /* Quiz Cards - Special Style */
+        .quiz-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+        }
+
+        .quiz-card::before {
+            background: linear-gradient(90deg, var(--accent), #f6ad55);
+        }
+
+        .quiz-card h3 {
+            color: white;
+        }
+
+        .quiz-card p {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .quiz-card .card-link {
+            color: var(--accent-light);
+        }
+
+        .quiz-card .tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* Management Functions Grid */
+        .functions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .functions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .functions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .function-box {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .function-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .function-box .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .function-box h4 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .function-box p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .function-box.planning { border-top: 4px solid #3182ce; }
+        .function-box.organizing { border-top: 4px solid #38a169; }
+        .function-box.leading { border-top: 4px solid #d69e2e; }
+        .function-box.controlling { border-top: 4px solid #e53e3e; }
+
+        /* PDF Links Section */
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .pdf-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--danger);
+        }
+
+        .pdf-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .pdf-link .pdf-icon {
+            font-size: 1.5rem;
+        }
+
+        .pdf-link span {
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: var(--accent-light);
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .mb-2 { margin-bottom: 2rem; }
+
+        /* Print Styles */
+        @media print {
+            header { padding: 1rem; }
+            .quick-nav { display: none; }
+            .card:hover { transform: none; }
+            .function-box:hover { transform: none; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .container { padding: 1rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📚 Μάνατζμεντ Εκπαίδευσης</h1>
+        <p class="subtitle">Πανεπιστήμιο Πατρών • MST352 • Μεταπτυχιακό Διοίκησης Εκπαίδευσης</p>
+        <span class="badge">🎯 Οδηγός Μελέτης & Εξετάσεων 2025</span>
+    </header>
+
+    <div class="container">
+        <!-- Quick Navigation -->
+        <nav class="quick-nav">
+            <a href="#quizzes">📝 Κουίζ</a>
+            <a href="#theories">📖 Θεωρίες</a>
+            <a href="#functions">🔄 4 Λειτουργίες</a>
+            <a href="#pdfs">📄 Διαφάνειες</a>
+            <a href="cheatsheets/cheatsheet.html">📋 Σκονάκια</a>
+            <a href="resources.html">🔗 Πρόσθετο Υλικό</a>
+            <a href="my-links.html">⭐ Οι Σύνδεσμοί μου</a>
+        </nav>
+
+        <!-- Management Functions Overview -->
+        <h2 class="section-title" id="functions">
+            <span class="icon">🔄</span>
+            Οι 4 Λειτουργίες της Διοίκησης
+        </h2>
+
+        <div class="functions-grid">
+            <a href="#planning-theories" class="function-box planning">
+                <div class="icon">📋</div>
+                <h4>Προγραμματισμός</h4>
+                <p>Planning</p>
+            </a>
+            <a href="#organizing-theories" class="function-box organizing">
+                <div class="icon">🏗️</div>
+                <h4>Οργάνωση</h4>
+                <p>Organizing</p>
+            </a>
+            <a href="#leading-theories" class="function-box leading">
+                <div class="icon">👥</div>
+                <h4>Ηγεσία</h4>
+                <p>Leading</p>
+            </a>
+            <a href="#controlling-theories" class="function-box controlling">
+                <div class="icon">📊</div>
+                <h4>Έλεγχος</h4>
+                <p>Controlling</p>
+            </a>
+        </div>
+
+        <!-- Quizzes Section -->
+        <h2 class="section-title" id="quizzes">
+            <span class="icon">📝</span>
+            Διαδραστικά Κουίζ Αυτοαξιολόγησης
+        </h2>
+
+        <div class="cards-grid">
+            <div class="card quiz-card">
+                <h3>🎯 Κουίζ Ηγεσίας</h3>
+                <p>20 ερωτήσεις για τις θεωρίες ηγεσίας: Hersey-Blanchard, Fiedler, House κ.ά.</p>
+                <div>
+                    <span class="tag sos">SOS: Hersey-Blanchard</span>
+                </div>
+                <a href="quizzes/quiz-leadership.html" class="card-link">Ξεκίνα το Quiz →</a>
+            </div>
+
+            <div class="card quiz-card">
+                <h3>💪 Κουίζ Παρακίνησης</h3>
+                <p>12 ερωτήσεις για Maslow, Herzberg, Vroom, Adams και άλλες θεωρίες.</p>
+                <div>
+                    <span class="tag sos">SOS: Vroom</span>
+                </div>
+                <a href="quizzes/quiz-motivation.html" class="card-link">Ξεκίνα το Quiz →</a>
+            </div>
+
+            <div class="card quiz-card">
+                <h3>📋 Κουίζ Προγραμματισμού</h3>
+                <p>20 ερωτήσεις για SWOT, MBO, Benchmarking και στρατηγικό σχεδιασμό.</p>
+                <div>
+                    <span class="tag">Planning</span>
+                </div>
+                <a href="quizzes/quiz-planning.html" class="card-link">Ξεκίνα το Quiz →</a>
+            </div>
+
+            <div class="card quiz-card">
+                <h3>📊 Κουίζ Ελέγχου</h3>
+                <p>20 ερωτήσεις για PDCA, BSC, είδη και βήματα ελέγχου.</p>
+                <div>
+                    <span class="tag">Control</span>
+                </div>
+                <a href="quizzes/quiz-control.html" class="card-link">Ξεκίνα το Quiz →</a>
+            </div>
+
+            <div class="card quiz-card">
+                <h3>🤔 Κουίζ Λήψης Αποφάσεων</h3>
+                <p>Ερωτήσεις για διαδικασίες και τεχνικές λήψης αποφάσεων.</p>
+                <div>
+                    <span class="tag">Decision Making</span>
+                </div>
+                <a href="quizzes/quiz-decisions.html" class="card-link">Ξεκίνα το Quiz →</a>
+            </div>
+
+            <div class="card quiz-card">
+                <h3>📚 Θέματα Εξετάσεων 2024-2025</h3>
+                <p>24 ερωτήσεις πολλαπλών επιλογών από τα επίσημα θέματα.</p>
+                <div>
+                    <span class="tag sos">Εξετάσεις</span>
+                </div>
+                <a href="quizzes/quiz-exams.html" class="card-link">Ξεκίνα το Quiz →</a>
+            </div>
+
+            <div class="card quiz-card">
+                <h3>🔮 Πιθανά Θέματα 2025</h3>
+                <p>10 θέματα ανάπτυξης με υποδειγματικές απαντήσεις.</p>
+                <div>
+                    <span class="tag sos">Προετοιμασία</span>
+                </div>
+                <a href="quizzes/quiz-predicted.html" class="card-link">Εξάσκηση →</a>
+            </div>
+        </div>
+
+        <!-- Theories Section -->
+        <h2 class="section-title" id="theories">
+            <span class="icon">📖</span>
+            Θεωρίες ανά Κατηγορία
+        </h2>
+
+        <!-- Παρακίνηση -->
+        <h3 id="motivation-theories" style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.3rem;">
+            💪 Θεωρίες Παρακίνησης (Motivation)
+        </h3>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Θεωρία Maslow</h3>
+                <p>Πυραμίδα Ιεράρχησης Αναγκών</p>
+                <div>
+                    <span class="tag sos">SOS</span>
+                    <span class="tag">Content Theory</span>
+                </div>
+                <a href="theories/maslow.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Θεωρία Herzberg</h3>
+                <p>Δύο Παραγόντων (Κίνητρα & Υγιεινή)</p>
+                <div>
+                    <span class="tag">Content Theory</span>
+                </div>
+                <a href="theories/herzberg.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Θεωρία Vroom</h3>
+                <p>Θεωρία Προσδοκιών (Π×Σ×Σθ)</p>
+                <div>
+                    <span class="tag sos">SOS</span>
+                    <span class="tag">Process Theory</span>
+                </div>
+                <a href="theories/vroom.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Θεωρία Adams</h3>
+                <p>Θεωρία Δικαιοσύνης (Equity)</p>
+                <div>
+                    <span class="tag">Process Theory</span>
+                </div>
+                <a href="theories/adams.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Θεωρία ERG (Alderfer)</h3>
+                <p>Ύπαρξη, Συσχέτιση, Ανάπτυξη</p>
+                <div>
+                    <span class="tag">Content Theory</span>
+                </div>
+                <a href="theories/erg.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Θεωρία McClelland</h3>
+                <p>Ανάγκες Επίτευξης, Ισχύος, Συσχέτισης</p>
+                <div>
+                    <span class="tag">Content Theory</span>
+                </div>
+                <a href="theories/mcclelland.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Θεωρία Skinner</h3>
+                <p>Θεωρία Ενίσχυσης (Reinforcement)</p>
+                <div>
+                    <span class="tag">Behavioral</span>
+                </div>
+                <a href="theories/skinner.html" class="card-link">Διάβασε →</a>
+            </div>
+        </div>
+
+        <!-- Ηγεσία -->
+        <h3 id="leading-theories" style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.3rem;">
+            👥 Θεωρίες Ηγεσίας (Leadership)
+        </h3>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Hersey-Blanchard</h3>
+                <p>Μοντέλο Ηγεσίας Καταστάσεων</p>
+                <div>
+                    <span class="tag sos">SOS - ΣΗΜΑΝΤΙΚΟ!</span>
+                </div>
+                <a href="theories/hersey-blanchard.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>House Path-Goal</h3>
+                <p>Θεωρία Μονοπατιού-Στόχου</p>
+                <div>
+                    <span class="tag">Contingency</span>
+                </div>
+                <a href="theories/house-path-goal.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Fiedler</h3>
+                <p>Μοντέλο Ενδεχομένων (LPC)</p>
+                <div>
+                    <span class="tag">Contingency</span>
+                </div>
+                <a href="theories/fiedler.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Blake & Mouton</h3>
+                <p>Πλέγμα Ηγεσίας (9×9 Grid)</p>
+                <div>
+                    <span class="tag">Behavioral</span>
+                </div>
+                <a href="theories/blake-mouton.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Vroom-Jago</h3>
+                <p>Μοντέλο Συμμετοχής στη Λήψη Αποφάσεων</p>
+                <div>
+                    <span class="tag">Decision Making</span>
+                </div>
+                <a href="theories/vroom-jago.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Likert Systems</h3>
+                <p>4 Συστήματα Διοίκησης</p>
+                <div>
+                    <span class="tag">Behavioral</span>
+                </div>
+                <a href="theories/likert.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Μετασχηματιστική Ηγεσία</h3>
+                <p>Transformational vs Transactional</p>
+                <div>
+                    <span class="tag">Modern</span>
+                </div>
+                <a href="theories/transformational.html" class="card-link">Διάβασε →</a>
+            </div>
+        </div>
+
+        <!-- Προγραμματισμός -->
+        <h3 id="planning-theories" style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.3rem;">
+            📋 Προγραμματισμός (Planning)
+        </h3>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Ανάλυση SWOT</h3>
+                <p>Δυνάμεις, Αδυναμίες, Ευκαιρίες, Απειλές</p>
+                <div>
+                    <span class="tag">Strategic</span>
+                </div>
+                <a href="theories/swot.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Ανάλυση PEST</h3>
+                <p>Political, Economic, Social, Technological</p>
+                <div>
+                    <span class="tag">Environmental</span>
+                </div>
+                <a href="theories/pest.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>MBO (Drucker)</h3>
+                <p>Διοίκηση με Στόχους</p>
+                <div>
+                    <span class="tag">Goal Setting</span>
+                </div>
+                <a href="theories/mbo.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Benchmarking</h3>
+                <p>Συγκριτική Αξιολόγηση</p>
+                <div>
+                    <span class="tag">Best Practices</span>
+                </div>
+                <a href="theories/benchmarking.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Βήματα Προγραμματισμού</h3>
+                <p>6 Βήματα διαδικασίας σχεδιασμού</p>
+                <div>
+                    <span class="tag">Process</span>
+                </div>
+                <a href="theories/planning-steps.html" class="card-link">Διάβασε →</a>
+            </div>
+        </div>
+
+        <!-- Έλεγχος -->
+        <h3 id="controlling-theories" style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.3rem;">
+            📊 Έλεγχος (Controlling)
+        </h3>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Κύκλος PDCA (Deming)</h3>
+                <p>Plan-Do-Check-Act</p>
+                <div>
+                    <span class="tag sos">SOS</span>
+                    <span class="tag">Quality</span>
+                </div>
+                <a href="theories/pdca.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Balanced Scorecard</h3>
+                <p>Ισορροπημένη Κάρτα Επιδόσεων</p>
+                <div>
+                    <span class="tag">Performance</span>
+                </div>
+                <a href="theories/bsc.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Είδη Ελέγχου</h3>
+                <p>Πρόδρασης, Παράλληλης, Ανάδρασης</p>
+                <div>
+                    <span class="tag">Types</span>
+                </div>
+                <a href="theories/control-types.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Βήματα Ελέγχου</h3>
+                <p>4 Βήματα διαδικασίας ελέγχου</p>
+                <div>
+                    <span class="tag">Process</span>
+                </div>
+                <a href="theories/control-steps.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>ΔΟΠ (TQM)</h3>
+                <p>Διοίκηση Ολικής Ποιότητας</p>
+                <div>
+                    <span class="tag">Quality</span>
+                </div>
+                <a href="theories/tqm.html" class="card-link">Διάβασε →</a>
+            </div>
+        </div>
+
+        <!-- Λήψη Αποφάσεων -->
+        <h3 id="decision-theories" style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.3rem;">
+            🤔 Λήψη Αποφάσεων (Decision Making)
+        </h3>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Βήματα Λήψης Αποφάσεων</h3>
+                <p>5-6 Βήματα ορθολογικής διαδικασίας</p>
+                <div>
+                    <span class="tag">Process</span>
+                </div>
+                <a href="theories/decision-steps.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Τύποι Αποφάσεων</h3>
+                <p>Προγραμματισμένες vs Μη προγραμματισμένες</p>
+                <div>
+                    <span class="tag">Types</span>
+                </div>
+                <a href="theories/decision-types.html" class="card-link">Διάβασε →</a>
+            </div>
+
+            <div class="card">
+                <h3>Ομαδικές Τεχνικές</h3>
+                <p>Brainstorming, Delphi, NGT</p>
+                <div>
+                    <span class="tag">Group</span>
+                </div>
+                <a href="theories/group-decisions.html" class="card-link">Διάβασε →</a>
+            </div>
+        </div>
+
+        <!-- PDFs Section -->
+        <h2 class="section-title" id="pdfs">
+            <span class="icon">📄</span>
+            Διαφάνειες Μαθήματος (PDFs)
+        </h2>
+
+        <div class="pdf-grid">
+            <a href="pdfs/1_Εισαγωγή.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>1. Εισαγωγή</span>
+            </a>
+            <a href="pdfs/2α_Παρακίνηση.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>2α. Παρακίνηση</span>
+            </a>
+            <a href="pdfs/2β_Παρακίνηση_εκπαιδευτικών.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>2β. Παρακίνηση Εκπαιδευτικών</span>
+            </a>
+            <a href="pdfs/3α_Διαδικασίες_Ελέγχου.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>3α. Διαδικασίες Ελέγχου</span>
+            </a>
+            <a href="pdfs/3β_Εφαρμογή_Ελέγχου.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>3β. Εφαρμογή Ελέγχου</span>
+            </a>
+            <a href="pdfs/4_Λήψη_αποφάσεων.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>4. Λήψη Αποφάσεων</span>
+            </a>
+            <a href="pdfs/ΔΕ_6_Ηγεσία.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>ΔΕ 6. Ηγεσία</span>
+            </a>
+            <a href="pdfs/ΔΕ_9_ΔΟΠ.pdf" class="pdf-link">
+                <span class="pdf-icon">📕</span>
+                <span>ΔΕ 9. ΔΟΠ</span>
+            </a>
+            <a href="pdfs/MANEDU_1.pdf" class="pdf-link">
+                <span class="pdf-icon">📗</span>
+                <span>MANEDU 1</span>
+            </a>
+            <a href="pdfs/MANEDU_2.pdf" class="pdf-link">
+                <span class="pdf-icon">📗</span>
+                <span>MANEDU 2</span>
+            </a>
+            <a href="pdfs/MANEDU_4.pdf" class="pdf-link">
+                <span class="pdf-icon">📗</span>
+                <span>MANEDU 4</span>
+            </a>
+            <a href="pdfs/MANEDU_6.pdf" class="pdf-link">
+                <span class="pdf-icon">📗</span>
+                <span>MANEDU 6</span>
+            </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="text-center" style="margin-top: 3rem;">
+            <h3 style="color: var(--primary); margin-bottom: 1rem;">🔗 Χρήσιμοι Σύνδεσμοι</h3>
+            <a href="https://eclass.upatras.gr/courses/MST352/" target="_blank" class="quick-nav" style="display: inline-flex; margin: 0;">
+                🎓 e-Class MST352
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">
+            Δημιουργήθηκε για προσωπική μελέτη • Ιανουάριος 2025
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Σκονάκια - Μάνατζμεντ Εκπαίδευσης | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --accent: #ed8936;
+            --bg: #ffffff;
+            --text: #1a202c;
+            --muted: #4a5568;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* Screen only navigation */
+        .screen-nav {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .screen-nav a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+
+        .print-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        /* Cheat Sheet Container */
+        .cheatsheet {
+            max-width: 210mm;
+            margin: 1rem auto;
+            padding: 10mm;
+            background: white;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5mm;
+            margin-bottom: 5mm;
+        }
+
+        .page-header h1 {
+            font-size: 16pt;
+            color: var(--primary);
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5mm;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4mm;
+        }
+
+        /* Section Box */
+        .box {
+            border: 1px solid var(--border);
+            border-radius: 3mm;
+            padding: 3mm;
+            break-inside: avoid;
+        }
+
+        .box h3 {
+            font-size: 10pt;
+            color: var(--primary);
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 1mm;
+            margin-bottom: 2mm;
+        }
+
+        .box.sos {
+            border-color: #e53e3e;
+            background: #fff5f5;
+        }
+
+        .box.sos h3 {
+            color: #c53030;
+        }
+
+        /* Compact Lists */
+        .compact-list {
+            font-size: 9pt;
+        }
+
+        .compact-list li {
+            margin-left: 3mm;
+            margin-bottom: 1mm;
+        }
+
+        /* Mini Tables */
+        .mini-table {
+            width: 100%;
+            font-size: 8pt;
+            border-collapse: collapse;
+        }
+
+        .mini-table th, .mini-table td {
+            border: 1px solid var(--border);
+            padding: 1mm 2mm;
+            text-align: left;
+        }
+
+        .mini-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Keywords */
+        .keyword {
+            display: inline-block;
+            background: #fbd38d;
+            padding: 0.5mm 2mm;
+            border-radius: 2mm;
+            font-size: 8pt;
+            margin: 0.5mm;
+        }
+
+        /* Formula Box */
+        .formula {
+            background: #ebf8ff;
+            border-left: 2mm solid #3182ce;
+            padding: 2mm 3mm;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9pt;
+            margin: 2mm 0;
+        }
+
+        /* Page Break */
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            text-align: center;
+            font-size: 12pt;
+            font-weight: 700;
+            color: var(--primary);
+            background: #f7fafc;
+            padding: 2mm;
+            margin: 3mm 0;
+            border-radius: 2mm;
+        }
+
+        /* Print Styles */
+        @media print {
+            .screen-nav { display: none; }
+            body { font-size: 9pt; }
+            .cheatsheet { margin: 0; padding: 5mm; }
+            @page { 
+                size: A4; 
+                margin: 10mm;
+            }
+        }
+
+        /* Quick Reference Highlight */
+        .highlight {
+            background: #faf089;
+            padding: 0 2mm;
+        }
+
+        .small-note {
+            font-size: 7pt;
+            color: var(--muted);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Screen Navigation -->
+    <div class="screen-nav">
+        <a href="../index.html">← Αρχική</a>
+        <span>📋 Σκονάκια Μελέτης</span>
+        <button class="print-btn" onclick="window.print()">🖨️ Εκτύπωση</button>
+    </div>
+
+    <div class="cheatsheet">
+        <!-- ΣΕΛΙΔΑ 1: ΠΑΡΑΚΙΝΗΣΗ & ΗΓΕΣΙΑ -->
+        <div class="page-header">
+            <h1>📚 ΜΑΝΑΤΖΜΕΝΤ ΕΚΠΑΙΔΕΥΣΗΣ - ΣΚΟΝΑΚΙ</h1>
+            <p>MST352 • Πανεπιστήμιο Πατρών • Σελίδα 1/2</p>
+        </div>
+
+        <div class="section-divider">💪 ΘΕΩΡΙΕΣ ΠΑΡΑΚΙΝΗΣΗΣ</div>
+
+        <div class="grid-2">
+            <!-- MASLOW -->
+            <div class="box sos">
+                <h3>⚠️ MASLOW - Πυραμίδα Αναγκών</h3>
+                <p style="font-size: 8pt;">5 επίπεδα, από κάτω προς τα πάνω:</p>
+                <ol class="compact-list">
+                    <li><strong>Φυσιολογικές</strong> - τροφή, στέγη, μισθός</li>
+                    <li><strong>Ασφάλειας</strong> - σταθερή εργασία, συμβόλαιο</li>
+                    <li><strong>Κοινωνικές</strong> - σχέσεις, ανήκειν σε ομάδα</li>
+                    <li><strong>Εκτίμησης</strong> - αναγνώριση, κύρος</li>
+                    <li><strong>Αυτοπραγμάτωσης</strong> - ανάπτυξη, δημιουργικότητα</li>
+                </ol>
+                <p class="small-note">🎯 Κάτω→Πάνω: Δεν προχωράς αν δεν ικανοποιηθεί η προηγούμενη</p>
+            </div>
+
+            <!-- HERZBERG -->
+            <div class="box">
+                <h3>HERZBERG - Δύο Παράγοντες</h3>
+                <table class="mini-table">
+                    <tr>
+                        <th>Κίνητρα (ικανοποίηση)</th>
+                        <th>Υγιεινή (δυσαρέσκεια)</th>
+                    </tr>
+                    <tr>
+                        <td>Επίτευγμα, Αναγνώριση</td>
+                        <td>Μισθός, Συνθήκες</td>
+                    </tr>
+                    <tr>
+                        <td>Ευθύνη, Προαγωγή</td>
+                        <td>Πολιτική, Επίβλεψη</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάπτυξη, Αυτονομία</td>
+                        <td>Σχέσεις, Ασφάλεια</td>
+                    </tr>
+                </table>
+                <p class="small-note">⚡ Υγιεινή: Αποτρέπουν δυσαρέσκεια, ΔΕΝ δημιουργούν κίνητρα</p>
+            </div>
+
+            <!-- VROOM -->
+            <div class="box sos">
+                <h3>⚠️ VROOM - Θεωρία Προσδοκιών</h3>
+                <div class="formula">
+                    <strong>Παρακίνηση = Π × Σ × Σθ</strong>
+                </div>
+                <ul class="compact-list">
+                    <li><strong>Π (Προσδοκία)</strong> = Προσπάθεια → Απόδοση</li>
+                    <li><strong>Σ (Συνδρομή)</strong> = Απόδοση → Ανταμοιβή</li>
+                    <li><strong>Σθ (Σθένος)</strong> = Αξία ανταμοιβής</li>
+                </ul>
+                <p class="small-note">🎯 Αν ΟΠΟΙΟΣΔΗΠΟΤΕ = 0, τότε Παρακίνηση = 0!</p>
+            </div>
+
+            <!-- ERG & McClelland -->
+            <div class="box">
+                <h3>ERG (Alderfer) & McCLELLAND</h3>
+                <p><strong>ERG:</strong></p>
+                <ul class="compact-list">
+                    <li>E (Existence) = Φυσιολ. + Ασφάλεια</li>
+                    <li>R (Relatedness) = Κοινωνικές</li>
+                    <li>G (Growth) = Εκτίμηση + Αυτοπραγμ.</li>
+                </ul>
+                <p style="margin-top: 2mm;"><strong>McClelland:</strong></p>
+                <span class="keyword">nAch Επίτευξη</span>
+                <span class="keyword">nPow Ισχύς</span>
+                <span class="keyword">nAff Συσχέτιση</span>
+            </div>
+        </div>
+
+        <div class="section-divider">👥 ΘΕΩΡΙΕΣ ΗΓΕΣΙΑΣ</div>
+
+        <div class="grid-2">
+            <!-- HERSEY-BLANCHARD -->
+            <div class="box sos">
+                <h3>⚠️ HERSEY-BLANCHARD - 4 Στυλ</h3>
+                <table class="mini-table">
+                    <tr>
+                        <th>Στυλ</th>
+                        <th>Εργ/Σχ</th>
+                        <th>Ετοιμότητα</th>
+                    </tr>
+                    <tr>
+                        <td>S1 Καθοδηγητικό</td>
+                        <td>↑/↓</td>
+                        <td>M1 Ανίκανοι-Απρόθυμοι</td>
+                    </tr>
+                    <tr>
+                        <td>S2 Πειστικό</td>
+                        <td>↑/↑</td>
+                        <td>M2 Ανίκανοι-Πρόθυμοι</td>
+                    </tr>
+                    <tr>
+                        <td>S3 Συμμετοχικό</td>
+                        <td>↓/↑</td>
+                        <td>M3 Ικανοί-Απρόθυμοι</td>
+                    </tr>
+                    <tr>
+                        <td>S4 Εξουσιοδοτικό</td>
+                        <td>↓/↓</td>
+                        <td>M4 Ικανοί-Πρόθυμοι</td>
+                    </tr>
+                </table>
+                <p class="small-note">🎯 Ετοιμότητα = Ικανότητα + Προθυμία + Αυτοπεποίθηση</p>
+            </div>
+
+            <!-- HOUSE PATH-GOAL -->
+            <div class="box">
+                <h3>HOUSE - Μονοπάτι-Στόχος</h3>
+                <ul class="compact-list">
+                    <li><strong>Αυταρχική</strong> - Σαφείς προσδοκίες, κανόνες</li>
+                    <li><strong>Υποστηρικτική</strong> - Φιλική, ενδιαφέρεται</li>
+                    <li><strong>Συμμετοχική</strong> - Ζητά γνώμη</li>
+                    <li><strong>Προσανατ. στο αποτέλεσμα</strong> - Υψηλοί στόχοι</li>
+                </ul>
+                <p class="small-note">Ο ηγέτης "καθαρίζει το μονοπάτι" προς τον στόχο</p>
+            </div>
+
+            <!-- FIEDLER -->
+            <div class="box">
+                <h3>FIEDLER - Μοντέλο Ενδεχομένων</h3>
+                <p><strong>LPC (Least Preferred Coworker):</strong></p>
+                <ul class="compact-list">
+                    <li>Υψηλό LPC → Προσανατ. στις ΣΧΕΣΕΙΣ</li>
+                    <li>Χαμηλό LPC → Προσανατ. στην ΕΡΓΑΣΙΑ</li>
+                </ul>
+                <p><strong>Παράγοντες κατάστασης:</strong></p>
+                <span class="keyword">Σχέσεις ηγέτη-μέλους</span>
+                <span class="keyword">Δομή εργασίας</span>
+                <span class="keyword">Ισχύς θέσης</span>
+            </div>
+
+            <!-- BLAKE & MOUTON -->
+            <div class="box">
+                <h3>BLAKE-MOUTON - Πλέγμα 9×9</h3>
+                <table class="mini-table">
+                    <tr>
+                        <th>Θέση</th>
+                        <th>Στυλ</th>
+                    </tr>
+                    <tr><td>1,1</td><td>Αδιάφορος/Φτωχός</td></tr>
+                    <tr><td>1,9</td><td>Λέσχης (Country Club)</td></tr>
+                    <tr><td>9,1</td><td>Εξουσίας (Task Master)</td></tr>
+                    <tr><td>5,5</td><td>Μέσου Δρόμου</td></tr>
+                    <tr><td class="highlight">9,9</td><td class="highlight">Ομαδικός (ΙΔΑΝΙΚΟ)</td></tr>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- End Page 1 -->
+
+    <div class="page-break"></div>
+
+    <div class="cheatsheet">
+        <!-- ΣΕΛΙΔΑ 2: ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ, ΕΛΕΓΧΟΣ, ΑΠΟΦΑΣΕΙΣ -->
+        <div class="page-header">
+            <h1>📚 ΜΑΝΑΤΖΜΕΝΤ ΕΚΠΑΙΔΕΥΣΗΣ - ΣΚΟΝΑΚΙ</h1>
+            <p>MST352 • Πανεπιστήμιο Πατρών • Σελίδα 2/2</p>
+        </div>
+
+        <div class="section-divider">📋 ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ</div>
+
+        <div class="grid-2">
+            <!-- SWOT -->
+            <div class="box">
+                <h3>SWOT Analysis</h3>
+                <table class="mini-table">
+                    <tr>
+                        <th></th>
+                        <th>Θετικά</th>
+                        <th>Αρνητικά</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Εσωτ.</strong></td>
+                        <td>S-Δυνάμεις</td>
+                        <td>W-Αδυναμίες</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Εξωτ.</strong></td>
+                        <td>O-Ευκαιρίες</td>
+                        <td>T-Απειλές</td>
+                    </tr>
+                </table>
+                <p class="small-note">S+W = Εσωτερικοί | O+T = Εξωτερικοί</p>
+            </div>
+
+            <!-- PEST -->
+            <div class="box">
+                <h3>PEST/PESTEL Analysis</h3>
+                <ul class="compact-list">
+                    <li><strong>P</strong>olitical - Πολιτικοί</li>
+                    <li><strong>E</strong>conomic - Οικονομικοί</li>
+                    <li><strong>S</strong>ocial - Κοινωνικοί</li>
+                    <li><strong>T</strong>echnological - Τεχνολογικοί</li>
+                    <li><strong>E</strong>nvironmental - Περιβαλλοντικοί</li>
+                    <li><strong>L</strong>egal - Νομικοί</li>
+                </ul>
+                <p class="small-note">Ανάλυση ΕΞΩΤΕΡΙΚΟΥ περιβάλλοντος</p>
+            </div>
+
+            <!-- MBO -->
+            <div class="box">
+                <h3>MBO (Drucker) - Διοίκηση με Στόχους</h3>
+                <ol class="compact-list">
+                    <li>Καθορισμός στόχων με συμμετοχή</li>
+                    <li>Ανάπτυξη σχεδίων δράσης</li>
+                    <li>Περιοδική ανασκόπηση</li>
+                    <li>Αξιολόγηση απόδοσης</li>
+                </ol>
+                <p><strong>SMART Στόχοι:</strong></p>
+                <span class="keyword">Specific</span>
+                <span class="keyword">Measurable</span>
+                <span class="keyword">Achievable</span>
+                <span class="keyword">Relevant</span>
+                <span class="keyword">Time-bound</span>
+            </div>
+
+            <!-- Βήματα Προγραμματισμού -->
+            <div class="box">
+                <h3>6 Βήματα Προγραμματισμού</h3>
+                <ol class="compact-list">
+                    <li>Ορισμός στόχων</li>
+                    <li>Ανάλυση κατάστασης</li>
+                    <li>Ανάπτυξη εναλλακτικών</li>
+                    <li>Αξιολόγηση εναλλακτικών</li>
+                    <li>Επιλογή καλύτερης</li>
+                    <li>Υλοποίηση & παρακολούθηση</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="section-divider">📊 ΕΛΕΓΧΟΣ</div>
+
+        <div class="grid-2">
+            <!-- PDCA -->
+            <div class="box sos">
+                <h3>⚠️ PDCA - Κύκλος Deming</h3>
+                <table class="mini-table">
+                    <tr>
+                        <th>Βήμα</th>
+                        <th>Περιγραφή</th>
+                    </tr>
+                    <tr><td><strong>P</strong>lan</td><td>Σχεδιασμός βελτίωσης</td></tr>
+                    <tr><td><strong>D</strong>o</td><td>Υλοποίηση (πιλοτικά)</td></tr>
+                    <tr><td><strong>C</strong>heck</td><td>Έλεγχος αποτελεσμάτων</td></tr>
+                    <tr><td><strong>A</strong>ct</td><td>Καθιέρωση ή διόρθωση</td></tr>
+                </table>
+                <p class="small-note">🔄 Συνεχής κύκλος βελτίωσης (ΔΟΠ/TQM)</p>
+            </div>
+
+            <!-- Είδη Ελέγχου -->
+            <div class="box">
+                <h3>3 Είδη Ελέγχου (χρονικά)</h3>
+                <table class="mini-table">
+                    <tr>
+                        <th>Είδος</th>
+                        <th>Πότε</th>
+                        <th>Παράδειγμα</th>
+                    </tr>
+                    <tr>
+                        <td>Πρόδρασης</td>
+                        <td>Πριν</td>
+                        <td>Προληπτικός</td>
+                    </tr>
+                    <tr>
+                        <td>Παράλληλος</td>
+                        <td>Κατά τη διάρκεια</td>
+                        <td>Επίβλεψη</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάδρασης</td>
+                        <td>Μετά</td>
+                        <td>Αξιολόγηση</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- BSC -->
+            <div class="box">
+                <h3>Balanced Scorecard - 4 Διαστάσεις</h3>
+                <ol class="compact-list">
+                    <li><strong>Οικονομική</strong> - ROI, κέρδη</li>
+                    <li><strong>Πελατών</strong> - Ικανοποίηση, διατήρηση</li>
+                    <li><strong>Εσωτ. Διαδικασιών</strong> - Ποιότητα, αποδοτικότητα</li>
+                    <li><strong>Μάθησης/Ανάπτυξης</strong> - Επιμόρφωση, καινοτομία</li>
+                </ol>
+                <p class="small-note">Ισορροπημένη αξιολόγηση απόδοσης</p>
+            </div>
+
+            <!-- 4 Βήματα Ελέγχου -->
+            <div class="box">
+                <h3>4 Βήματα Διαδικασίας Ελέγχου</h3>
+                <ol class="compact-list">
+                    <li><strong>Καθορισμός</strong> προτύπων/στόχων</li>
+                    <li><strong>Μέτρηση</strong> πραγματικής απόδοσης</li>
+                    <li><strong>Σύγκριση</strong> απόδοσης με πρότυπα</li>
+                    <li><strong>Διορθωτική</strong> ενέργεια (αν χρειάζεται)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="section-divider">🤔 ΛΗΨΗ ΑΠΟΦΑΣΕΩΝ</div>
+
+        <div class="grid-3">
+            <!-- Βήματα -->
+            <div class="box">
+                <h3>5 Βήματα Απόφασης</h3>
+                <ol class="compact-list">
+                    <li>Αναγνώριση προβλήματος</li>
+                    <li>Ανάλυση πληροφοριών</li>
+                    <li>Ανάπτυξη εναλλακτικών</li>
+                    <li>Αξιολόγηση & επιλογή</li>
+                    <li>Υλοποίηση & αξιολόγηση</li>
+                </ol>
+            </div>
+
+            <!-- Τύποι Αποφάσεων -->
+            <div class="box">
+                <h3>Τύποι Αποφάσεων</h3>
+                <ul class="compact-list">
+                    <li><strong>Προγραμματισμένες</strong><br>Ρουτίνα, κανόνες</li>
+                    <li><strong>Μη προγραμματισμένες</strong><br>Νέες, μοναδικές</li>
+                </ul>
+            </div>
+
+            <!-- Τεχνικές -->
+            <div class="box">
+                <h3>Ομαδικές Τεχνικές</h3>
+                <ul class="compact-list">
+                    <li><strong>Brainstorming</strong> - Ιδέες χωρίς κριτική</li>
+                    <li><strong>Delphi</strong> - Ανώνυμα, εξ αποστάσεως</li>
+                    <li><strong>NGT</strong> - Ψηφοφορία ιδεών</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-divider">📌 ΓΡΗΓΟΡΗ ΑΝΑΦΟΡΑ</div>
+
+        <div class="grid-2">
+            <div class="box">
+                <h3>4 Λειτουργίες Διοίκησης</h3>
+                <table class="mini-table">
+                    <tr><td>1</td><td><strong>Προγραμματισμός</strong> (Planning)</td></tr>
+                    <tr><td>2</td><td><strong>Οργάνωση</strong> (Organizing)</td></tr>
+                    <tr><td>3</td><td><strong>Ηγεσία</strong> (Leading)</td></tr>
+                    <tr><td>4</td><td><strong>Έλεγχος</strong> (Controlling)</td></tr>
+                </table>
+            </div>
+
+            <div class="box">
+                <h3>Αποδοτικότητα vs Αποτελεσματικότητα</h3>
+                <ul class="compact-list">
+                    <li><strong>Αποδοτικότητα</strong> = "Κάνω σωστά τα πράγματα"<br><em>(ελαχιστοποίηση πόρων)</em></li>
+                    <li><strong>Αποτελεσματικότητα</strong> = "Κάνω τα σωστά πράγματα"<br><em>(επίτευξη στόχων)</em></li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 5mm; font-size: 8pt; color: var(--muted);">
+            📚 MST352 • Καλή επιτυχία στις εξετάσεις! 🎓
+        </div>
+
+    </div><!-- End Page 2 -->
+
+</body>
+</html>

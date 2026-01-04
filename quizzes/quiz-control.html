@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Ελέγχου | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #faf8f5; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #9b2c2c 0%, #c53030 100%); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 12px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 12px; margin: 20px 0; overflow: hidden; }
+        .progress { background: linear-gradient(90deg, #c53030, #fc8181); height: 100%; transition: width 0.3s; border-radius: 10px; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; font-weight: 600; }
+        .stats span { padding: 8px 16px; border-radius: 20px; }
+        .correct-count { background: #c6f6d5; color: #276749; }
+        .wrong-count { background: #fed7d7; color: #c53030; }
+        .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .question-number { color: #c53030; font-weight: 600; margin-bottom: 10px; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; color: #1a365d; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { border-color: #c53030; background: #fff5f5; }
+        .option.correct { border-color: #38a169; background: #c6f6d5; }
+        .option.wrong { border-color: #e53e3e; background: #fed7d7; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #c6f6d5; color: #276749; }
+        .feedback.wrong { background: #fed7d7; color: #c53030; }
+        .theory-toggle { background: #ebf8ff; color: #3182ce; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: 600; }
+        .theory-box { background: #f0f9ff; border-left: 4px solid #3182ce; padding: 20px; margin-top: 15px; border-radius: 0 8px 8px 0; display: none; }
+        .theory-box.show { display: block; }
+        .theory-box h4 { color: #1a365d; margin-bottom: 10px; }
+        .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .keyword { background: #fbd38d; color: #744210; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; }
+        .sos-badge { background: #e53e3e; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .nav-btn.prev { background: #e2e8f0; color: #4a5568; }
+        .nav-btn.next { background: #c53030; color: white; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #c53030, #fc8181); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .score-text { font-size: 2.5rem; font-weight: bold; color: white; }
+        .restart-btn { background: #1a365d; color: white; padding: 15px 40px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; margin-top: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3182ce; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        <header>
+            <h1>🎯 Quiz Ελέγχου</h1>
+            <p>PDCA, BSC, Τύποι & Διαδικασίες Ελέγχου</p>
+        </header>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div class="stats">
+            <span class="correct-count">✓ Σωστές: <span id="correctCount">0</span></span>
+            <span class="wrong-count">✗ Λάθος: <span id="wrongCount">0</span></span>
+        </div>
+        <div id="quizContainer"></div>
+        <div id="resultsContainer" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Τι σημαίνει το ακρωνύμιο PDCA;",
+                options: ["Plan, Design, Control, Assess", "Plan, Do, Check, Act", "Prepare, Develop, Create, Apply", "Process, Data, Control, Analysis"],
+                correct: 1,
+                explanation: "PDCA: Plan (Σχεδίασε), Do (Κάνε), Check (Έλεγξε), Act (Δράσε).",
+                theory: { title: "Κύκλος PDCA (Deming)", sos: true, content: "Επαναλαμβανόμενος κύκλος συνεχούς βελτίωσης. Plan: σχεδιασμός. Do: εκτέλεση. Check: έλεγχος αποτελεσμάτων. Act: διορθωτικές ενέργειες.", keywords: ["PDCA", "Deming", "Συνεχής βελτίωση", "Κύκλος"] }
+            },
+            {
+                question: "Ποιος ανέπτυξε τον κύκλο PDCA;",
+                options: ["Peter Drucker", "William Edwards Deming", "Frederick Taylor", "Henri Fayol"],
+                correct: 1,
+                explanation: "Ο Deming διέδωσε τον κύκλο PDCA (αρχικά από τον Shewhart).",
+                theory: { title: "Deming και Ποιότητα", sos: true, content: "Ο Deming θεωρείται πατέρας της Διοίκησης Ολικής Ποιότητας (TQM). Ο κύκλος PDCA είναι θεμελιώδες εργαλείο.", keywords: ["Deming", "TQM", "Ποιότητα"] }
+            },
+            {
+                question: "Ποια είναι τα 4 βήματα της διαδικασίας ελέγχου;",
+                options: ["Στόχοι → Μέτρηση → Σύγκριση → Διόρθωση", "Σχεδιασμός → Εκτέλεση → Αξιολόγηση → Αναφορά", "Παρατήρηση → Καταγραφή → Ανάλυση → Δημοσίευση", "Εντολή → Έλεγχος → Τιμωρία → Επιβράβευση"],
+                correct: 0,
+                explanation: "1) Καθορισμός προτύπων, 2) Μέτρηση απόδοσης, 3) Σύγκριση, 4) Διορθωτικές ενέργειες.",
+                theory: { title: "Διαδικασία Ελέγχου", sos: false, content: "Τέσσερα βήματα: Θέσε πρότυπα → Μέτρησε απόδοση → Σύγκρινε με πρότυπα → Αν υπάρχει απόκλιση, διόρθωσε.", keywords: ["Πρότυπα", "Μέτρηση", "Απόκλιση", "Διόρθωση"] }
+            },
+            {
+                question: "Ο προληπτικός έλεγχος (feedforward control) γίνεται:",
+                options: ["Μετά την ολοκλήρωση της διαδικασίας", "Κατά τη διάρκεια της διαδικασίας", "Πριν την έναρξη της διαδικασίας", "Μόνο σε περιπτώσεις κρίσης"],
+                correct: 2,
+                explanation: "Feedforward = ΠΡΙΝ, Concurrent = ΚΑΤΑ ΤΗ ΔΙΑΡΚΕΙΑ, Feedback = ΜΕΤΑ.",
+                theory: { title: "Τύποι Ελέγχου (χρονικά)", sos: false, content: "Προληπτικός (feedforward): πριν. Ταυτόχρονος (concurrent): κατά τη διάρκεια. Ανατροφοδοτικός (feedback): μετά.", keywords: ["Feedforward", "Concurrent", "Feedback"] }
+            },
+            {
+                question: "Το Balanced Scorecard (BSC) περιλαμβάνει πόσες διαστάσεις;",
+                options: ["2", "3", "4", "5"],
+                correct: 2,
+                explanation: "BSC: Οικονομική, Πελάτες, Εσωτερικές Διαδικασίες, Μάθηση & Ανάπτυξη.",
+                theory: { title: "Balanced Scorecard", sos: false, content: "4 διαστάσεις: 1) Οικονομική, 2) Πελατών, 3) Εσωτερικών διαδικασιών, 4) Μάθησης & Ανάπτυξης. Δημιουργοί: Kaplan & Norton.", keywords: ["BSC", "4 διαστάσεις", "Kaplan", "Norton"] }
+            },
+            {
+                question: "Στο BSC, η διάσταση 'Μάθηση και Ανάπτυξη' αφορά:",
+                options: ["Τα κέρδη της εταιρείας", "Την ικανοποίηση πελατών", "Την ανάπτυξη εργαζομένων και καινοτομία", "Την αποτελεσματικότητα διαδικασιών"],
+                correct: 2,
+                explanation: "Learning & Growth = εκπαίδευση, δεξιότητες, καινοτομία, τεχνολογία.",
+                theory: { title: "BSC - Μάθηση & Ανάπτυξη", sos: false, content: "Εστιάζει στην ικανότητα του οργανισμού για βελτίωση: εκπαίδευση προσωπικού, καινοτομία, οργανωσιακή μάθηση.", keywords: ["Learning", "Growth", "Καινοτομία", "Εκπαίδευση"] }
+            },
+            {
+                question: "Η TQM (Total Quality Management) εστιάζει σε:",
+                options: ["Έλεγχο μόνο στο τέλος της παραγωγής", "Συνεχή βελτίωση της ποιότητας σε όλο τον οργανισμό", "Μείωση προσωπικού", "Αύξηση τιμών"],
+                correct: 1,
+                explanation: "TQM = Ολική ποιότητα, συμμετοχή όλων, συνεχής βελτίωση.",
+                theory: { title: "Διοίκηση Ολικής Ποιότητας (TQM)", sos: false, content: "Φιλοσοφία διοίκησης που εστιάζει στη συνεχή βελτίωση μέσω συμμετοχής όλων. Εστίαση στον πελάτη και στην πρόληψη σφαλμάτων.", keywords: ["TQM", "Ολική ποιότητα", "Συνεχής βελτίωση"] }
+            },
+            {
+                question: "Στο στάδιο 'Act' του PDCA, τι κάνουμε;",
+                options: ["Σχεδιάζουμε το πλάνο", "Εκτελούμε το πλάνο", "Ελέγχουμε τα αποτελέσματα", "Προχωράμε σε διορθωτικές ενέργειες ή τυποποίηση"],
+                correct: 3,
+                explanation: "Act: Αν πέτυχε → τυποποίησε. Αν απέτυχε → διόρθωσε και ξεκίνα νέο κύκλο.",
+                theory: { title: "PDCA - Στάδιο Act", sos: true, content: "Δράση βάσει αποτελεσμάτων του Check. Τυποποίηση επιτυχημένων αλλαγών ή νέος κύκλος PDCA για βελτίωση.", keywords: ["Act", "Τυποποίηση", "Διόρθωση", "Νέος κύκλος"] }
+            },
+            {
+                question: "Ο ταυτόχρονος έλεγχος (concurrent control) στην εκπαίδευση είναι:",
+                options: ["Η τελική εξέταση", "Η επιτήρηση κατά τη διάρκεια του μαθήματος", "Ο σχεδιασμός του αναλυτικού προγράμματος", "Η πρόσληψη εκπαιδευτικών"],
+                correct: 1,
+                explanation: "Concurrent = κατά τη διάρκεια της διαδικασίας, π.χ. παρατήρηση στην τάξη.",
+                theory: { title: "Ταυτόχρονος Έλεγχος στην Εκπαίδευση", sos: false, content: "Παραδείγματα: παρατήρηση διδασκαλίας, επίβλεψη μαθήματος, διαμορφωτική αξιολόγηση.", keywords: ["Concurrent", "Παρατήρηση", "Διαμορφωτική αξιολόγηση"] }
+            },
+            {
+                question: "Ο ανατροφοδοτικός έλεγχος (feedback control) στην εκπαίδευση περιλαμβάνει:",
+                options: ["Τον σχεδιασμό του ωρολογίου προγράμματος", "Την αξιολόγηση μαθητών στο τέλος του τριμήνου", "Την επιλογή διδακτικών βιβλίων", "Την κατανομή μαθητών σε τμήματα"],
+                correct: 1,
+                explanation: "Feedback = μετά την ολοκλήρωση, π.χ. τελικές εξετάσεις, απολογισμός.",
+                theory: { title: "Ανατροφοδοτικός Έλεγχος", sos: false, content: "Αξιολόγηση μετά το πέρας της διαδικασίας. Παρέχει πληροφορίες για μελλοντικές βελτιώσεις.", keywords: ["Feedback", "Τελική αξιολόγηση", "Απολογισμός"] }
+            },
+            {
+                question: "Στο BSC, η διάσταση 'Εσωτερικές Διαδικασίες' εξετάζει:",
+                options: ["Τη χρηματοοικονομική απόδοση", "Την ικανοποίηση πελατών", "Την αποτελεσματικότητα των εσωτερικών λειτουργιών", "Τις δεξιότητες των εργαζομένων"],
+                correct: 2,
+                explanation: "Internal Processes: Πόσο καλά λειτουργούν οι διαδικασίες μας;",
+                theory: { title: "BSC - Εσωτερικές Διαδικασίες", sos: false, content: "Μετρά την αποτελεσματικότητα, ποιότητα και ταχύτητα των εσωτερικών διαδικασιών που δημιουργούν αξία.", keywords: ["Internal processes", "Αποτελεσματικότητα", "Διαδικασίες"] }
+            },
+            {
+                question: "Ποιο είναι το κύριο χαρακτηριστικό του κύκλου PDCA;",
+                options: ["Εφαρμόζεται μόνο μία φορά", "Είναι επαναλαμβανόμενος και συνεχής", "Αφορά μόνο οικονομικά θέματα", "Χρησιμοποιείται μόνο στη βιομηχανία"],
+                correct: 1,
+                explanation: "Ο PDCA είναι κύκλος: μετά το Act, ξεκινάς νέο Plan.",
+                theory: { title: "Συνεχής Βελτίωση", sos: true, content: "Ο PDCA δεν τελειώνει ποτέ. Κάθε κύκλος οδηγεί σε βελτίωση και νέο κύκλο. Βασική αρχή της TQM.", keywords: ["Κύκλος", "Συνεχής", "Kaizen", "Επανάληψη"] }
+            }
+        ];
+
+        let currentQuestion = 0, correctAnswers = 0, wrongAnswers = 0;
+        let answered = new Array(questions.length).fill(false);
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Ερώτηση ${currentQuestion + 1} από ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">${q.options.map((opt, i) => `<div class="option" data-index="${i}">${opt}</div>`).join('')}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="theory-toggle" onclick="document.getElementById('theoryBox').classList.toggle('show')">📚 Δες τη Θεωρία</button>
+                    <div class="theory-box" id="theoryBox">
+                        <h4>${q.theory.title} ${q.theory.sos ? '<span class="sos-badge">SOS</span>' : ''}</h4>
+                        <p>${q.theory.content}</p>
+                        <div class="keywords">${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}</div>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Προηγούμενη</button>
+                        <button class="nav-btn next" onclick="nextQuestion()">${currentQuestion === questions.length - 1 ? 'Αποτελέσματα' : 'Επόμενη →'}</button>
+                    </div>
+                </div>`;
+            document.querySelectorAll('.option').forEach(opt => opt.addEventListener('click', () => selectOption(parseInt(opt.dataset.index))));
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function selectOption(index) {
+            if (answered[currentQuestion]) return;
+            const q = questions[currentQuestion];
+            answered[currentQuestion] = true;
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === index && index !== q.correct) opt.classList.add('wrong');
+            });
+            const feedback = document.getElementById('feedback');
+            if (index === q.correct) { correctAnswers++; feedback.className = 'feedback show correct'; feedback.innerHTML = '✓ Σωστό! ' + q.explanation; }
+            else { wrongAnswers++; feedback.className = 'feedback show wrong'; feedback.innerHTML = '✗ Λάθος. ' + q.explanation; }
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('wrongCount').textContent = wrongAnswers;
+        }
+
+        function nextQuestion() { if (currentQuestion < questions.length - 1) { currentQuestion++; renderQuestion(); } else showResults(); }
+        function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; renderQuestion(); } }
+
+        function showResults() {
+            const pct = Math.round((correctAnswers / questions.length) * 100);
+            let msg = pct >= 90 ? '🏆 Εξαιρετικά!' : pct >= 70 ? '👍 Πολύ καλά!' : pct >= 50 ? '📚 Χρειάζεσαι επανάληψη.' : '💪 Διάβασε ξανά!';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="score-circle"><span class="score-text">${pct}%</span></div>
+                <h2>${msg}</h2><p>Σωστές: ${correctAnswers}/${questions.length}</p>
+                <button class="restart-btn" onclick="location.reload()">🔄 Ξανά</button><br><br>
+                <a href="../index.html" class="back-link">← Αρχική</a>`;
+        }
+        renderQuestion();
+    </script>
+</body>
+</html>

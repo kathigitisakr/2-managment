@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⭐ Οι Σύνδεσμοί μου - MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, #dd6b20 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+        }
+
+        .instructions h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .instructions code {
+            background: #e2e8f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .links-container {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .link-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .link-icon {
+            font-size: 1.5rem;
+        }
+
+        .link-content h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .link-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ΠΡΟΣΘΕΣΤΕ ΤΟΥΣ ΔΙΚΟΥΣ ΣΑΣ ΣΥΝΔΕΣΜΟΥΣ ΠΑΡΑΚΑΤΩ */
+        /* Κάθε κατηγορία έχει το δικό της χρώμα */
+        .link-item.video { border-left: 4px solid #e53e3e; }
+        .link-item.article { border-left: 4px solid #38a169; }
+        .link-item.notes { border-left: 4px solid #3182ce; }
+        .link-item.tool { border-left: 4px solid #805ad5; }
+        .link-item.other { border-left: 4px solid #ed8936; }
+
+        .add-hint {
+            background: #f0fff4;
+            border: 2px dashed var(--success);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--success);
+            margin-top: 1rem;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 2rem 0;
+        }
+
+        @media print {
+            nav.top-nav, .instructions, .add-hint { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="index.html">← Αρχική</a>
+    </nav>
+
+    <header>
+        <h1>⭐ Οι Σύνδεσμοί μου</h1>
+        <p>Προσωπική συλλογή χρήσιμων πόρων</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Οδηγίες -->
+        <div class="instructions">
+            <h2>📝 Πώς να προσθέσεις συνδέσμους</h2>
+            <p>Άνοιξε αυτό το αρχείο με έναν text editor (π.χ. Notepad++, VS Code) και:</p>
+            <ol style="margin: 1rem 0 0 1.5rem;">
+                <li>Βρες την κατηγορία που θέλεις (π.χ. <code>Βίντεο</code>, <code>Άρθρα</code>)</li>
+                <li>Αντίγραψε ένα υπάρχον <code>&lt;a class="link-item"&gt;</code> block</li>
+                <li>Άλλαξε το URL στο <code>href=""</code></li>
+                <li>Άλλαξε τον τίτλο και την περιγραφή</li>
+                <li>Αποθήκευσε το αρχείο!</li>
+            </ol>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ΒΙΝΤΕΟ -->
+        <!-- ============================================ -->
+        <h2 class="section-title">🎥 Βίντεο</h2>
+        <div class="links-container">
+
+            <!-- ΠΑΡΑΔΕΙΓΜΑ - Αντικατέστησε με δικά σου -->
+            <a href="https://www.youtube.com/watch?v=EXAMPLE" target="_blank" class="link-item video">
+                <span class="link-icon">📺</span>
+                <div class="link-content">
+                    <h3>Τίτλος Βίντεο</h3>
+                    <p>Σύντομη περιγραφή του βίντεο</p>
+                </div>
+            </a>
+
+            <!-- ΠΡΟΣΘΕΣΕ ΕΔΩ ΠΕΡΙΣΣΟΤΕΡΑ ΒΙΝΤΕΟ -->
+            <div class="add-hint">
+                ➕ Αντέγραψε το block παραπάνω για να προσθέσεις νέο βίντεο
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ΑΡΘΡΑ & ΙΣΤΟΣΕΛΙΔΕΣ -->
+        <!-- ============================================ -->
+        <h2 class="section-title">📖 Άρθρα & Ιστοσελίδες</h2>
+        <div class="links-container">
+
+            <!-- ΠΑΡΑΔΕΙΓΜΑ -->
+            <a href="https://example.com" target="_blank" class="link-item article">
+                <span class="link-icon">📄</span>
+                <div class="link-content">
+                    <h3>Τίτλος Άρθρου</h3>
+                    <p>Περιγραφή του άρθρου ή της ιστοσελίδας</p>
+                </div>
+            </a>
+
+            <!-- ΠΡΟΣΘΕΣΕ ΕΔΩ ΠΕΡΙΣΣΟΤΕΡΑ ΑΡΘΡΑ -->
+            <div class="add-hint">
+                ➕ Αντέγραψε το block παραπάνω για να προσθέσεις νέο άρθρο
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ΣΗΜΕΙΩΣΕΙΣ & ΕΓΓΡΑΦΑ -->
+        <!-- ============================================ -->
+        <h2 class="section-title">📝 Σημειώσεις & Έγγραφα</h2>
+        <div class="links-container">
+
+            <!-- ΠΑΡΑΔΕΙΓΜΑ -->
+            <a href="https://drive.google.com/EXAMPLE" target="_blank" class="link-item notes">
+                <span class="link-icon">📋</span>
+                <div class="link-content">
+                    <h3>Τίτλος Εγγράφου</h3>
+                    <p>Περιγραφή του εγγράφου</p>
+                </div>
+            </a>
+
+            <!-- ΠΡΟΣΘΕΣΕ ΕΔΩ ΠΕΡΙΣΣΟΤΕΡΑ ΕΓΓΡΑΦΑ -->
+            <div class="add-hint">
+                ➕ Αντέγραψε το block παραπάνω για να προσθέσεις νέο έγγραφο
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ΕΡΓΑΛΕΙΑ -->
+        <!-- ============================================ -->
+        <h2 class="section-title">🛠️ Εργαλεία</h2>
+        <div class="links-container">
+
+            <!-- ΠΑΡΑΔΕΙΓΜΑ -->
+            <a href="https://example.com/tool" target="_blank" class="link-item tool">
+                <span class="link-icon">🔧</span>
+                <div class="link-content">
+                    <h3>Όνομα Εργαλείου</h3>
+                    <p>Περιγραφή του εργαλείου</p>
+                </div>
+            </a>
+
+            <!-- ΠΡΟΣΘΕΣΕ ΕΔΩ ΠΕΡΙΣΣΟΤΕΡΑ ΕΡΓΑΛΕΙΑ -->
+            <div class="add-hint">
+                ➕ Αντέγραψε το block παραπάνω για να προσθέσεις νέο εργαλείο
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ΑΛΛΟΙ ΣΥΝΔΕΣΜΟΙ -->
+        <!-- ============================================ -->
+        <h2 class="section-title">📌 Άλλοι Σύνδεσμοι</h2>
+        <div class="links-container">
+
+            <!-- ΠΑΡΑΔΕΙΓΜΑ -->
+            <a href="https://example.com" target="_blank" class="link-item other">
+                <span class="link-icon">🔗</span>
+                <div class="link-content">
+                    <h3>Τίτλος Συνδέσμου</h3>
+                    <p>Περιγραφή</p>
+                </div>
+            </a>
+
+            <!-- ΠΡΟΣΘΕΣΕ ΕΔΩ ΠΕΡΙΣΣΟΤΕΡΟΥΣ ΣΥΝΔΕΣΜΟΥΣ -->
+            <div class="add-hint">
+                ➕ Αντέγραψε το block παραπάνω για να προσθέσεις νέο σύνδεσμο
+            </div>
+
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Προσωπική συλλογή συνδέσμων
+        </p>
+    </footer>
+
+</body>
+</html>

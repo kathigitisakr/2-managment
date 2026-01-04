@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔗 Πρόσθετο Υλικό - Μάνατζμεντ Εκπαίδευσης | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--info) 0%, #2b6cb0 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .resource-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--info);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .resource-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--info);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .resource-card a:hover {
+            background: var(--primary);
+        }
+
+        .category-tag {
+            display: inline-block;
+            background: var(--bg-paper);
+            color: var(--text-muted);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .resource-card.video { border-left-color: #e53e3e; }
+        .resource-card.article { border-left-color: #38a169; }
+        .resource-card.book { border-left-color: #d69e2e; }
+        .resource-card.tool { border-left-color: #805ad5; }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 2rem 0;
+        }
+
+        @media print {
+            nav.top-nav { display: none; }
+            .resource-card a { color: var(--primary); background: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="index.html">← Αρχική</a>
+        <span style="color: white;">🔗 Πρόσθετο Υλικό</span>
+    </nav>
+
+    <header>
+        <h1>🔗 Πρόσθετο Υλικό</h1>
+        <p>Επιλεγμένοι πόροι για βαθύτερη μελέτη</p>
+    </header>
+
+    <div class="container">
+
+        <!-- YouTube & Videos -->
+        <h2 class="section-title">🎥 Βίντεο & Παρουσιάσεις</h2>
+        <div class="resource-grid">
+            <div class="resource-card video">
+                <h3>📺 Situational Leadership (Hersey-Blanchard)</h3>
+                <p>Εξαιρετική οπτική εξήγηση του μοντέλου με παραδείγματα εφαρμογής.</p>
+                <a href="https://www.youtube.com/watch?v=2nrjPbPkDjs" target="_blank">▶️ YouTube</a>
+            </div>
+
+            <div class="resource-card video">
+                <h3>📺 Maslow's Hierarchy of Needs</h3>
+                <p>Animated εξήγηση της πυραμίδας αναγκών του Maslow.</p>
+                <a href="https://www.youtube.com/watch?v=O-4ithG_pfg" target="_blank">▶️ YouTube</a>
+            </div>
+
+            <div class="resource-card video">
+                <h3>📺 Herzberg's Two-Factor Theory</h3>
+                <p>Κατανοητή παρουσίαση της θεωρίας δύο παραγόντων.</p>
+                <a href="https://www.youtube.com/watch?v=i_GpqxPhjR4" target="_blank">▶️ YouTube</a>
+            </div>
+
+            <div class="resource-card video">
+                <h3>📺 SWOT Analysis Explained</h3>
+                <p>Πρακτικός οδηγός για ανάλυση SWOT με παραδείγματα.</p>
+                <a href="https://www.youtube.com/watch?v=JXXHqM6RzZQ" target="_blank">▶️ YouTube</a>
+            </div>
+
+            <div class="resource-card video">
+                <h3>📺 PDCA Cycle (Deming)</h3>
+                <p>Εξήγηση του κύκλου συνεχούς βελτίωσης.</p>
+                <a href="https://www.youtube.com/watch?v=wMONq6l2pvQ" target="_blank">▶️ YouTube</a>
+            </div>
+
+            <div class="resource-card video">
+                <h3>📺 Path-Goal Theory (House)</h3>
+                <p>Θεωρία μονοπατιού-στόχου με εφαρμογές.</p>
+                <a href="https://www.youtube.com/watch?v=V6cEP3VKQyE" target="_blank">▶️ YouTube</a>
+            </div>
+        </div>
+
+        <!-- Articles & Websites -->
+        <h2 class="section-title">📚 Άρθρα & Ιστοσελίδες</h2>
+        <div class="resource-grid">
+            <div class="resource-card article">
+                <h3>📖 MindTools - Leadership Styles</h3>
+                <p>Comprehensive guide για διάφορα στυλ ηγεσίας με self-assessment tools.</p>
+                <a href="https://www.mindtools.com/pages/article/newLDR_84.htm" target="_blank">🔗 Επίσκεψη</a>
+            </div>
+
+            <div class="resource-card article">
+                <h3>📖 Harvard Business Review - Leadership</h3>
+                <p>Άρθρα από κορυφαίους ακαδημαϊκούς για σύγχρονη ηγεσία.</p>
+                <a href="https://hbr.org/topic/leadership" target="_blank">🔗 Επίσκεψη</a>
+            </div>
+
+            <div class="resource-card article">
+                <h3>📖 Simply Psychology - Maslow</h3>
+                <p>Αναλυτική εξήγηση της θεωρίας Maslow με κριτική.</p>
+                <a href="https://www.simplypsychology.org/maslow.html" target="_blank">🔗 Επίσκεψη</a>
+            </div>
+
+            <div class="resource-card article">
+                <h3>📖 Management Study Guide</h3>
+                <p>Δωρεάν υλικό για όλες τις θεωρίες διοίκησης.</p>
+                <a href="https://www.managementstudyguide.com/" target="_blank">🔗 Επίσκεψη</a>
+            </div>
+
+            <div class="resource-card article">
+                <h3>📖 Balanced Scorecard Institute</h3>
+                <p>Επίσημος οργανισμός για BSC με πόρους και case studies.</p>
+                <a href="https://balancedscorecard.org/" target="_blank">🔗 Επίσκεψη</a>
+            </div>
+        </div>
+
+        <!-- Tools -->
+        <h2 class="section-title">🛠️ Εργαλεία & Templates</h2>
+        <div class="resource-grid">
+            <div class="resource-card tool">
+                <h3>🔧 SWOT Analysis Template</h3>
+                <p>Δωρεάν template για ανάλυση SWOT σε σχολική μονάδα.</p>
+                <a href="https://www.canva.com/templates/s/swot-analysis/" target="_blank">🔗 Canva</a>
+            </div>
+
+            <div class="resource-card tool">
+                <h3>🔧 Gantt Chart Tool</h3>
+                <p>Online εργαλείο για δημιουργία διαγραμμάτων Gantt.</p>
+                <a href="https://www.teamgantt.com/" target="_blank">🔗 TeamGantt</a>
+            </div>
+
+            <div class="resource-card tool">
+                <h3>🔧 Leadership Style Quiz</h3>
+                <p>Αυτοαξιολόγηση του στυλ ηγεσίας σας.</p>
+                <a href="https://www.mindtools.com/pages/article/leadership-style-quiz.htm" target="_blank">🔗 MindTools</a>
+            </div>
+        </div>
+
+        <!-- Books -->
+        <h2 class="section-title">📕 Προτεινόμενα Βιβλία</h2>
+        <div class="resource-grid">
+            <div class="resource-card book">
+                <h3>📚 "The One Minute Manager" - Blanchard & Johnson</h3>
+                <p>Κλασικό βιβλίο για αποτελεσματική διοίκηση με πρακτικές συμβουλές.</p>
+                <span class="category-tag">Leadership</span>
+            </div>
+
+            <div class="resource-card book">
+                <h3>📚 "Management" - Schermerhorn</h3>
+                <p>Πλήρες εγχειρίδιο διοίκησης που χρησιμοποιείται σε πανεπιστήμια.</p>
+                <span class="category-tag">Textbook</span>
+            </div>
+
+            <div class="resource-card book">
+                <h3>📚 "The Practice of Management" - Peter Drucker</h3>
+                <p>Το κλασικό έργο του "πατέρα" του σύγχρονου management.</p>
+                <span class="category-tag">Classic</span>
+            </div>
+
+            <div class="resource-card book">
+                <h3>📚 "Leading Change" - John Kotter</h3>
+                <p>8 βήματα για επιτυχημένη διαχείριση αλλαγής.</p>
+                <span class="category-tag">Change Management</span>
+            </div>
+        </div>
+
+        <!-- Greek Resources -->
+        <h2 class="section-title">🇬🇷 Ελληνικοί Πόροι</h2>
+        <div class="resource-grid">
+            <div class="resource-card article">
+                <h3>🎓 e-Class Πανεπιστημίου Πατρών</h3>
+                <p>Επίσημη πλατφόρμα του μαθήματος MST352.</p>
+                <a href="https://eclass.upatras.gr/courses/MST352/" target="_blank">🔗 e-Class</a>
+            </div>
+
+            <div class="resource-card article">
+                <h3>📖 Ελληνική Wikipedia - Διοίκηση</h3>
+                <p>Άρθρα στα Ελληνικά για βασικές έννοιες management.</p>
+                <a href="https://el.wikipedia.org/wiki/Διοίκηση" target="_blank">🔗 Wikipedia</a>
+            </div>
+
+            <div class="resource-card article">
+                <h3>📖 ΔΙΠΑΕ - Σημειώσεις Διοίκησης</h3>
+                <p>Ακαδημαϊκό υλικό από ελληνικά πανεπιστήμια.</p>
+                <a href="https://www.ihu.gr/" target="_blank">🔗 IHU</a>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Οι σύνδεσμοι οδηγούν σε εξωτερικούς ιστότοπους
+        </p>
+    </footer>
+
+</body>
+</html>

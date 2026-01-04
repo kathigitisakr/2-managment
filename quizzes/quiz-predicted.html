@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Προβλεπόμενα Θέματα Ανάπτυξης | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #faf8f5; color: #2d3748; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 12px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .sos-badge { background: white; color: #c53030; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; display: inline-block; margin-top: 10px; font-weight: 600; }
+        .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 5px solid #c53030; }
+        .question-number { color: #c53030; font-weight: 600; margin-bottom: 10px; font-size: 0.9rem; }
+        .question-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; color: #1a365d; }
+        .toggle-answer { background: #1a365d; color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .toggle-answer:hover { background: #2c5282; }
+        .answer-box { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 15px; display: none; }
+        .answer-box.show { display: block; }
+        .answer-box h4 { color: #c53030; margin-bottom: 15px; border-bottom: 2px solid #c53030; padding-bottom: 8px; }
+        .answer-box h5 { color: #2d3748; margin: 15px 0 8px; }
+        .answer-box ul { margin-left: 20px; margin-bottom: 15px; }
+        .answer-box li { margin-bottom: 8px; }
+        .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0; }
+        .keyword { background: #fbd38d; color: #744210; padding: 4px 12px; border-radius: 15px; font-size: 0.85rem; }
+        .exam-tip { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0; }
+        .exam-tip strong { color: #2c5282; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3182ce; text-decoration: none; }
+        .topic-tag { background: #e2e8f0; color: #4a5568; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; margin-left: 10px; }
+        @media print { .toggle-answer, .back-link { display: none; } .answer-box { display: block !important; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        
+        <header>
+            <h1>📋 Προβλεπόμενα Θέματα Ανάπτυξης</h1>
+            <p>Πιθανές ερωτήσεις εξετάσεων με υποδειγματικές απαντήσεις</p>
+            <span class="sos-badge">🎯 SOS Θέματα</span>
+        </header>
+
+        <!-- Question 1: Hersey-Blanchard -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 1 <span class="topic-tag">Ηγεσία - SOS</span></div>
+            <div class="question-title">Αναλύστε το Μοντέλο Κατασταστικής Ηγεσίας των Hersey-Blanchard και δώστε παραδείγματα εφαρμογής στη σχολική μονάδα.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Εισαγωγή:</h5>
+                <p>Το μοντέλο των Hersey-Blanchard (1969) είναι θεωρία κατασταστικής ηγεσίας που υποστηρίζει ότι δεν υπάρχει ένα "καλύτερο" στυλ ηγεσίας. Το αποτελεσματικό στυλ εξαρτάται από την ωριμότητα των υφισταμένων.</p>
+                
+                <h5>Ωριμότητα (Readiness) = Ικανότητα + Προθυμία + Αυτοπεποίθηση</h5>
+                <ul>
+                    <li><strong>M1:</strong> Χαμηλή ικανότητα, χαμηλή προθυμία</li>
+                    <li><strong>M2:</strong> Χαμηλή ικανότητα, υψηλή προθυμία</li>
+                    <li><strong>M3:</strong> Υψηλή ικανότητα, χαμηλή προθυμία</li>
+                    <li><strong>M4:</strong> Υψηλή ικανότητα, υψηλή προθυμία</li>
+                </ul>
+
+                <h5>Τα 4 Στυλ Ηγεσίας:</h5>
+                <ul>
+                    <li><strong>S1 - Καθοδήγηση (Telling):</strong> Υψηλή εστίαση στο έργο, χαμηλή στη σχέση. Για M1.</li>
+                    <li><strong>S2 - Πώληση (Selling):</strong> Υψηλή εστίαση και στο έργο και στη σχέση. Για M2.</li>
+                    <li><strong>S3 - Συμμετοχή (Participating):</strong> Χαμηλή στο έργο, υψηλή στη σχέση. Για M3.</li>
+                    <li><strong>S4 - Ανάθεση (Delegating):</strong> Χαμηλή εστίαση και στα δύο. Για M4.</li>
+                </ul>
+
+                <h5>Εφαρμογή στη Σχολική Μονάδα:</h5>
+                <ul>
+                    <li><strong>S1:</strong> Νεοδιόριστος εκπαιδευτικός χωρίς εμπειρία → ο διευθυντής δίνει σαφείς οδηγίες</li>
+                    <li><strong>S2:</strong> Ενθουσιώδης αλλά άπειρος εκπαιδευτικός → καθοδήγηση με εξήγηση του "γιατί"</li>
+                    <li><strong>S3:</strong> Έμπειρος αλλά αποθαρρυμένος εκπαιδευτικός → υποστήριξη και ενθάρρυνση</li>
+                    <li><strong>S4:</strong> Υψηλά ικανός και παρακινημένος εκπαιδευτικός → αυτονομία</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">Hersey-Blanchard</span>
+                    <span class="keyword">Ωριμότητα</span>
+                    <span class="keyword">S1-S4</span>
+                    <span class="keyword">M1-M4</span>
+                    <span class="keyword">Κατασταστική ηγεσία</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2: PDCA -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 2 <span class="topic-tag">Έλεγχος - SOS</span></div>
+            <div class="question-title">Περιγράψτε τον κύκλο PDCA (Deming) και εξηγήστε πώς μπορεί να εφαρμοστεί για τη βελτίωση της ποιότητας στην εκπαίδευση.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Ο κύκλος PDCA:</h5>
+                <p>Ο W. Edwards Deming διέδωσε τον κύκλο PDCA ως εργαλείο συνεχούς βελτίωσης.</p>
+                <ul>
+                    <li><strong>Plan (Σχεδίασε):</strong> Αναγνώριση προβλήματος, ανάλυση, σχεδιασμός λύσης</li>
+                    <li><strong>Do (Κάνε):</strong> Εφαρμογή του σχεδίου σε μικρή κλίμακα</li>
+                    <li><strong>Check (Έλεγξε):</strong> Αξιολόγηση αποτελεσμάτων, σύγκριση με στόχους</li>
+                    <li><strong>Act (Δράσε):</strong> Τυποποίηση επιτυχίας ή νέος κύκλος για βελτίωση</li>
+                </ul>
+
+                <h5>Εφαρμογή στην Εκπαίδευση - Παράδειγμα: Βελτίωση επίδοσης μαθητών στα Μαθηματικά</h5>
+                <ul>
+                    <li><strong>Plan:</strong> Ανάλυση αποτελεσμάτων, εντοπισμός αδυναμιών, σχεδιασμός παρέμβασης (π.χ. ενισχυτική διδασκαλία)</li>
+                    <li><strong>Do:</strong> Πιλοτική εφαρμογή σε 2 τμήματα για 1 τρίμηνο</li>
+                    <li><strong>Check:</strong> Σύγκριση επίδοσης με τμήματα ελέγχου</li>
+                    <li><strong>Act:</strong> Αν πέτυχε → επέκταση σε όλο το σχολείο. Αν όχι → αναθεώρηση μεθόδου</li>
+                </ul>
+
+                <h5>Βασικά χαρακτηριστικά:</h5>
+                <ul>
+                    <li>Επαναλαμβανόμενος κύκλος (δεν τελειώνει ποτέ)</li>
+                    <li>Βασίζεται σε δεδομένα</li>
+                    <li>Θεμέλιο της TQM</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">PDCA</span>
+                    <span class="keyword">Deming</span>
+                    <span class="keyword">Συνεχής βελτίωση</span>
+                    <span class="keyword">TQM</span>
+                    <span class="keyword">Κύκλος</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3: Vroom -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 3 <span class="topic-tag">Παρακίνηση - SOS</span></div>
+            <div class="question-title">Αναλύστε τη Θεωρία Προσδοκίας του Vroom και εξηγήστε πώς μπορεί ο διευθυντής σχολείου να την εφαρμόσει για την παρακίνηση των εκπαιδευτικών.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Η Θεωρία Προσδοκίας (Expectancy Theory):</h5>
+                <p>Ο Victor Vroom (1964) ανέπτυξε τη θεωρία ότι η παρακίνηση εξαρτάται από τρεις παράγοντες:</p>
+                <p><strong>Παρακίνηση = Προσδοκία × Συντελεστικότητα × Σθένος (Μ = Π × Σ × Σθ)</strong></p>
+                
+                <ul>
+                    <li><strong>Προσδοκία (Expectancy):</strong> Η πεποίθηση ότι η προσπάθεια θα οδηγήσει σε καλή απόδοση</li>
+                    <li><strong>Συντελεστικότητα (Instrumentality):</strong> Η πεποίθηση ότι η καλή απόδοση θα οδηγήσει σε ανταμοιβή</li>
+                    <li><strong>Σθένος (Valence):</strong> Η αξία που έχει η ανταμοιβή για το άτομο</li>
+                </ul>
+
+                <h5>Σημαντικό:</h5>
+                <p>Αν οποιοσδήποτε παράγοντας είναι 0, η παρακίνηση είναι 0.</p>
+
+                <h5>Εφαρμογή στη Σχολική Μονάδα:</h5>
+                <ul>
+                    <li><strong>Ενίσχυση Προσδοκίας:</strong> Παροχή κατάλληλης εκπαίδευσης, πόρων, υποστήριξης</li>
+                    <li><strong>Ενίσχυση Συντελεστικότητας:</strong> Σαφής σύνδεση απόδοσης-ανταμοιβής, αντικειμενική αξιολόγηση</li>
+                    <li><strong>Ενίσχυση Σθένους:</strong> Προσφορά ανταμοιβών που εκτιμούν οι εκπαιδευτικοί (αναγνώριση, αυτονομία, επαγγελματική ανάπτυξη)</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">Vroom</span>
+                    <span class="keyword">Π × Σ × Σθ</span>
+                    <span class="keyword">Προσδοκία</span>
+                    <span class="keyword">Συντελεστικότητα</span>
+                    <span class="keyword">Σθένος</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4: Maslow -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 4 <span class="topic-tag">Παρακίνηση - SOS</span></div>
+            <div class="question-title">Παρουσιάστε την πυραμίδα αναγκών του Maslow και αναλύστε πώς μπορεί να χρησιμοποιηθεί για την παρακίνηση των εκπαιδευτικών.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Η Πυραμίδα του Maslow (1943):</h5>
+                <p>5 επίπεδα αναγκών, από τη βάση προς την κορυφή:</p>
+                <ol>
+                    <li><strong>Φυσιολογικές:</strong> Τροφή, νερό, στέγη, μισθός</li>
+                    <li><strong>Ασφάλειας:</strong> Σταθερότητα εργασίας, υγεία, ασφάλεια</li>
+                    <li><strong>Κοινωνικές:</strong> Σχέσεις, αποδοχή, ένταξη σε ομάδα</li>
+                    <li><strong>Εκτίμησης:</strong> Αναγνώριση, σεβασμός, κύρος</li>
+                    <li><strong>Αυτοπραγμάτωσης:</strong> Προσωπική ανάπτυξη, δημιουργικότητα</li>
+                </ol>
+
+                <h5>Βασική αρχή:</h5>
+                <p>Οι χαμηλότερες ανάγκες πρέπει να ικανοποιηθούν πρώτα πριν παρακινήσουν οι υψηλότερες.</p>
+
+                <h5>Εφαρμογή στην Εκπαίδευση:</h5>
+                <ul>
+                    <li><strong>Φυσιολογικές:</strong> Επαρκής μισθός, κατάλληλες συνθήκες εργασίας</li>
+                    <li><strong>Ασφάλειας:</strong> Μονιμότητα, σαφείς κανόνες, ασφαλές περιβάλλον</li>
+                    <li><strong>Κοινωνικές:</strong> Ομαδική εργασία, θετικό κλίμα, συνεργασία</li>
+                    <li><strong>Εκτίμησης:</strong> Έπαινος, αναγνώριση έργου, συμμετοχή σε αποφάσεις</li>
+                    <li><strong>Αυτοπραγμάτωσης:</strong> Ευκαιρίες επιμόρφωσης, αυτονομία, καινοτομία</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">Maslow</span>
+                    <span class="keyword">Πυραμίδα αναγκών</span>
+                    <span class="keyword">Αυτοπραγμάτωση</span>
+                    <span class="keyword">5 επίπεδα</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 5: SWOT -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 5 <span class="topic-tag">Προγραμματισμός</span></div>
+            <div class="question-title">Τι είναι η ανάλυση SWOT; Δώστε παράδειγμα εφαρμογής για τον στρατηγικό σχεδιασμό μιας σχολικής μονάδας.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Η ανάλυση SWOT:</h5>
+                <p>Εργαλείο στρατηγικού σχεδιασμού που αναλύει:</p>
+                <ul>
+                    <li><strong>Strengths (Δυνάμεις):</strong> Εσωτερικά πλεονεκτήματα</li>
+                    <li><strong>Weaknesses (Αδυναμίες):</strong> Εσωτερικά μειονεκτήματα</li>
+                    <li><strong>Opportunities (Ευκαιρίες):</strong> Εξωτερικές θετικές συνθήκες</li>
+                    <li><strong>Threats (Απειλές):</strong> Εξωτερικοί κίνδυνοι</li>
+                </ul>
+
+                <h5>Παράδειγμα για Σχολική Μονάδα:</h5>
+                <ul>
+                    <li><strong>S:</strong> Έμπειρο προσωπικό, καλές υποδομές, θετικό κλίμα</li>
+                    <li><strong>W:</strong> Έλλειψη τεχνολογικού εξοπλισμού, γηρασμένο προσωπικό</li>
+                    <li><strong>O:</strong> Ευρωπαϊκά προγράμματα (Erasmus+), νέες τεχνολογίες</li>
+                    <li><strong>T:</strong> Δημογραφική κρίση, περικοπές προϋπολογισμού</li>
+                </ul>
+
+                <h5>Στρατηγικές:</h5>
+                <ul>
+                    <li><strong>SO:</strong> Χρήση δυνάμεων για αξιοποίηση ευκαιριών</li>
+                    <li><strong>WO:</strong> Ξεπέρασμα αδυναμιών μέσω ευκαιριών</li>
+                    <li><strong>ST:</strong> Χρήση δυνάμεων για αντιμετώπιση απειλών</li>
+                    <li><strong>WT:</strong> Ελαχιστοποίηση αδυναμιών και αποφυγή απειλών</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">SWOT</span>
+                    <span class="keyword">Στρατηγικός σχεδιασμός</span>
+                    <span class="keyword">Εσωτερικό/Εξωτερικό</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 6: Decision Making -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 6 <span class="topic-tag">Λήψη Αποφάσεων</span></div>
+            <div class="question-title">Περιγράψτε τη διαδικασία ορθολογικής λήψης αποφάσεων και συγκρίνετε τις προγραμματισμένες με τις μη-προγραμματισμένες αποφάσεις στην εκπαίδευση.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Διαδικασία Ορθολογικής Λήψης Αποφάσεων:</h5>
+                <ol>
+                    <li>Αναγνώριση του προβλήματος</li>
+                    <li>Ανάπτυξη εναλλακτικών λύσεων</li>
+                    <li>Αξιολόγηση εναλλακτικών</li>
+                    <li>Επιλογή βέλτιστης λύσης</li>
+                    <li>Εφαρμογή και αξιολόγηση</li>
+                </ol>
+
+                <h5>Προγραμματισμένες Αποφάσεις:</h5>
+                <ul>
+                    <li>Επαναλαμβανόμενες, ρουτίνας</li>
+                    <li>Υπάρχουν κανόνες και διαδικασίες (SOP)</li>
+                    <li>Παραδείγματα: Έγκριση αδειών, κατανομή ωραρίου, παραγγελία υλικών</li>
+                </ul>
+
+                <h5>Μη-Προγραμματισμένες Αποφάσεις:</h5>
+                <ul>
+                    <li>Νέες, μοναδικές καταστάσεις</li>
+                    <li>Απαιτούν κρίση και δημιουργικότητα</li>
+                    <li>Παραδείγματα: Αντιμετώπιση κρίσης, στρατηγικές αλλαγές, νέα προγράμματα</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">5 βήματα</span>
+                    <span class="keyword">Programmed</span>
+                    <span class="keyword">Non-programmed</span>
+                    <span class="keyword">SOP</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 7: Herzberg -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 7 <span class="topic-tag">Παρακίνηση</span></div>
+            <div class="question-title">Αναλύστε τη Θεωρία των Δύο Παραγόντων του Herzberg και εξηγήστε τη σημασία της για τη διοίκηση εκπαιδευτικών οργανισμών.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                <h5>Θεωρία Δύο Παραγόντων (Herzberg, 1959):</h5>
+                
+                <h5>Παράγοντες Υγιεινής (Hygiene Factors):</h5>
+                <ul>
+                    <li>Εξωτερικοί παράγοντες</li>
+                    <li>Αποτρέπουν τη δυσαρέσκεια αλλά δεν παρακινούν</li>
+                    <li>Π.χ.: Μισθός, συνθήκες εργασίας, πολιτική οργανισμού, σχέσεις με προϊσταμένους</li>
+                </ul>
+
+                <h5>Παράγοντες Κινήτρων (Motivators):</h5>
+                <ul>
+                    <li>Εσωτερικοί παράγοντες</li>
+                    <li>Δημιουργούν ικανοποίηση και παρακινούν</li>
+                    <li>Π.χ.: Επίτευξη, αναγνώριση, ενδιαφέρον εργασίας, υπευθυνότητα, ανάπτυξη</li>
+                </ul>
+
+                <h5>Εφαρμογή στην Εκπαίδευση:</h5>
+                <ul>
+                    <li><strong>Υγιεινοί:</strong> Καλός μισθός, ασφαλές περιβάλλον, σαφείς πολιτικές</li>
+                    <li><strong>Κίνητρα:</strong> Αναγνώριση έργου, αυτονομία, ευκαιρίες ανάπτυξης, συμμετοχή</li>
+                </ul>
+
+                <div class="exam-tip">
+                    <strong>💡 Tip:</strong> Η βελτίωση μόνο των παραγόντων υγιεινής δεν αρκεί για παρακίνηση - χρειάζονται οι παράγοντες κινήτρων!
+                </div>
+
+                <div class="keywords">
+                    <span class="keyword">Herzberg</span>
+                    <span class="keyword">Παράγοντες υγιεινής</span>
+                    <span class="keyword">Παράγοντες κινήτρων</span>
+                    <span class="keyword">Δύο παράγοντες</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 8: Control Types -->
+        <div class="question-card">
+            <div class="question-number">Θέμα 8 <span class="topic-tag">Έλεγχος</span></div>
+            <div class="question-title">Περιγράψτε τους τρεις τύπους ελέγχου (feedforward, concurrent, feedback) και δώστε παραδείγματα εφαρμογής στην εκπαίδευση.</div>
+            <button class="toggle-answer" onclick="this.nextElementSibling.classList.toggle('show')">📝 Δες την Απάντηση</button>
+            <div class="answer-box">
+                <h4>Υποδειγματική Απάντηση</h4>
+                
+                <h5>1. Προληπτικός Έλεγχος (Feedforward Control):</h5>
+                <ul>
+                    <li>ΠΡΙΝ την έναρξη της δραστηριότητας</li>
+                    <li>Στόχος: Πρόληψη προβλημάτων</li>
+                    <li><strong>Παραδείγματα:</strong> Σχεδιασμός αναλυτικού προγράμματος, επιλογή κατάλληλου προσωπικού, προετοιμασία υλικών</li>
+                </ul>
+
+                <h5>2. Ταυτόχρονος Έλεγχος (Concurrent Control):</h5>
+                <ul>
+                    <li>ΚΑΤΑ ΤΗ ΔΙΑΡΚΕΙΑ της δραστηριότητας</li>
+                    <li>Στόχος: Διόρθωση σε πραγματικό χρόνο</li>
+                    <li><strong>Παραδείγματα:</strong> Παρατήρηση διδασκαλίας, επίβλεψη μαθήματος, διαμορφωτική αξιολόγηση</li>
+                </ul>
+
+                <h5>3. Ανατροφοδοτικός Έλεγχος (Feedback Control):</h5>
+                <ul>
+                    <li>ΜΕΤΑ την ολοκλήρωση της δραστηριότητας</li>
+                    <li>Στόχος: Αξιολόγηση και μελλοντική βελτίωση</li>
+                    <li><strong>Παραδείγματα:</strong> Τελικές εξετάσεις, απολογισμός σχολικού έτους, αξιολόγηση προγράμματος</li>
+                </ul>
+
+                <div class="keywords">
+                    <span class="keyword">Feedforward</span>
+                    <span class="keyword">Concurrent</span>
+                    <span class="keyword">Feedback</span>
+                    <span class="keyword">Τύποι ελέγχου</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="exam-tip" style="margin-top: 30px;">
+            <strong>📌 Συμβουλή για τις εξετάσεις:</strong> Να χρησιμοποιείτε πάντα:
+            <ul style="margin-top: 10px; margin-left: 20px;">
+                <li>Εισαγωγή με ορισμό της θεωρίας</li>
+                <li>Κύρια σημεία με bullet points</li>
+                <li>Συγκεκριμένα παραδείγματα από την εκπαίδευση</li>
+                <li>Συμπέρασμα με τη σημασία για τη σχολική μονάδα</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

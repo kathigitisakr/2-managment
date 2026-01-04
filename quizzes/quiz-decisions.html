@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Λήψης Αποφάσεων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #faf8f5; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #553c9a 0%, #805ad5 100%); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 12px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 12px; margin: 20px 0; overflow: hidden; }
+        .progress { background: linear-gradient(90deg, #805ad5, #b794f4); height: 100%; transition: width 0.3s; border-radius: 10px; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; font-weight: 600; }
+        .stats span { padding: 8px 16px; border-radius: 20px; }
+        .correct-count { background: #c6f6d5; color: #276749; }
+        .wrong-count { background: #fed7d7; color: #c53030; }
+        .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .question-number { color: #805ad5; font-weight: 600; margin-bottom: 10px; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; color: #1a365d; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { border-color: #805ad5; background: #faf5ff; }
+        .option.correct { border-color: #38a169; background: #c6f6d5; }
+        .option.wrong { border-color: #e53e3e; background: #fed7d7; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #c6f6d5; color: #276749; }
+        .feedback.wrong { background: #fed7d7; color: #c53030; }
+        .theory-toggle { background: #ebf8ff; color: #3182ce; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: 600; }
+        .theory-box { background: #f0f9ff; border-left: 4px solid #3182ce; padding: 20px; margin-top: 15px; border-radius: 0 8px 8px 0; display: none; }
+        .theory-box.show { display: block; }
+        .theory-box h4 { color: #1a365d; margin-bottom: 10px; }
+        .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .keyword { background: #fbd38d; color: #744210; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .nav-btn.prev { background: #e2e8f0; color: #4a5568; }
+        .nav-btn.next { background: #805ad5; color: white; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #805ad5, #b794f4); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .score-text { font-size: 2.5rem; font-weight: bold; color: white; }
+        .restart-btn { background: #1a365d; color: white; padding: 15px 40px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; margin-top: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3182ce; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        <header>
+            <h1>🧠 Quiz Λήψης Αποφάσεων</h1>
+            <p>Διαδικασίες, Τύποι & Τεχνικές Ομαδικών Αποφάσεων</p>
+        </header>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div class="stats">
+            <span class="correct-count">✓ Σωστές: <span id="correctCount">0</span></span>
+            <span class="wrong-count">✗ Λάθος: <span id="wrongCount">0</span></span>
+        </div>
+        <div id="quizContainer"></div>
+        <div id="resultsContainer" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Ποια είναι τα 5 βήματα της ορθολογικής διαδικασίας λήψης αποφάσεων;",
+                options: [
+                    "Πρόβλημα → Εναλλακτικές → Αξιολόγηση → Επιλογή → Εφαρμογή",
+                    "Ιδέα → Σχέδιο → Δράση → Αποτέλεσμα → Αξιολόγηση",
+                    "Συζήτηση → Ψηφοφορία → Απόφαση → Ανακοίνωση → Εφαρμογή",
+                    "Ανάλυση → Πρόβλεψη → Επιλογή → Δράση → Έλεγχος"
+                ],
+                correct: 0,
+                explanation: "1) Αναγνώριση προβλήματος, 2) Εναλλακτικές λύσεις, 3) Αξιολόγηση, 4) Επιλογή, 5) Εφαρμογή & αξιολόγηση.",
+                theory: { title: "Ορθολογική Λήψη Αποφάσεων", sos: false, content: "Συστηματική διαδικασία: εντοπισμός προβλήματος → ανάπτυξη εναλλακτικών → αξιολόγηση → επιλογή βέλτιστης → εφαρμογή και έλεγχος.", keywords: ["5 βήματα", "Ορθολογική", "Διαδικασία"] }
+            },
+            {
+                question: "Οι προγραμματισμένες αποφάσεις αφορούν:",
+                options: ["Νέα, μοναδικά και σύνθετα προβλήματα", "Επαναλαμβανόμενα, ρουτίνας προβλήματα", "Στρατηγικές αποφάσεις υψηλού κινδύνου", "Αποφάσεις που παίρνει μόνο ο διευθυντής"],
+                correct: 1,
+                explanation: "Προγραμματισμένες = ρουτίνας, με καθορισμένους κανόνες και διαδικασίες.",
+                theory: { title: "Προγραμματισμένες vs Μη-προγραμματισμένες", sos: false, content: "Προγραμματισμένες: ρουτίνας, κανόνες, SOP. Μη-προγραμματισμένες: νέες, μοναδικές, απαιτούν κρίση.", keywords: ["Programmed", "Non-programmed", "Ρουτίνα", "SOP"] }
+            },
+            {
+                question: "Η τεχνική Brainstorming χρησιμοποιείται για:",
+                options: ["Ψηφοφορία", "Παραγωγή πολλών ιδεών χωρίς κριτική", "Αξιολόγηση εργαζομένων", "Κατανομή προϋπολογισμού"],
+                correct: 1,
+                explanation: "Brainstorming = ελεύθερη παραγωγή ιδεών, χωρίς κριτική στην αρχή.",
+                theory: { title: "Brainstorming", sos: false, content: "Ομαδική τεχνική παραγωγής ιδεών. Κανόνες: όχι κριτική, ελευθερία, ποσότητα, συνδυασμός ιδεών.", keywords: ["Brainstorming", "Καταιγισμός ιδεών", "Δημιουργικότητα"] }
+            },
+            {
+                question: "Η μέθοδος Delphi χαρακτηρίζεται από:",
+                options: ["Πρόσωπο με πρόσωπο συζήτηση", "Ανώνυμη γνωμοδότηση ειδικών σε πολλαπλούς γύρους", "Ψηφοφορία πλειοψηφίας", "Απόφαση μόνο από τον ηγέτη"],
+                correct: 1,
+                explanation: "Delphi: ανώνυμοι γύροι ερωτηματολογίων μέχρι σύγκλιση απόψεων.",
+                theory: { title: "Μέθοδος Delphi", sos: false, content: "Επαναληπτικοί γύροι ανώνυμων ερωτηματολογίων σε ειδικούς. Ανατροφοδότηση μεταξύ γύρων. Στόχος: σύγκλιση απόψεων.", keywords: ["Delphi", "Ανώνυμο", "Ειδικοί", "Γύροι"] }
+            },
+            {
+                question: "Η Ονομαστική Τεχνική Ομάδας (NGT) περιλαμβάνει:",
+                options: ["Μόνο προφορική συζήτηση", "Γραπτή καταγραφή ιδεών → Παρουσίαση → Ψηφοφορία", "Τυχαία επιλογή λύσης", "Απόφαση του αρχαιότερου μέλους"],
+                correct: 1,
+                explanation: "NGT: ατομική γραπτή καταγραφή → παρουσίαση → συζήτηση → ψηφοφορία/κατάταξη.",
+                theory: { title: "Nominal Group Technique (NGT)", sos: false, content: "1) Σιωπηλή γραπτή καταγραφή, 2) Παρουσίαση ιδεών, 3) Διευκρινιστική συζήτηση, 4) Ψηφοφορία/κατάταξη.", keywords: ["NGT", "Γραπτή καταγραφή", "Ψηφοφορία"] }
+            },
+            {
+                question: "Η 'περιορισμένη ορθολογικότητα' (bounded rationality) του Simon σημαίνει:",
+                options: ["Οι άνθρωποι είναι τέλεια ορθολογικοί", "Οι αποφάσεις περιορίζονται από πληροφορίες, χρόνο και γνωστικές ικανότητες", "Όλες οι αποφάσεις είναι τυχαίες", "Μόνο οι ηγέτες παίρνουν σωστές αποφάσεις"],
+                correct: 1,
+                explanation: "Bounded rationality: η ορθολογικότητα περιορίζεται από ατελείς πληροφορίες και γνωστικά όρια.",
+                theory: { title: "Περιορισμένη Ορθολογικότητα", sos: false, content: "Herbert Simon: Οι άνθρωποι αναζητούν 'ικανοποιητική' λύση (satisficing), όχι τη βέλτιστη, λόγω περιορισμών.", keywords: ["Bounded rationality", "Simon", "Satisficing"] }
+            },
+            {
+                question: "Το 'groupthink' (ομαδική σκέψη) είναι:",
+                options: ["Θετικό φαινόμενο συνεργασίας", "Αρνητικό φαινόμενο όπου η ομάδα αποφεύγει τη διαφωνία", "Τεχνική brainstorming", "Μέθοδος αξιολόγησης"],
+                correct: 1,
+                explanation: "Groupthink: η ομάδα επιδιώκει ομοφωνία αποφεύγοντας κριτική σκέψη.",
+                theory: { title: "Groupthink (Janis)", sos: false, content: "Κίνδυνος σε συνεκτικές ομάδες: πίεση για συμφωνία, αυτολογοκρισία, ψευδαίσθηση ομοφωνίας. Αποτέλεσμα: κακές αποφάσεις.", keywords: ["Groupthink", "Janis", "Ομοφωνία", "Κίνδυνος"] }
+            },
+            {
+                question: "Ποια είναι η διαφορά ρίσκου και αβεβαιότητας στη λήψη αποφάσεων;",
+                options: ["Δεν υπάρχει διαφορά", "Ρίσκο: γνωστές πιθανότητες, Αβεβαιότητα: άγνωστες πιθανότητες", "Αβεβαιότητα: γνωστές πιθανότητες, Ρίσκο: άγνωστες", "Και τα δύο σημαίνουν σιγουριά"],
+                correct: 1,
+                explanation: "Ρίσκο = μπορούμε να εκτιμήσουμε πιθανότητες. Αβεβαιότητα = δεν γνωρίζουμε τις πιθανότητες.",
+                theory: { title: "Συνθήκες Λήψης Αποφάσεων", sos: false, content: "Βεβαιότητα: γνωρίζουμε το αποτέλεσμα. Ρίσκο: γνωρίζουμε πιθανότητες. Αβεβαιότητα: άγνωστες πιθανότητες.", keywords: ["Βεβαιότητα", "Ρίσκο", "Αβεβαιότητα"] }
+            },
+            {
+                question: "Στην εκπαίδευση, η απόφαση για το πώς θα αντιμετωπιστεί ένα ξαφνικό περιστατικό βίας είναι:",
+                options: ["Προγραμματισμένη απόφαση", "Μη-προγραμματισμένη απόφαση", "Ρουτίνας απόφαση", "Αυτοματοποιημένη απόφαση"],
+                correct: 1,
+                explanation: "Είναι νέο, μοναδικό πρόβλημα που απαιτεί κρίση, όχι εφαρμογή κανόνα.",
+                theory: { title: "Μη-προγραμματισμένες στην Εκπαίδευση", sos: false, content: "Παραδείγματα: κρίσεις, νέες καταστάσεις, στρατηγικές αλλαγές. Απαιτούν κρίση, δημιουργικότητα, ανάληψη ρίσκου.", keywords: ["Κρίση", "Μοναδικό", "Κρίση διευθυντή"] }
+            },
+            {
+                question: "Η διαίσθηση (intuition) στη λήψη αποφάσεων:",
+                options: ["Πρέπει πάντα να αγνοείται", "Μπορεί να είναι χρήσιμη, ειδικά σε έμπειρα άτομα", "Είναι πάντα λανθασμένη", "Χρησιμοποιείται μόνο σε ρουτίνας αποφάσεις"],
+                correct: 1,
+                explanation: "Η διαίσθηση, βασισμένη στην εμπειρία, μπορεί να βοηθήσει σε πολύπλοκες καταστάσεις.",
+                theory: { title: "Διαίσθηση στις Αποφάσεις", sos: false, content: "Η διαίσθηση είναι η γρήγορη, ασυνείδητη αναγνώριση προτύπων βάσει εμπειρίας. Συμπληρώνει την ορθολογική ανάλυση.", keywords: ["Intuition", "Εμπειρία", "Πρότυπα"] }
+            }
+        ];
+
+        let currentQuestion = 0, correctAnswers = 0, wrongAnswers = 0;
+        let answered = new Array(questions.length).fill(false);
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Ερώτηση ${currentQuestion + 1} από ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">${q.options.map((opt, i) => `<div class="option" data-index="${i}">${opt}</div>`).join('')}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="theory-toggle" onclick="document.getElementById('theoryBox').classList.toggle('show')">📚 Δες τη Θεωρία</button>
+                    <div class="theory-box" id="theoryBox">
+                        <h4>${q.theory.title}</h4>
+                        <p>${q.theory.content}</p>
+                        <div class="keywords">${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}</div>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Προηγούμενη</button>
+                        <button class="nav-btn next" onclick="nextQuestion()">${currentQuestion === questions.length - 1 ? 'Αποτελέσματα' : 'Επόμενη →'}</button>
+                    </div>
+                </div>`;
+            document.querySelectorAll('.option').forEach(opt => opt.addEventListener('click', () => selectOption(parseInt(opt.dataset.index))));
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function selectOption(index) {
+            if (answered[currentQuestion]) return;
+            const q = questions[currentQuestion];
+            answered[currentQuestion] = true;
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === index && index !== q.correct) opt.classList.add('wrong');
+            });
+            const feedback = document.getElementById('feedback');
+            if (index === q.correct) { correctAnswers++; feedback.className = 'feedback show correct'; feedback.innerHTML = '✓ Σωστό! ' + q.explanation; }
+            else { wrongAnswers++; feedback.className = 'feedback show wrong'; feedback.innerHTML = '✗ Λάθος. ' + q.explanation; }
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('wrongCount').textContent = wrongAnswers;
+        }
+
+        function nextQuestion() { if (currentQuestion < questions.length - 1) { currentQuestion++; renderQuestion(); } else showResults(); }
+        function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; renderQuestion(); } }
+
+        function showResults() {
+            const pct = Math.round((correctAnswers / questions.length) * 100);
+            let msg = pct >= 90 ? '🏆 Εξαιρετικά!' : pct >= 70 ? '👍 Πολύ καλά!' : pct >= 50 ? '📚 Χρειάζεσαι επανάληψη.' : '💪 Διάβασε ξανά!';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="score-circle"><span class="score-text">${pct}%</span></div>
+                <h2>${msg}</h2><p>Σωστές: ${correctAnswers}/${questions.length}</p>
+                <button class="restart-btn" onclick="location.reload()">🔄 Ξανά</button><br><br>
+                <a href="../index.html" class="back-link">← Αρχική</a>`;
+        }
+        renderQuestion();
+    </script>
+</body>
+</html>

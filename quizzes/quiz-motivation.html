@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Παρακίνησης | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: #faf8f5; color: #2d3748; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 12px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 12px; margin: 20px 0; overflow: hidden; }
+        .progress { background: linear-gradient(90deg, #ed8936, #f6ad55); height: 100%; transition: width 0.3s; border-radius: 10px; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; font-weight: 600; }
+        .stats span { padding: 8px 16px; border-radius: 20px; }
+        .correct-count { background: #c6f6d5; color: #276749; }
+        .wrong-count { background: #fed7d7; color: #c53030; }
+        .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .question-number { color: #ed8936; font-weight: 600; margin-bottom: 10px; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; color: #1a365d; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { border-color: #ed8936; background: #fffaf0; }
+        .option.selected { border-color: #3182ce; background: #ebf8ff; }
+        .option.correct { border-color: #38a169; background: #c6f6d5; }
+        .option.wrong { border-color: #e53e3e; background: #fed7d7; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #c6f6d5; color: #276749; }
+        .feedback.wrong { background: #fed7d7; color: #c53030; }
+        .theory-toggle { background: #ebf8ff; color: #3182ce; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: 600; }
+        .theory-box { background: #f0f9ff; border-left: 4px solid #3182ce; padding: 20px; margin-top: 15px; border-radius: 0 8px 8px 0; display: none; }
+        .theory-box.show { display: block; }
+        .theory-box h4 { color: #1a365d; margin-bottom: 10px; }
+        .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .keyword { background: #fbd38d; color: #744210; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; }
+        .sos-badge { background: #e53e3e; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 8px; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .nav-btn.prev { background: #e2e8f0; color: #4a5568; }
+        .nav-btn.next { background: #ed8936; color: white; }
+        .nav-btn:hover { transform: translateY(-2px); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #ed8936, #f6ad55); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .score-text { font-size: 2.5rem; font-weight: bold; color: white; }
+        .results h2 { color: #1a365d; margin-bottom: 15px; }
+        .restart-btn { background: #1a365d; color: white; padding: 15px 40px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; margin-top: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3182ce; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+        
+        <header>
+            <h1>📊 Quiz Παρακίνησης</h1>
+            <p>Θεωρίες Παρακίνησης στην Εκπαίδευση</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="stats">
+            <span class="correct-count">✓ Σωστές: <span id="correctCount">0</span></span>
+            <span class="wrong-count">✗ Λάθος: <span id="wrongCount">0</span></span>
+        </div>
+
+        <div id="quizContainer"></div>
+        <div id="resultsContainer" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Ποια είναι η σωστή σειρά των αναγκών στην πυραμίδα του Maslow (από κάτω προς τα πάνω);",
+                options: [
+                    "Φυσιολογικές → Ασφάλειας → Κοινωνικές → Εκτίμησης → Αυτοπραγμάτωσης",
+                    "Ασφάλειας → Φυσιολογικές → Κοινωνικές → Αυτοπραγμάτωσης → Εκτίμησης",
+                    "Κοινωνικές → Φυσιολογικές → Ασφάλειας → Εκτίμησης → Αυτοπραγμάτωσης",
+                    "Φυσιολογικές → Κοινωνικές → Ασφάλειας → Εκτίμησης → Αυτοπραγμάτωσης"
+                ],
+                correct: 0,
+                explanation: "Η πυραμίδα του Maslow ξεκινά από τις βασικές φυσιολογικές ανάγκες και κορυφώνεται με την αυτοπραγμάτωση.",
+                theory: {
+                    title: "Θεωρία Ιεράρχησης Αναγκών Maslow",
+                    sos: true,
+                    content: "Ο Abraham Maslow ανέπτυξε τη θεωρία της ιεράρχησης αναγκών. Οι χαμηλότερες ανάγκες (φυσιολογικές, ασφάλειας, κοινωνικές) πρέπει να ικανοποιηθούν πριν τις υψηλότερες (εκτίμησης, αυτοπραγμάτωσης).",
+                    keywords: ["Πυραμίδα αναγκών", "Αυτοπραγμάτωση", "Ιεράρχηση"]
+                }
+            },
+            {
+                question: "Σύμφωνα με τη θεωρία του Herzberg, ποιοι παράγοντες προκαλούν δυσαρέσκεια αν λείπουν αλλά όχι ικανοποίηση αν υπάρχουν;",
+                options: [
+                    "Παράγοντες κινήτρων",
+                    "Παράγοντες υγιεινής",
+                    "Παράγοντες αυτοπραγμάτωσης",
+                    "Παράγοντες επίτευξης"
+                ],
+                correct: 1,
+                explanation: "Οι παράγοντες υγιεινής (μισθός, συνθήκες, ασφάλεια) αποτρέπουν τη δυσαρέσκεια αλλά δεν παρακινούν.",
+                theory: {
+                    title: "Θεωρία Δύο Παραγόντων Herzberg",
+                    sos: false,
+                    content: "Ο Frederick Herzberg διέκρινε τους παράγοντες υγιεινής (εξωτερικοί: μισθός, συνθήκες) από τους παράγοντες κινήτρων (εσωτερικοί: αναγνώριση, επίτευξη).",
+                    keywords: ["Παράγοντες υγιεινής", "Παράγοντες κινήτρων", "Δύο παράγοντες"]
+                }
+            },
+            {
+                question: "Ποια είναι η σωστή φόρμουλα της Θεωρίας Προσδοκίας του Vroom;",
+                options: [
+                    "Παρακίνηση = Ανάγκη × Ικανοποίηση",
+                    "Παρακίνηση = Προσδοκία × Συντελεστικότητα × Σθένος",
+                    "Παρακίνηση = Είσοδοι ÷ Έξοδοι",
+                    "Παρακίνηση = Στόχος + Ανατροφοδότηση"
+                ],
+                correct: 1,
+                explanation: "Μ = Π × Σ × Σθ (Expectancy × Instrumentality × Valence)",
+                theory: {
+                    title: "Θεωρία Προσδοκίας Vroom",
+                    sos: true,
+                    content: "Προσδοκία: πεποίθηση ότι η προσπάθεια οδηγεί σε απόδοση. Συντελεστικότητα: πεποίθηση ότι η απόδοση οδηγεί σε ανταμοιβή. Σθένος: αξία της ανταμοιβής για το άτομο.",
+                    keywords: ["Προσδοκία", "Συντελεστικότητα", "Σθένος", "Π×Σ×Σθ"]
+                }
+            },
+            {
+                question: "Στη Θεωρία Δικαιοσύνης του Adams, τι συγκρίνει ο εργαζόμενος;",
+                options: [
+                    "Τον μισθό του με τον μισθό του προϊσταμένου",
+                    "Τη σχέση εισροών-εκροών του με αυτή άλλων",
+                    "Τις ανάγκες του με τις δυνατότητες του οργανισμού",
+                    "Τους στόχους του με τα αποτελέσματα"
+                ],
+                correct: 1,
+                explanation: "Η θεωρία δικαιοσύνης εστιάζει στη σύγκριση του λόγου εισροών/εκροών με άλλους.",
+                theory: {
+                    title: "Θεωρία Δικαιοσύνης Adams",
+                    sos: false,
+                    content: "Ο εργαζόμενος συγκρίνει τη σχέση των εισροών του (προσπάθεια, χρόνος) με τις εκροές (μισθός, αναγνώριση) σε σχέση με άλλους συναδέλφους.",
+                    keywords: ["Εισροές", "Εκροές", "Κοινωνική σύγκριση", "Equity"]
+                }
+            },
+            {
+                question: "Ποιος εισήγαγε τη θεωρία ERG που αναθεώρησε τη θεωρία του Maslow;",
+                options: [
+                    "Herzberg",
+                    "Vroom",
+                    "Alderfer",
+                    "McClelland"
+                ],
+                correct: 2,
+                explanation: "Ο Clayton Alderfer ανέπτυξε τη θεωρία ERG: Existence, Relatedness, Growth.",
+                theory: {
+                    title: "Θεωρία ERG Alderfer",
+                    sos: false,
+                    content: "E = Existence (Ύπαρξη), R = Relatedness (Σχέσεις), G = Growth (Ανάπτυξη). Σε αντίθεση με τον Maslow, επιτρέπει ταυτόχρονη ικανοποίηση αναγκών.",
+                    keywords: ["Existence", "Relatedness", "Growth", "ERG"]
+                }
+            },
+            {
+                question: "Ποιες είναι οι τρεις ανάγκες στη θεωρία του McClelland;",
+                options: [
+                    "Τροφή, Στέγη, Ασφάλεια",
+                    "Επίτευξη, Εξουσία, Συνάφεια",
+                    "Ύπαρξη, Σχέσεις, Ανάπτυξη",
+                    "Αυτονομία, Ικανότητα, Σχέσεις"
+                ],
+                correct: 1,
+                explanation: "nAch (Achievement), nPow (Power), nAff (Affiliation).",
+                theory: {
+                    title: "Θεωρία Επίκτητων Αναγκών McClelland",
+                    sos: false,
+                    content: "Ανάγκη επίτευξης (nAch): επιθυμία για επιτυχία. Ανάγκη εξουσίας (nPow): επιθυμία για επιρροή. Ανάγκη συνάφειας (nAff): επιθυμία για σχέσεις.",
+                    keywords: ["nAch", "nPow", "nAff", "Achievement"]
+                }
+            },
+            {
+                question: "Σύμφωνα με τον Skinner, η θετική ενίσχυση σημαίνει:",
+                options: [
+                    "Τιμωρία για κακή συμπεριφορά",
+                    "Προσθήκη ευχάριστου ερεθίσματος μετά την επιθυμητή συμπεριφορά",
+                    "Αφαίρεση δυσάρεστου ερεθίσματος",
+                    "Αγνόηση της συμπεριφοράς"
+                ],
+                correct: 1,
+                explanation: "Η θετική ενίσχυση προσθέτει κάτι ευχάριστο για να ενισχύσει τη συμπεριφορά.",
+                theory: {
+                    title: "Θεωρία Ενίσχυσης Skinner",
+                    sos: false,
+                    content: "Θετική ενίσχυση: προσθήκη ευχάριστου. Αρνητική ενίσχυση: αφαίρεση δυσάρεστου. Τιμωρία: προσθήκη δυσάρεστου. Απόσβεση: αγνόηση.",
+                    keywords: ["Θετική ενίσχυση", "Αρνητική ενίσχυση", "Τιμωρία", "Απόσβεση"]
+                }
+            },
+            {
+                question: "Στην εκπαίδευση, η αναγνώριση του έργου του εκπαιδευτικού από τον διευθυντή αποτελεί:",
+                options: [
+                    "Παράγοντα υγιεινής κατά Herzberg",
+                    "Παράγοντα κινήτρων κατά Herzberg",
+                    "Φυσιολογική ανάγκη κατά Maslow",
+                    "Ανάγκη ασφάλειας κατά Maslow"
+                ],
+                correct: 1,
+                explanation: "Η αναγνώριση είναι εσωτερικός παράγοντας που παρακινεί και δημιουργεί ικανοποίηση.",
+                theory: {
+                    title: "Εφαρμογή Herzberg στην Εκπαίδευση",
+                    sos: false,
+                    content: "Παράγοντες κινήτρων στην εκπαίδευση: αναγνώριση, αυτονομία, επαγγελματική ανάπτυξη, συμμετοχή σε αποφάσεις. Παράγοντες υγιεινής: μισθός, συνθήκες, σχέσεις με διεύθυνση.",
+                    keywords: ["Αναγνώριση", "Αυτονομία", "Εσωτερικά κίνητρα"]
+                }
+            },
+            {
+                question: "Τι σημαίνει 'Σθένος' (Valence) στη θεωρία του Vroom;",
+                options: [
+                    "Η ικανότητα του ατόμου να εκτελέσει το έργο",
+                    "Η πιθανότητα επιτυχίας",
+                    "Η αξία που αποδίδει το άτομο στην ανταμοιβή",
+                    "Ο βαθμός δυσκολίας του στόχου"
+                ],
+                correct: 2,
+                explanation: "Το σθένος αναφέρεται στην υποκειμενική αξία της ανταμοιβής για το άτομο.",
+                theory: {
+                    title: "Σθένος στη Θεωρία Vroom",
+                    sos: true,
+                    content: "Το σθένος μπορεί να είναι θετικό (επιθυμητή ανταμοιβή), αρνητικό (ανεπιθύμητη) ή μηδέν (αδιάφορη). Αν οποιοσδήποτε παράγοντας είναι 0, η παρακίνηση είναι 0.",
+                    keywords: ["Σθένος", "Valence", "Αξία ανταμοιβής"]
+                }
+            },
+            {
+                question: "Ένας εκπαιδευτικός αισθάνεται ότι δουλεύει περισσότερο από τον συνάδελφό του αλλά παίρνει τον ίδιο μισθό. Ποια θεωρία εξηγεί τη δυσαρέσκειά του;",
+                options: [
+                    "Θεωρία Maslow",
+                    "Θεωρία Herzberg",
+                    "Θεωρία Δικαιοσύνης Adams",
+                    "Θεωρία ERG"
+                ],
+                correct: 2,
+                explanation: "Η θεωρία Δικαιοσύνης εξηγεί τη δυσαρέσκεια από την αντιλαμβανόμενη αδικία στη σχέση εισροών-εκροών.",
+                theory: {
+                    title: "Αδικία στην Εκπαίδευση",
+                    sos: false,
+                    content: "Όταν ο εργαζόμενος αντιλαμβάνεται αδικία, μπορεί να: μειώσει την προσπάθειά του, να ζητήσει αύξηση, να αλλάξει τη σύγκρισή του, ή να αποχωρήσει.",
+                    keywords: ["Αδικία", "Εισροές/Εκροές", "Σύγκριση"]
+                }
+            },
+            {
+                question: "Ποια ανάγκη στην πυραμίδα του Maslow καλύπτεται όταν ένας εκπαιδευτικός συμμετέχει σε ομάδα συναδέλφων;",
+                options: [
+                    "Φυσιολογική",
+                    "Ασφάλειας",
+                    "Κοινωνική",
+                    "Αυτοπραγμάτωσης"
+                ],
+                correct: 2,
+                explanation: "Οι κοινωνικές ανάγκες περιλαμβάνουν την ανάγκη για σχέσεις, αποδοχή και ένταξη σε ομάδα.",
+                theory: {
+                    title: "Κοινωνικές Ανάγκες Maslow",
+                    sos: true,
+                    content: "Στην εκπαίδευση: συνεργασία με συναδέλφους, σχέσεις με μαθητές, αίσθηση του 'ανήκειν' στη σχολική κοινότητα.",
+                    keywords: ["Κοινωνικές ανάγκες", "Ομάδα", "Αποδοχή"]
+                }
+            },
+            {
+                question: "Η απόσβεση (extinction) στη θεωρία Skinner σημαίνει:",
+                options: [
+                    "Σκληρή τιμωρία",
+                    "Θετική ενίσχυση",
+                    "Αγνόηση της συμπεριφοράς ώστε να εξαλειφθεί",
+                    "Αρνητική ανατροφοδότηση"
+                ],
+                correct: 2,
+                explanation: "Η απόσβεση είναι η αγνόηση μιας συμπεριφοράς για να σταματήσει σταδιακά.",
+                theory: {
+                    title: "Απόσβεση Skinner",
+                    sos: false,
+                    content: "Χρησιμοποιείται για ανεπιθύμητες συμπεριφορές: αν δεν λαμβάνουν καμία ενίσχυση, τείνουν να εξαλείφονται με τον καιρό.",
+                    keywords: ["Απόσβεση", "Extinction", "Αγνόηση"]
+                }
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let answered = new Array(questions.length).fill(false);
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const container = document.getElementById('quizContainer');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Ερώτηση ${currentQuestion + 1} από ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <div class="option" data-index="${i}">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="theory-toggle" onclick="toggleTheory()">📚 Δες τη Θεωρία</button>
+                    <div class="theory-box" id="theoryBox">
+                        <h4>${q.theory.title} ${q.theory.sos ? '<span class="sos-badge">SOS</span>' : ''}</h4>
+                        <p>${q.theory.content}</p>
+                        <div class="keywords">
+                            ${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Προηγούμενη</button>
+                        <button class="nav-btn next" onclick="nextQuestion()">${currentQuestion === questions.length - 1 ? 'Δες Αποτελέσματα' : 'Επόμενη →'}</button>
+                    </div>
+                </div>
+            `;
+
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', () => selectOption(parseInt(opt.dataset.index)));
+            });
+
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (answered[currentQuestion]) return;
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            
+            answered[currentQuestion] = true;
+            
+            options.forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                if (i === index && index !== q.correct) opt.classList.add('wrong');
+            });
+
+            if (index === q.correct) {
+                correctAnswers++;
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = `✓ Σωστό! ${q.explanation}`;
+            } else {
+                wrongAnswers++;
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `✗ Λάθος. ${q.explanation}`;
+            }
+
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('wrongCount').textContent = wrongAnswers;
+        }
+
+        function toggleTheory() {
+            document.getElementById('theoryBox').classList.toggle('show');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function showResults() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            document.getElementById('quizContainer').style.display = 'none';
+            const results = document.getElementById('resultsContainer');
+            results.style.display = 'block';
+            
+            let message = '';
+            if (percentage >= 90) message = '🏆 Εξαιρετικά! Είσαι έτοιμος/η για τις εξετάσεις!';
+            else if (percentage >= 70) message = '👍 Πολύ καλά! Λίγη ακόμη μελέτη.';
+            else if (percentage >= 50) message = '📚 Χρειάζεσαι περισσότερη επανάληψη.';
+            else message = '💪 Μην απογοητεύεσαι! Διάβασε ξανά τη θεωρία.';
+
+            results.innerHTML = `
+                <div class="score-circle">
+                    <span class="score-text">${percentage}%</span>
+                </div>
+                <h2>${message}</h2>
+                <p>Απάντησες σωστά ${correctAnswers} από ${questions.length} ερωτήσεις.</p>
+                <button class="restart-btn" onclick="restartQuiz()">🔄 Ξεκίνα Ξανά</button>
+                <br><br>
+                <a href="../index.html" class="back-link">← Επιστροφή στην Αρχική</a>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            answered = new Array(questions.length).fill(false);
+            document.getElementById('correctCount').textContent = '0';
+            document.getElementById('wrongCount').textContent = '0';
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>

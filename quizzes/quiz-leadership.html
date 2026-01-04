@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Quiz Ηγεσίας - MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --bg: #f7fafc;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --info: #3182ce;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg);
+            color: #1a202c;
+            line-height: 1.6;
+        }
+        nav { background: var(--primary); padding: 1rem 2rem; }
+        nav a { color: white; text-decoration: none; font-weight: 500; }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .container { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+        
+        /* Progress */
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent), #f6ad55);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+        
+        /* Question Card */
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .question-card.sos { border-left: 4px solid var(--danger); }
+        .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* Theory Toggle */
+        .theory-toggle {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .theory-toggle:hover { background: #2b6cb0; }
+        .theory-box {
+            background: #ebf8ff;
+            border-left: 4px solid var(--info);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .theory-box.show { display: block; }
+        .theory-box h4 { color: var(--info); margin-bottom: 0.5rem; }
+        .keyword { 
+            display: inline-block; 
+            background: #fbd38d; 
+            padding: 0.2rem 0.5rem; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            margin: 0.2rem;
+        }
+        .example-text {
+            background: #f0fff4;
+            border-left: 3px solid var(--success);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Options */
+        .options { display: grid; gap: 0.5rem; }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover { border-color: var(--accent); background: #fffaf0; }
+        .option.selected { border-color: var(--info); background: #ebf8ff; }
+        .option.correct { border-color: var(--success); background: #f0fff4; }
+        .option.wrong { border-color: var(--danger); background: #fff5f5; }
+        .option input { display: none; }
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .option.selected .option-marker { background: var(--info); color: white; border-color: var(--info); }
+        .option.correct .option-marker { background: var(--success); color: white; border-color: var(--success); }
+        .option.wrong .option-marker { background: var(--danger); color: white; border-color: var(--danger); }
+        
+        /* Feedback */
+        .feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #f0fff4; border-left: 4px solid var(--success); }
+        .feedback.wrong { background: #fff5f5; border-left: 4px solid var(--danger); }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: #dd6b20; }
+        .btn-primary:disabled { background: #cbd5e0; cursor: not-allowed; }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover { background: var(--primary); color: white; }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        
+        /* Results */
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .results.show { display: block; }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #2c5282);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        .score-circle .score { font-size: 2.5rem; font-weight: 700; }
+        .score-circle .label { font-size: 0.9rem; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <nav><a href="../index.html">← Αρχική</a></nav>
+    
+    <header>
+        <h1>📝 Quiz Ηγεσίας</h1>
+        <p>Θεωρίες Ηγεσίας • 15 Ερωτήσεις</p>
+    </header>
+
+    <div class="container">
+        <!-- Progress -->
+        <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
+        <div class="stats">
+            <span>Ερώτηση <span id="currentQ">1</span>/15</span>
+            <span>✓ <span id="correctCount">0</span> | ✗ <span id="wrongCount">0</span></span>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container"></div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+            <div class="score-circle">
+                <span class="score" id="finalScore">0%</span>
+                <span class="label">Βαθμολογία</span>
+            </div>
+            <h2 id="resultMessage">Συγχαρητήρια!</h2>
+            <p id="resultDetails"></p>
+            <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 1rem;">
+                🔄 Ξανά από την αρχή
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                sos: true,
+                theory: "Hersey-Blanchard",
+                theoryContent: {
+                    title: "Μοντέλο Ηγεσίας Καταστάσεων ⚠️ SOS",
+                    description: "Οι ηγέτες προσαρμόζουν τα στυλ τους ανάλογα με την <strong>ετοιμότητα</strong> των υφισταμένων. Η ετοιμότητα περιλαμβάνει: Ικανότητα, Προθυμία, Αυτοπεποίθηση.",
+                    keywords: ["Ετοιμότητα", "S1-S4 Στυλ", "M1-M4 Ωριμότητα", "Προσαρμοστικότητα"],
+                    example: "Νεοδιόριστος εκπαιδευτικός (M1) χρειάζεται Καθοδηγητικό στυλ (S1) με σαφείς οδηγίες."
+                },
+                question: "Σύμφωνα με το μοντέλο Hersey-Blanchard, η ετοιμότητα των εργαζομένων καθορίζεται από:",
+                options: [
+                    "Ικανότητα, προθυμία και αυτοπεποίθηση",
+                    "Δύναμη θέσης και δομή στόχου",
+                    "Μόνο την εκπαίδευση",
+                    "Το μισθό και τις παροχές"
+                ],
+                correct: 0,
+                explanation: "Η ετοιμότητα = Ικανότητα + Προθυμία + Αυτοπεποίθηση στην εκτέλεση των καθηκόντων."
+            },
+            {
+                id: 2,
+                sos: true,
+                theory: "Hersey-Blanchard",
+                theoryContent: {
+                    title: "Τα 4 Στυλ Ηγεσίας H-B",
+                    description: "<strong>S1 Καθοδηγητικό:</strong> Υψηλή εργασία, χαμηλή σχέση<br><strong>S2 Πειστικό:</strong> Υψηλή εργασία, υψηλή σχέση<br><strong>S3 Συμμετοχικό:</strong> Χαμηλή εργασία, υψηλή σχέση<br><strong>S4 Εξουσιοδοτικό:</strong> Χαμηλή εργασία, χαμηλή σχέση",
+                    keywords: ["S1 Telling", "S2 Selling", "S3 Participating", "S4 Delegating"],
+                    example: "Έμπειρος αλλά αδιάφορος εκπαιδευτικός (M3) χρειάζεται Συμμετοχικό στυλ (S3)."
+                },
+                question: "Όταν οι υφιστάμενοι είναι ικανοί αλλά απρόθυμοι/ανασφαλείς, ποιο στυλ Hersey-Blanchard ταιριάζει;",
+                options: [
+                    "S1 Καθοδηγητικό",
+                    "S2 Πειστικό",
+                    "S3 Συμμετοχικό",
+                    "S4 Εξουσιοδοτικό"
+                ],
+                correct: 2,
+                explanation: "S3 Συμμετοχικό: Ο ηγέτης μοιράζεται ιδέες και ενθαρρύνει τη συμμετοχή στις αποφάσεις."
+            },
+            {
+                id: 3,
+                sos: false,
+                theory: "House Path-Goal",
+                theoryContent: {
+                    title: "Θεωρία Μονοπατιού-Στόχου (House)",
+                    description: "Ο ηγέτης 'καθαρίζει το μονοπάτι' προς τους στόχους. 4 συμπεριφορές: <strong>Αυταρχική</strong> (σαφείς κανόνες), <strong>Υποστηρικτική</strong> (φιλική), <strong>Συμμετοχική</strong> (ζητά γνώμη), <strong>Προσανατολισμένη στο αποτέλεσμα</strong> (υψηλοί στόχοι).",
+                    keywords: ["Path-Goal", "Directive", "Supportive", "Participative", "Achievement-oriented"],
+                    example: "Διευθυντής που αντιμετωπίζει τους εκπαιδευτικούς ως ίσους = Υποστηρικτική ηγεσία."
+                },
+                question: "Ποιο στυλ Path-Goal ακολουθεί ο διευθυντής που είναι φιλικός και αντιμετωπίζει τα μέλη ως ίσους;",
+                options: [
+                    "Καθοδηγητική ηγεσία",
+                    "Υποστηρικτική ηγεσία",
+                    "Συμμετοχική ηγεσία",
+                    "Ηγεσία προσανατολισμένη στα επιτεύγματα"
+                ],
+                correct: 1,
+                explanation: "Υποστηρικτική ηγεσία: Φιλική, ενδιαφέρεται για τους υφισταμένους, δημιουργεί θετικό κλίμα."
+            },
+            {
+                id: 4,
+                sos: false,
+                theory: "Fiedler",
+                theoryContent: {
+                    title: "Μοντέλο Ενδεχομένων Fiedler",
+                    description: "Χρησιμοποιεί την κλίμακα <strong>LPC</strong> (Least Preferred Coworker). Υψηλό LPC = Προσανατολισμός στις σχέσεις. Χαμηλό LPC = Προσανατολισμός στην εργασία. Το στυλ θεωρείται σταθερό.",
+                    keywords: ["LPC", "Ταίριασμα στυλ-κατάστασης", "Σταθερό στυλ"],
+                    example: "Σε ευνοϊκές ή πολύ δυσμενείς καταστάσεις, αποδίδει καλύτερα ο ηγέτης χαμηλού LPC."
+                },
+                question: "Τι μετρά η κλίμακα LPC του Fiedler;",
+                options: [
+                    "Το επίπεδο εκπαίδευσης του ηγέτη",
+                    "Αν ο ηγέτης έχει κίνητρο την εργασία ή τις σχέσεις",
+                    "Την παραγωγικότητα της ομάδας",
+                    "Τον αριθμό των υφισταμένων"
+                ],
+                correct: 1,
+                explanation: "LPC μετρά τον προσανατολισμό του ηγέτη: Υψηλό = σχέσεις, Χαμηλό = εργασία."
+            },
+            {
+                id: 5,
+                sos: false,
+                theory: "Blake & Mouton",
+                theoryContent: {
+                    title: "Πλέγμα Ηγεσίας Blake & Mouton",
+                    description: "Πλέγμα 9×9 με δύο άξονες: Ενδιαφέρον για ανθρώπους (κάθετος) και Ενδιαφέρον για παραγωγή (οριζόντιος). Το <strong>(9,9)</strong> Ομαδικό στυλ θεωρείται ιδανικό.",
+                    keywords: ["9,9 Team", "1,1 Impoverished", "1,9 Country Club", "9,1 Task Master", "5,5 Middle"],
+                    example: "Διευθυντής (9,9) δημιουργεί ομάδα με υψηλή απόδοση και ικανοποίηση."
+                },
+                question: "Στο πλέγμα Blake-Mouton, ποια θέση αντιπροσωπεύει τον 'Manager Λέσχης' (Country Club);",
+                options: [
+                    "(1,1)",
+                    "(1,9)",
+                    "(9,1)",
+                    "(9,9)"
+                ],
+                correct: 1,
+                explanation: "(1,9) = Υψηλό ενδιαφέρον για ανθρώπους, χαμηλό για παραγωγή."
+            },
+            {
+                id: 6,
+                sos: false,
+                theory: "Κλασικά Στυλ",
+                theoryContent: {
+                    title: "Κλασικά Στυλ Ηγεσίας",
+                    description: "<strong>Αυταρχικό:</strong> Ο ηγέτης αποφασίζει μόνος<br><strong>Δημοκρατικό:</strong> Συμμετοχή στις αποφάσεις<br><strong>Φιλελεύθερο (Laissez-faire):</strong> Ελάχιστη παρέμβαση",
+                    keywords: ["Autocratic", "Democratic", "Laissez-faire"],
+                    example: "Δημοκρατικός διευθυντής συζητά με τους εκπαιδευτικούς πριν αποφασίσει."
+                },
+                question: "Ποιο στυλ ηγεσίας χαρακτηρίζεται από συμμετοχή των υφισταμένων στη λήψη αποφάσεων;",
+                options: [
+                    "Αυταρχικό",
+                    "Δημοκρατικό",
+                    "Φιλελεύθερο",
+                    "Γραφειοκρατικό"
+                ],
+                correct: 1,
+                explanation: "Δημοκρατικό στυλ: Ο ηγέτης ενθαρρύνει τη συμμετοχή και ζητά τη γνώμη της ομάδας."
+            },
+            {
+                id: 7,
+                sos: true,
+                theory: "Hersey-Blanchard",
+                theoryContent: {
+                    title: "Αντιστοίχιση Στυλ-Ετοιμότητας",
+                    description: "S1 → M1 (Ανίκανοι, απρόθυμοι)<br>S2 → M2 (Ανίκανοι αλλά πρόθυμοι)<br>S3 → M3 (Ικανοί αλλά απρόθυμοι)<br>S4 → M4 (Ικανοί και πρόθυμοι)",
+                    keywords: ["M1-M4", "Ωριμότητα", "Αντιστοίχιση"],
+                    example: "Νέος υπάλληλος με ενθουσιασμό (M2) χρειάζεται S2 (Πειστικό) - οδηγίες + υποστήριξη."
+                },
+                question: "Για υφιστάμενους που είναι πρόθυμοι αλλά χωρίς ικανότητες (M2), ποιο στυλ χρησιμοποιούμε;",
+                options: [
+                    "S1 Καθοδηγητικό",
+                    "S2 Πειστικό/Πώλησης",
+                    "S3 Συμμετοχικό",
+                    "S4 Εξουσιοδοτικό"
+                ],
+                correct: 1,
+                explanation: "S2 Πειστικό: Υψηλή καθοδήγηση + υψηλή υποστήριξη. Εξηγεί τις αποφάσεις."
+            },
+            {
+                id: 8,
+                sos: false,
+                theory: "Μετασχηματιστική",
+                theoryContent: {
+                    title: "Μετασχηματιστική vs Συναλλακτική Ηγεσία",
+                    description: "<strong>Μετασχηματιστική:</strong> Εμπνέει, δημιουργεί όραμα, αλλάζει τον οργανισμό<br><strong>Συναλλακτική:</strong> Ανταλλαγή (απόδοση για ανταμοιβές), διατήρηση status quo",
+                    keywords: ["Transformational", "Transactional", "Vision", "Exchange"],
+                    example: "Μετασχηματιστικός διευθυντής εμπνέει τους εκπαιδευτικούς με όραμα για το σχολείο."
+                },
+                question: "Ποιο είδος ηγεσίας εστιάζει στην έμπνευση και τη δημιουργία οράματος;",
+                options: [
+                    "Συναλλακτική",
+                    "Μετασχηματιστική",
+                    "Γραφειοκρατική",
+                    "Φιλελεύθερη"
+                ],
+                correct: 1,
+                explanation: "Μετασχηματιστική ηγεσία: Εμπνέει, δημιουργεί όραμα, ενθαρρύνει την αλλαγή."
+            },
+            {
+                id: 9,
+                sos: false,
+                theory: "Υποκατάστατα",
+                theoryContent: {
+                    title: "Υποκατάστατα της Ηγεσίας",
+                    description: "Παράγοντες που μειώνουν την ανάγκη για ηγεσία: Εμπειρία υφισταμένων, σαφείς κανόνες, αυτόνομες ομάδες, επαγγελματισμός.",
+                    keywords: ["Substitutes for Leadership", "Εμπειρία", "Αυτονομία"],
+                    example: "Έμπειροι εκπαιδευτικοί με σαφή καθήκοντα χρειάζονται λιγότερη καθοδήγηση."
+                },
+                question: "Ποιοι παράγοντες κατευθύνουν τις προσπάθειες εργασίας χωρίς τη συμμετοχή του ηγέτη;",
+                options: [
+                    "Παράγοντες συμπεριφοράς",
+                    "Συμπεριφορές ηγεσίας",
+                    "Μοντέλα έκτακτης ανάγκης",
+                    "Υποκατάστατα της ηγεσίας"
+                ],
+                correct: 3,
+                explanation: "Υποκατάστατα της ηγεσίας: Παράγοντες που αντικαθιστούν ή περιορίζουν την ανάγκη ηγεσίας."
+            },
+            {
+                id: 10,
+                sos: false,
+                theory: "Likert",
+                theoryContent: {
+                    title: "4 Συστήματα Likert",
+                    description: "System 1: Εκμεταλλευτικό-Αυταρχικό<br>System 2: Καλοπροαίρετο-Αυταρχικό<br>System 3: Συμβουλευτικό<br>System 4: Συμμετοχικό (ιδανικό)",
+                    keywords: ["System 1-4", "Exploitative", "Benevolent", "Consultative", "Participative"],
+                    example: "System 4 σχολείο: Οι αποφάσεις λαμβάνονται συλλογικά, υψηλή εμπιστοσύνη."
+                },
+                question: "Ποιο σύστημα Likert θεωρείται το πιο αποτελεσματικό;",
+                options: [
+                    "System 1 - Εκμεταλλευτικό",
+                    "System 2 - Καλοπροαίρετο",
+                    "System 3 - Συμβουλευτικό",
+                    "System 4 - Συμμετοχικό"
+                ],
+                correct: 3,
+                explanation: "System 4 (Participative): Υψηλή εμπιστοσύνη, συμμετοχική λήψη αποφάσεων."
+            },
+            {
+                id: 11,
+                sos: false,
+                theory: "Ενδιαφέρον",
+                theoryContent: {
+                    title: "Συμπεριφορά Ηγέτη",
+                    description: "Δύο διαστάσεις: <strong>Ενδιαφέρον για το έργο</strong> (task-oriented) και <strong>Ενδιαφέρον για τους ανθρώπους</strong> (relationship-oriented).",
+                    keywords: ["Task-oriented", "People-oriented", "Consideration", "Initiating Structure"],
+                    example: "Θερμός, υποστηρικτικός διευθυντής = Υψηλό ενδιαφέρον για τους ανθρώπους."
+                },
+                question: "Ένας διευθυντής που είναι θερμός, υποστηρικτικός και σέβεται τα συναισθήματα των υφισταμένων έχει:",
+                options: [
+                    "Υψηλό ενδιαφέρον για το έργο",
+                    "Υψηλό ενδιαφέρον για τους ανθρώπους",
+                    "Χαμηλό ενδιαφέρον για το έργο",
+                    "Χαμηλό ενδιαφέρον για τους ανθρώπους"
+                ],
+                correct: 1,
+                explanation: "Υψηλό ενδιαφέρον για τους ανθρώπους: Φροντίδα, σεβασμός, υποστήριξη."
+            },
+            {
+                id: 12,
+                sos: false,
+                theory: "Ενδυνάμωση",
+                theoryContent: {
+                    title: "Ενδυνάμωση (Empowerment)",
+                    description: "Η διαδικασία μέσω της οποίας οι διευθυντές επιτρέπουν και βοηθούν τους άλλους να αποκτήσουν εξουσία και επιρροή.",
+                    keywords: ["Empowerment", "Αυτονομία", "Εκχώρηση εξουσίας"],
+                    example: "Ο διευθυντής αναθέτει στον υποδιευθυντή πλήρη ευθύνη για τα προγράμματα."
+                },
+                question: "Πώς ονομάζεται η διαδικασία που οι διευθυντές βοηθούν τους άλλους να αποκτήσουν εξουσία;",
+                options: [
+                    "Ισχύς",
+                    "Όραμα",
+                    "Ενδυνάμωση",
+                    "Εξαναγκασμός"
+                ],
+                correct: 2,
+                explanation: "Ενδυνάμωση (Empowerment): Μεταβίβαση εξουσίας και ευθύνης στους υφισταμένους."
+            },
+            {
+                id: 13,
+                sos: false,
+                theory: "Vroom-Jago",
+                theoryContent: {
+                    title: "Μοντέλο Vroom-Jago",
+                    description: "Καθορίζει τον βαθμό συμμετοχής των υφισταμένων στη λήψη αποφάσεων. Από αυταρχική (AI) έως ομαδική (GII).",
+                    keywords: ["Αποφάσεις", "Συμμετοχή", "AI-AII-CI-CII-GII"],
+                    example: "Για επείγουσες αποφάσεις χωρίς ανάγκη αποδοχής, χρησιμοποιείται AI (μόνος)."
+                },
+                question: "Το μοντέλο Vroom-Jago αφορά:",
+                options: [
+                    "Την ετοιμότητα των υφισταμένων",
+                    "Τον βαθμό συμμετοχής στη λήψη αποφάσεων",
+                    "Τον προσανατολισμό στην εργασία",
+                    "Τα χαρακτηριστικά του ηγέτη"
+                ],
+                correct: 1,
+                explanation: "Vroom-Jago: Καθορίζει πότε και πόσο να συμμετέχουν οι υφιστάμενοι στις αποφάσεις."
+            },
+            {
+                id: 14,
+                sos: false,
+                theory: "Χαρισματική",
+                theoryContent: {
+                    title: "Χαρισματική Ηγεσία",
+                    description: "Βασίζεται στην προσωπικότητα και τα χαρακτηριστικά του ηγέτη. Χαρακτηριστικά: Όραμα, αυτοπεποίθηση, επικοινωνιακές ικανότητες.",
+                    keywords: ["Charisma", "Vision", "Επιρροή", "Έμπνευση"],
+                    example: "Χαρισματικός διευθυντής εμπνέει τους εκπαιδευτικούς με το προσωπικό του παράδειγμα."
+                },
+                question: "Η χαρισματική ηγεσία βασίζεται κυρίως σε:",
+                options: [
+                    "Τη θέση στην ιεραρχία",
+                    "Τα προσωπικά χαρακτηριστικά του ηγέτη",
+                    "Τους κανόνες του οργανισμού",
+                    "Τις αμοιβές που προσφέρει"
+                ],
+                correct: 1,
+                explanation: "Χαρισματική ηγεσία: Η επιρροή προέρχεται από την προσωπικότητα, όχι τη θέση."
+            },
+            {
+                id: 15,
+                sos: false,
+                theory: "Blake & Mouton",
+                theoryContent: {
+                    title: "Ιδανικό Στυλ Blake-Mouton",
+                    description: "Το (9,9) Ομαδικό στυλ (Team Management) θεωρείται ιδανικό: Υψηλό ενδιαφέρον για ανθρώπους ΚΑΙ για παραγωγή.",
+                    keywords: ["9,9 Team", "Ιδανικό", "Υψηλή απόδοση"],
+                    example: "Διευθυντής (9,9) δημιουργεί δεσμευμένη ομάδα με υψηλούς στόχους."
+                },
+                question: "Ποια θέση στο πλέγμα Blake-Mouton θεωρείται ιδανική;",
+                options: [
+                    "(1,1)",
+                    "(5,5)",
+                    "(9,1)",
+                    "(9,9)"
+                ],
+                correct: 3,
+                explanation: "(9,9) Ομαδικός/Team: Μέγιστο ενδιαφέρον και για ανθρώπους και για παραγωγή."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswers = [];
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const container = document.getElementById('quiz-container');
+            
+            let html = `
+                <div class="question-card ${q.sos ? 'sos' : ''}">
+                    ${q.sos ? '<span class="sos-badge">⚠️ SOS - Σημαντικό!</span>' : ''}
+                    <p class="question-text">${currentQuestion + 1}. ${q.question}</p>
+                    
+                    <button class="theory-toggle" onclick="toggleTheory()">
+                        📖 Διάβασε τη Θεωρία
+                    </button>
+                    
+                    <div class="theory-box" id="theoryBox">
+                        <h4>${q.theoryContent.title}</h4>
+                        <p>${q.theoryContent.description}</p>
+                        <div style="margin: 0.5rem 0;">
+                            ${q.theoryContent.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                        </div>
+                        <div class="example-text">
+                            <strong>📌 Παράδειγμα:</strong> ${q.theoryContent.example}
+                        </div>
+                    </div>
+                    
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option" id="opt${i}" onclick="selectOption(${i})">
+                                <input type="radio" name="answer" value="${i}">
+                                <span class="option-marker">${String.fromCharCode(65 + i)}</span>
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="feedback" id="feedback"></div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="btn btn-outline" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>
+                        ← Προηγούμενη
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+                        ${currentQuestion === questions.length - 1 ? 'Τέλος' : 'Επόμενη →'}
+                    </button>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            updateProgress();
+            
+            // Restore previous answer if exists
+            if (userAnswers[currentQuestion] !== undefined) {
+                answered = true;
+                const selectedOpt = document.getElementById(`opt${userAnswers[currentQuestion]}`);
+                selectedOpt.classList.add('selected');
+                showFeedback(userAnswers[currentQuestion]);
+            } else {
+                answered = false;
+            }
+        }
+
+        function toggleTheory() {
+            document.getElementById('theoryBox').classList.toggle('show');
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            answered = true;
+            userAnswers[currentQuestion] = index;
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === index) {
+                    opt.classList.add(index === q.correct ? 'correct' : 'wrong');
+                }
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            if (index === q.correct) {
+                score++;
+            }
+            
+            showFeedback(index);
+            updateStats();
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function showFeedback(selected) {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const isCorrect = selected === q.correct;
+            
+            feedback.className = `feedback show ${isCorrect ? 'correct' : 'wrong'}`;
+            feedback.innerHTML = `
+                <strong>${isCorrect ? '✓ Σωστά!' : '✗ Λάθος!'}</strong>
+                <p>${q.explanation}</p>
+            `;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                answered = false;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+        }
+
+        function updateStats() {
+            const correct = userAnswers.filter((ans, i) => ans === questions[i].correct).length;
+            const wrong = userAnswers.filter((ans, i) => ans !== undefined && ans !== questions[i].correct).length;
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('wrongCount').textContent = wrong;
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            const results = document.getElementById('results');
+            results.classList.add('show');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = percentage + '%';
+            
+            let message, details;
+            if (percentage >= 90) {
+                message = '🏆 Εξαιρετικά!';
+                details = 'Είσαι έτοιμος/η για τις εξετάσεις!';
+            } else if (percentage >= 70) {
+                message = '👍 Πολύ καλά!';
+                details = 'Λίγο ακόμα μελέτη και είσαι έτοιμος/η!';
+            } else if (percentage >= 50) {
+                message = '📚 Καλή προσπάθεια!';
+                details = 'Διάβασε ξανά τη θεωρία και ξαναπροσπάθησε.';
+            } else {
+                message = '💪 Μην τα παρατάς!';
+                details = 'Χρειάζεται περισσότερη μελέτη.';
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultDetails').textContent = `${score}/${questions.length} σωστές - ${details}`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            userAnswers = [];
+            
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('results').classList.remove('show');
+            
+            renderQuestion();
+            updateStats();
+        }
+
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>

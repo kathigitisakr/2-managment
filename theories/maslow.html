@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maslow - Ιεράρχηση Αναγκών | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c05621;
+            --primary-dark: #9c4221;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #fffaf0;
+            --bg-paper: #fef5e7;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Pyramid Visual */
+        .pyramid-container {
+            margin: 2rem auto;
+            max-width: 500px;
+        }
+
+        .pyramid-level {
+            text-align: center;
+            padding: 1rem;
+            margin: 0 auto;
+            color: white;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .pyramid-level:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .level-5 {
+            width: 50%;
+            background: linear-gradient(135deg, #9b2c2c 0%, #c53030 100%);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .level-4 {
+            width: 60%;
+            background: linear-gradient(135deg, #c05621 0%, #ed8936 100%);
+        }
+
+        .level-3 {
+            width: 70%;
+            background: linear-gradient(135deg, #2f855a 0%, #48bb78 100%);
+        }
+
+        .level-2 {
+            width: 80%;
+            background: linear-gradient(135deg, #2b6cb0 0%, #4299e1 100%);
+        }
+
+        .level-1 {
+            width: 90%;
+            background: linear-gradient(135deg, #553c9a 0%, #805ad5 100%);
+            border-radius: 0 0 8px 8px;
+        }
+
+        .level-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Needs Cards */
+        .needs-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .need-card {
+            background: var(--bg-paper);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .need-card.physiological { border-color: #805ad5; }
+        .need-card.safety { border-color: #4299e1; }
+        .need-card.social { border-color: #48bb78; }
+        .need-card.esteem { border-color: #ed8936; }
+        .need-card.self-actualization { border-color: #c53030; }
+
+        .need-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .need-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .need-card .examples {
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            background: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        /* Principles Box */
+        .principle-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .principle-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Comparison Box */
+        .comparison-box {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(237, 137, 54, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-motivation.html">📝 Quiz Παρακίνησης</a>
+    </nav>
+
+    <header>
+        <span class="sos-badge">⚠️ SOS - ΣΗΜΑΝΤΙΚΟ ΘΕΜΑ</span>
+        <h1>Θεωρία Ιεράρχησης Αναγκών</h1>
+        <p class="theorist">Abraham Maslow (Hierarchy of Needs)</p>
+    </header>
+
+    <div class="container">
+        <!-- Pyramid Visual -->
+        <div class="pyramid-container">
+            <div class="pyramid-level level-5">
+                Αυτοπραγμάτωση
+                <span class="level-label">Self-Actualization</span>
+            </div>
+            <div class="pyramid-level level-4">
+                Ανάγκες Εκτίμησης
+                <span class="level-label">Esteem Needs</span>
+            </div>
+            <div class="pyramid-level level-3">
+                Κοινωνικές Ανάγκες
+                <span class="level-label">Social/Belongingness</span>
+            </div>
+            <div class="pyramid-level level-2">
+                Ανάγκες Ασφάλειας
+                <span class="level-label">Safety Needs</span>
+            </div>
+            <div class="pyramid-level level-1">
+                Φυσιολογικές Ανάγκες
+                <span class="level-label">Physiological Needs</span>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Πυραμίδα Αναγκών Maslow</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>maslow-pyramid.png</code>
+            </p>
+            <!-- Αντικαταστήστε με: <img src="../assets/maslow-pyramid.png" class="theory-image" alt="Maslow's Hierarchy of Needs"> -->
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Η θεωρία <strong>Ιεράρχησης των Αναγκών</strong> του Abraham Maslow αποτελεί μία από τις 
+                πιο διάσημες <strong>θεωρίες περιεχομένου</strong> (Content Theories) στην παρακίνηση. 
+                Σύμφωνα με τον Maslow, ο άνθρωπος υποκινείται από την προσπάθεια να καλύψει τις 
+                ανάγκες του, οι οποίες <strong>ιεραρχούνται σε μια πυραμίδα 5 επιπέδων</strong>.
+            </p>
+            <p style="margin-top: 1rem;">
+                Η διάθεση του εργαζομένου για εργασία είναι μια <strong>συνεχής διαδικασία</strong> με 
+                την οποία προσπαθεί να ικανοποιήσει διαδοχικά τις ανάγκες του. Ο εργαζόμενος αναμένει 
+                κίνητρα για να μπορέσει να ικανοποιήσει αυτές τις ανάγκες.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Ιεράρχηση Αναγκών</span>
+                <span class="keyword">Πυραμίδα Maslow</span>
+                <span class="keyword">Αυτοπραγμάτωση</span>
+                <span class="keyword">Self-Actualization</span>
+                <span class="keyword">Αρχή Ελλείμματος</span>
+                <span class="keyword">Αρχή Προοδευτικότητας</span>
+                <span class="keyword">Χαμηλότερες Ανάγκες</span>
+                <span class="keyword">Υψηλότερες Ανάγκες</span>
+                <span class="keyword">Content Theory</span>
+            </div>
+        </section>
+
+        <!-- Βασικές Αρχές -->
+        <section class="section">
+            <h2>⚖️ Βασικές Αρχές</h2>
+            
+            <div class="principle-box">
+                <h4>📌 Αρχή του Ελλείμματος (Deficit Principle)</h4>
+                <p>
+                    Μια <strong>ικανοποιημένη ανάγκη δεν αποτελεί παράγοντα παρακίνησης</strong> της 
+                    συμπεριφοράς. Μόνο οι ανεκπλήρωτες ανάγκες παρακινούν τον άνθρωπο να δράσει.
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <h4>📌 Αρχή της Προοδευτικότητας (Progression Principle)</h4>
+                <p>
+                    Μια ανάγκη σε ένα επίπεδο <strong>δεν ενεργοποιείται μέχρι να ικανοποιηθεί η ανάγκη 
+                    στο αμέσως χαμηλότερο επίπεδο</strong>. Η κίνηση γίνεται από τη βάση προς την κορυφή.
+                </p>
+            </div>
+        </section>
+
+        <!-- Τα 5 Επίπεδα Αναγκών -->
+        <section class="section">
+            <h2>📊 Τα 5 Επίπεδα Αναγκών</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Επίπεδο</th>
+                        <th>Ανάγκη</th>
+                        <th>Κατηγορία</th>
+                        <th>Περιγραφή</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1ο</strong></td>
+                        <td>Φυσιολογικές</td>
+                        <td>Χαμηλότερες</td>
+                        <td>Τροφή, νερό, ύπνος, στέγη</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2ο</strong></td>
+                        <td>Ασφάλειας</td>
+                        <td>Χαμηλότερες</td>
+                        <td>Σταθερότητα, προστασία, ασφάλεια</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3ο</strong></td>
+                        <td>Κοινωνικές</td>
+                        <td>Χαμηλότερες</td>
+                        <td>Ανήκειν, αγάπη, σχέσεις</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4ο</strong></td>
+                        <td>Εκτίμησης</td>
+                        <td>Υψηλότερες</td>
+                        <td>Αναγνώριση, κύρος, αυτοεκτίμηση</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5ο</strong></td>
+                        <td>Αυτοπραγμάτωσης</td>
+                        <td>Υψηλότερες</td>
+                        <td>Ανάπτυξη, δημιουργικότητα, εξέλιξη</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="needs-grid">
+                <div class="need-card physiological">
+                    <h4>🍽️ 1. Φυσιολογικές Ανάγκες</h4>
+                    <p>Βασικές βιολογικές ανάγκες επιβίωσης</p>
+                    <div class="examples">
+                        <strong>Στην εργασία:</strong> Επαρκής μισθός, ωράριο, υγιεινό περιβάλλον εργασίας
+                    </div>
+                </div>
+                
+                <div class="need-card safety">
+                    <h4>🛡️ 2. Ανάγκες Ασφάλειας</h4>
+                    <p>Ανάγκη για σταθερότητα και προστασία</p>
+                    <div class="examples">
+                        <strong>Στην εργασία:</strong> Εργασιακή σταθερότητα, ξεκάθαρες αρμοδιότητες, υποστήριξη από διοίκηση
+                    </div>
+                </div>
+                
+                <div class="need-card social">
+                    <h4>👥 3. Κοινωνικές Ανάγκες</h4>
+                    <p>Ανάγκη ανήκειν, φιλία, αποδοχή</p>
+                    <div class="examples">
+                        <strong>Στην εργασία:</strong> Ομαδικότητα, σχέσεις με συναδέλφους, ομάδες έργου, κοινές δράσεις
+                    </div>
+                </div>
+                
+                <div class="need-card esteem">
+                    <h4>⭐ 4. Ανάγκες Εκτίμησης</h4>
+                    <p>Αναγνώριση, κύρος, αυτοσεβασμός</p>
+                    <div class="examples">
+                        <strong>Στην εργασία:</strong> Αναγνώριση, επιβράβευση, εμπιστοσύνη, δημόσια αναγνώριση
+                    </div>
+                </div>
+                
+                <div class="need-card self-actualization">
+                    <h4>🌟 5. Ανάγκες Αυτοπραγμάτωσης</h4>
+                    <p>Ανάπτυξη δυνατοτήτων, δημιουργικότητα</p>
+                    <div class="examples">
+                        <strong>Στην εργασία:</strong> Επαγγελματική ανάπτυξη, καινοτομία, επιρροή στο έργο
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Επίπεδο</th>
+                        <th>Ανάγκες Εκπαιδευτικών</th>
+                        <th>Πρακτικά Κίνητρα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Φυσιολογικές</strong></td>
+                        <td>Επαρκής μισθός, ωράριο, υγιεινό περιβάλλον</td>
+                        <td>Βελτίωση υποδομών, μείωση γραφειοκρατίας</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ασφάλειας</strong></td>
+                        <td>Εργασιακή σταθερότητα, ξεκάθαρες αρμοδιότητες</td>
+                        <td>Κανονιστικές οδηγίες, δίκαιη αξιολόγηση, προστασία από burnout</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Κοινωνικές</strong></td>
+                        <td>Ανήκειν, ομαδικότητα, σχέσεις με συναδέλφους</td>
+                        <td>Ομάδες έργου, κοινές δράσεις, συναντήσεις προσωπικού</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Εκτίμησης</strong></td>
+                        <td>Αναγνώριση, επιβράβευση, εμπιστοσύνη</td>
+                        <td>Εσωτερική επιβράβευση, δημόσια αναγνώριση, «Εκπαιδευτικός του Μήνα»</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Αυτοπραγμάτωσης</strong></td>
+                        <td>Ανάπτυξη, καινοτομία, επιρροή στο έργο</td>
+                        <td>Επιμόρφωση, Erasmus+, mentoring νέων εκπαιδευτικών</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Διευθυντής παρακινεί νεοδιόριστο εκπαιδευτικό</h4>
+                <p>
+                    Ο νεοδιόριστος εκπαιδευτικός αρχικά χρειάζεται <strong>ασφάλεια</strong> (σαφείς οδηγίες, 
+                    υποστήριξη). Στη συνέχεια <strong>κοινωνική ένταξη</strong> (να νιώσει μέλος του συλλόγου). 
+                    Καθώς εξελίσσεται, χρειάζεται <strong>αναγνώριση</strong> (επιβράβευση για το έργο του) 
+                    και τέλος ευκαιρίες <strong>αυτοπραγμάτωσης</strong> (συμμετοχή σε καινοτόμα προγράμματα).
+                </p>
+            </div>
+        </section>
+
+        <!-- Σύνδεση με θεωρία ERG -->
+        <section class="section">
+            <h2>🔗 Σύνδεση με Θεωρία ERG (Alderfer)</h2>
+            
+            <div class="comparison-box">
+                <h4>📌 Αντιστοίχιση Maslow - ERG</h4>
+                <p>Η θεωρία ERG του Clayton Alderfer απλοποιεί την πυραμίδα του Maslow σε 3 επίπεδα:</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Maslow</th>
+                        <th>ERG (Alderfer)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Φυσιολογικές + Ασφάλειας</td>
+                        <td><strong>Existence</strong> (Ύπαρξη)</td>
+                    </tr>
+                    <tr>
+                        <td>Κοινωνικές + Εκτίμησης (εξωτερική)</td>
+                        <td><strong>Relatedness</strong> (Συσχέτιση)</td>
+                    </tr>
+                    <tr>
+                        <td>Εκτίμησης (εσωτερική) + Αυτοπραγμάτωσης</td>
+                        <td><strong>Growth</strong> (Ανάπτυξη)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 1rem; color: var(--text-muted);">
+                <strong>Σημαντική διαφορά:</strong> Στη θεωρία ERG, αν απογοητευτεί κάποιος σε υψηλότερο επίπεδο, 
+                μπορεί να επιστρέψει σε χαμηλότερο (regression), ενώ στον Maslow η κίνηση είναι μόνο προς τα πάνω.
+            </p>
+        </section>
+
+        <!-- Σύνδεση με Herzberg -->
+        <section class="section">
+            <h2>🔗 Σύνδεση με Θεωρία Herzberg</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Maslow</th>
+                        <th>Herzberg</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Φυσιολογικές, Ασφάλειας, Κοινωνικές</td>
+                        <td><strong>Παράγοντες Υγιεινής</strong> (Hygiene Factors)</td>
+                    </tr>
+                    <tr>
+                        <td>Εκτίμησης, Αυτοπραγμάτωσης</td>
+                        <td><strong>Παράγοντες Κινήτρων</strong> (Motivators)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Η θεωρία Maslow είναι <strong>θεωρία περιεχομένου</strong> (Content Theory)</li>
+                <li>Οι <strong>χαμηλότερες ανάγκες</strong> = Φυσιολογικές, Ασφάλειας, Κοινωνικές</li>
+                <li>Οι <strong>υψηλότερες ανάγκες</strong> = Εκτίμησης, Αυτοπραγμάτωσης</li>
+                <li>Χαμηλότερες ανάγκες Maslow = <strong>Ανάγκες ύπαρξης</strong> στη θεωρία ERG</li>
+                <li>Συχνή ερώτηση: <em>«Ποια επίπεδα αντιστοιχούν σε ποιες θεωρίες;»</em></li>
+                <li>Να θυμάστε: Αρχή <strong>Ελλείμματος</strong> και Αρχή <strong>Προοδευτικότητας</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στα αρχεία:<br>
+                • <strong>«2α Παρακίνηση.pdf»</strong>, Διαφάνειες 6-8<br>
+                • <strong>«2β Παρακίνηση εκπαιδευτικών.pdf»</strong> - Εφαρμογή στην εκπαίδευση<br>
+                • <strong>«MANEDU_1.pdf»</strong>, Διαφάνεια 48
+            </p>
+            <a href="../pdfs/2α_Παρακίνηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Παρακίνησης
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

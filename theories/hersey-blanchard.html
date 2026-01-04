@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hersey-Blanchard - Μοντέλο Ηγεσίας Καταστάσεων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Image Placeholder */
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--text-muted);
+        }
+
+        .image-placeholder p {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Style Cards */
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .styles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .style-card {
+            background: var(--bg-paper);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .style-card.s1 { border-color: var(--danger); }
+        .style-card.s2 { border-color: var(--warning); }
+        .style-card.s3 { border-color: var(--info); }
+        .style-card.s4 { border-color: var(--success); }
+
+        .style-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .style-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Link */
+        .pdf-reference {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--danger);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(237, 137, 54, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-leadership.html">📝 Quiz Ηγεσίας</a>
+    </nav>
+
+    <header>
+        <span class="sos-badge">⚠️ SOS - ΣΗΜΑΝΤΙΚΟ ΘΕΜΑ</span>
+        <h1>Μοντέλο Ηγεσίας Καταστάσεων</h1>
+        <p class="theorist">Hersey & Blanchard (Situational Leadership)</p>
+    </header>
+
+    <div class="container">
+        <!-- Image -->
+        <div class="image-placeholder">
+           <img src="../assets/hersey-blanchard.png" class="theory-image" alt="Hersey-Blanchard Model">
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Το μοντέλο <strong>Ηγεσίας Καταστάσεων</strong> των Hersey και Blanchard υποστηρίζει ότι 
+                <strong>δεν υπάρχει ένα «καλύτερο» στυλ ηγεσίας</strong>. Αντίθετα, ο αποτελεσματικός ηγέτης 
+                προσαρμόζει τη συμπεριφορά του ανάλογα με την <strong>ετοιμότητα</strong> (readiness/maturity) 
+                των υφισταμένων του.
+            </p>
+            <p style="margin-top: 0rem;">
+                Η <strong>ετοιμότητα</strong> αξιολογείται με βάση τρεις παράγοντες:
+            </p>
+            <ul style="margin: 1rem 0 0 1.5rem;">
+                <li><strong>Ικανότητα</strong> (Ability) - Γνώσεις και δεξιότητες</li>
+                <li><strong>Προθυμία</strong> (Willingness) - Κίνητρο και διάθεση</li>
+                <li><strong>Αυτοπεποίθηση</strong> (Confidence) - Εμπιστοσύνη στον εαυτό</li>
+            </ul>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Ετοιμότητα (Readiness)</span>
+                <span class="keyword">Ωριμότητα (Maturity)</span>
+                <span class="keyword">S1-S4 Στυλ</span>
+                <span class="keyword">M1-M4 Επίπεδα</span>
+                <span class="keyword">Προσαρμοστικότητα</span>
+                <span class="keyword">Situational Leadership</span>
+                <span class="keyword">Task Behavior</span>
+                <span class="keyword">Relationship Behavior</span>
+            </div>
+        </section>
+
+        <!-- Τα 4 Στυλ -->
+        <section class="section">
+            <h2>📊 Τα 4 Στυλ Ηγεσίας</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στυλ</th>
+                        <th>Χαρακτηριστικά</th>
+                        <th>Ετοιμότητα Υφισταμένων</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>S1 - Καθοδηγητικό (Telling)</strong></td>
+                        <td>Υψηλή εργασία, Χαμηλή σχέση - Δίνει οδηγίες</td>
+                        <td>M1: Ανίκανοι, απρόθυμοι, ανασφαλείς</td>
+                    </tr>
+                    <tr>
+                        <td><strong>S2 - Πειστικό (Selling)</strong></td>
+                        <td>Υψηλή εργασία, Υψηλή σχέση - Εξηγεί αποφάσεις</td>
+                        <td>M2: Πρόθυμοι αλλά ανίκανοι</td>
+                    </tr>
+                    <tr>
+                        <td><strong>S3 - Συμμετοχικό (Participating)</strong></td>
+                        <td>Χαμηλή εργασία, Υψηλή σχέση - Μοιράζεται ιδέες</td>
+                        <td>M3: Ικανοί αλλά απρόθυμοι/ανασφαλείς</td>
+                    </tr>
+                    <tr>
+                        <td><strong>S4 - Εξουσιοδοτικό (Delegating)</strong></td>
+                        <td>Χαμηλή εργασία, Χαμηλή σχέση - Εκχωρεί</td>
+                        <td>M4: Ικανοί, πρόθυμοι, με αυτοπεποίθηση</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="styles-grid">
+                <div class="style-card s1">
+                    <h4>S1 - Καθοδηγητικό</h4>
+                    <p>Ο ηγέτης δίνει <strong>σαφείς οδηγίες</strong> και επιβλέπει στενά. Κατάλληλο για νέους/άπειρους.</p>
+                </div>
+                <div class="style-card s2">
+                    <h4>S2 - Πειστικό</h4>
+                    <p>Ο ηγέτης <strong>εξηγεί τις αποφάσεις</strong> και προσφέρει υποστήριξη. Συνδυάζει καθοδήγηση με επικοινωνία.</p>
+                </div>
+                <div class="style-card s3">
+                    <h4>S3 - Συμμετοχικό</h4>
+                    <p>Ο ηγέτης <strong>μοιράζεται ιδέες</strong> και ενθαρρύνει συμμετοχή στις αποφάσεις. Ιδανικό για ικανούς αλλά διστακτικούς.</p>
+                </div>
+                <div class="style-card s4">
+                    <h4>S4 - Εξουσιοδοτικό</h4>
+                    <p>Ο ηγέτης <strong>εκχωρεί αρμοδιότητες</strong> και εμπιστεύεται την ομάδα. Για έμπειρους και αυτόνομους.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Παράδειγμα Εφαρμογής -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Διευθυντής Σχολείου</h4>
+                <p>
+                    <strong>Νεοδιόριστος εκπαιδευτικός (M1):</strong> Ο Διευθυντής χρησιμοποιεί 
+                    <strong>Καθοδηγητικό στυλ (S1)</strong> - δίνει σαφείς οδηγίες για το ωρολόγιο 
+                    πρόγραμμα, τον τρόπο αξιολόγησης και τις διαδικασίες του σχολείου.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Ενθουσιώδης αλλά άπειρος (M2)</h4>
+                <p>
+                    <strong>Εκπαιδευτικός με 1-2 χρόνια:</strong> Ο Διευθυντής χρησιμοποιεί 
+                    <strong>Πειστικό στυλ (S2)</strong> - εξηγεί τους λόγους πίσω από τις αποφάσεις, 
+                    παρέχει εκπαίδευση και υποστήριξη.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Έμπειρος αλλά απογοητευμένος (M3)</h4>
+                <p>
+                    <strong>Εκπαιδευτικός με 10+ χρόνια που νιώθει αδιάφορος:</strong> Ο Διευθυντής 
+                    χρησιμοποιεί <strong>Συμμετοχικό στυλ (S3)</strong> - τον εμπλέκει στη λήψη 
+                    αποφάσεων, ζητά τη γνώμη του, αναθέτει ευθύνες.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Ικανός και αυτόνομος (M4)</h4>
+                <p>
+                    <strong>Υποδιευθυντής ή Υπεύθυνος Τομέα:</strong> Ο Διευθυντής χρησιμοποιεί 
+                    <strong>Εξουσιοδοτικό στυλ (S4)</strong> - του εμπιστεύεται πλήρως έργα και 
+                    αρμοδιότητες χωρίς στενή επίβλεψη.
+                </p>
+            </div>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Η <strong>ετοιμότητα</strong> αφορά το ΕΡΓΟ, όχι τον άνθρωπο γενικά</li>
+                <li>Ο ίδιος άνθρωπος μπορεί να έχει διαφορετική ετοιμότητα σε διαφορετικά έργα</li>
+                <li>Το στυλ πρέπει να <strong>προσαρμόζεται δυναμικά</strong></li>
+                <li>Δεν υπάρχει "καλύτερο" στυλ - όλα είναι κατάλληλα ανάλογα την κατάσταση</li>
+                <li>Συχνή ερώτηση: <em>"Ποιο στυλ για ποια ετοιμότητα;"</em></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf»</strong>, 
+                Διαφάνειες 30-34
+            </p>
+            <a href="../pdfs/ΔΕ_6_Ηγεσία.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>
