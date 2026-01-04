@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Likert - Συστήματα Ηγεσίας | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-dark: #3730a3;
+            --secondary: #2d3748;
+            --accent: #818cf8;
+            --accent-light: #e0e7ff;
+            --bg-cream: #eef2ff;
+            --bg-paper: #e0e7ff;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #16a34a;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #dc2626;
+            --system1: #dc2626;
+            --system2: #ea580c;
+            --system3: #0891b2;
+            --system4: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Core Concept Box */
+        .core-concept {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(67, 56, 202, 0.3);
+        }
+
+        .core-concept h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .core-concept .concept-text {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .core-concept .concept-text strong {
+            color: var(--primary);
+        }
+
+        /* Systems Spectrum */
+        .systems-spectrum {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .systems-spectrum h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .spectrum-bar {
+            display: flex;
+            height: 60px;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .spectrum-segment {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .spectrum-segment.s1 { background: var(--system1); }
+        .spectrum-segment.s2 { background: var(--system2); }
+        .spectrum-segment.s3 { background: var(--system3); }
+        .spectrum-segment.s4 { background: var(--system4); }
+
+        .spectrum-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 0 1rem;
+        }
+
+        /* Four Systems Grid */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .systems-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .system-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .system-card.s1 {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 3px solid var(--system1);
+        }
+
+        .system-card.s2 {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 3px solid var(--system2);
+        }
+
+        .system-card.s3 {
+            background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+            border: 3px solid var(--system3);
+        }
+
+        .system-card.s4 {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 3px solid var(--system4);
+        }
+
+        .system-card .system-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .system-card .system-number {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .system-card.s1 .system-number { background: var(--system1); }
+        .system-card.s2 .system-number { background: var(--system2); }
+        .system-card.s3 .system-number { background: var(--system3); }
+        .system-card.s4 .system-number { background: var(--system4); }
+
+        .system-card h4 {
+            margin-bottom: 0.1rem;
+        }
+
+        .system-card.s1 h4 { color: var(--system1); }
+        .system-card.s2 h4 { color: var(--system2); }
+        .system-card.s3 h4 { color: var(--system3); }
+        .system-card.s4 h4 { color: var(--system4); }
+
+        .system-card .english {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .system-card .characteristics {
+            margin-top: 0.75rem;
+        }
+
+        .system-card .characteristics li {
+            margin-bottom: 0.4rem;
+            padding-left: 0.5rem;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #c7d2fe 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Best System Box */
+        .best-system {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 3px solid var(--system4);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .best-system h4 {
+            color: var(--system4);
+            margin-bottom: 0.5rem;
+        }
+
+        .best-system .star {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Comparison Box */
+        .comparison-visual {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background: var(--bg-paper);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-visual .end-label {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .comparison-visual .end-label.authoritarian {
+            background: #fee2e2;
+            color: var(--system1);
+        }
+
+        .comparison-visual .end-label.participative {
+            background: #d1fae5;
+            color: var(--system4);
+        }
+
+        .comparison-visual .arrow {
+            flex: 1;
+            height: 4px;
+            background: linear-gradient(90deg, var(--system1), var(--system2), var(--system3), var(--system4));
+            margin: 0 1rem;
+            border-radius: 2px;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(129, 140, 248, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-leadership.html">📝 Quiz Ηγεσίας</a>
+    </nav>
+
+    <header>
+        <h1>Συστήματα Ηγεσίας</h1>
+        <p class="theorist">Rensis Likert (Management Systems)</p>
+    </header>
+
+    <div class="container">
+        <!-- Core Concept -->
+        <div class="core-concept">
+            <h3>🎯 Η Βασική Ιδέα</h3>
+            <div class="concept-text">
+                <p>
+                    Ο Likert ταξινόμησε τα στυλ ηγεσίας σε <strong>4 συστήματα</strong>, 
+                    από το πλέον αυταρχικό έως το πλέον συμμετοχικό.<br>
+                    Το <strong>Σύστημα 4 (Συμμετοχικό)</strong> θεωρείται το πιο αποτελεσματικό.
+                </p>
+            </div>
+        </div>
+
+        <!-- Systems Spectrum -->
+        <div class="systems-spectrum">
+            <h3>📊 Το Συνεχές των 4 Συστημάτων</h3>
+            <div class="spectrum-bar">
+                <div class="spectrum-segment s1">Σύστημα 1</div>
+                <div class="spectrum-segment s2">Σύστημα 2</div>
+                <div class="spectrum-segment s3">Σύστημα 3</div>
+                <div class="spectrum-segment s4">Σύστημα 4</div>
+            </div>
+            <div class="spectrum-labels">
+                <span>⬅️ Αυταρχικό</span>
+                <span>Συμμετοχικό ➡️</span>
+            </div>
+        </div>
+
+        <!-- Four Systems Grid -->
+        <div class="systems-grid">
+            <div class="system-card s1">
+                <div class="system-header">
+                    <div class="system-number">1</div>
+                    <div>
+                        <h4>Αυταρχικός Ηγέτης</h4>
+                        <span class="english">Exploitative Authoritative</span>
+                    </div>
+                </div>
+                <ul class="characteristics">
+                    <li>Αποφάσεις με μορφή <strong>διαταγών</strong></li>
+                    <li><strong>Έντονος συγκεντρωτικός</strong> έλεγχος</li>
+                    <li>Μονόδρομη επικοινωνία (πάνω → κάτω)</li>
+                    <li>Χρήση φόβου και τιμωρίας</li>
+                </ul>
+            </div>
+            
+            <div class="system-card s2">
+                <div class="system-header">
+                    <div class="system-number">2</div>
+                    <div>
+                        <h4>Καλοπροαίρετος Αυταρχικός</h4>
+                        <span class="english">Benevolent Authoritative</span>
+                    </div>
+                </div>
+                <ul class="characteristics">
+                    <li>Σχεδόν ίδιος με αυταρχικός</li>
+                    <li><strong>Πείθει</strong> ότι ενεργεί για το συμφέρον τους</li>
+                    <li>Πατερναλιστική προσέγγιση</li>
+                    <li>Κάποια ανταμοιβή αντί μόνο τιμωρία</li>
+                </ul>
+            </div>
+            
+            <div class="system-card s3">
+                <div class="system-header">
+                    <div class="system-number">3</div>
+                    <div>
+                        <h4>Συμβουλευτικός Ηγέτης</h4>
+                        <span class="english">Consultative</span>
+                    </div>
+                </div>
+                <ul class="characteristics">
+                    <li><strong>Αμφίδρομη επικοινωνία</strong> με συνεργάτες</li>
+                    <li>Δέχεται τις <strong>ιδέες</strong> τους</li>
+                    <li>Παίρνει αυτός τις <strong>σημαντικές αποφάσεις</strong></li>
+                    <li>Δευτερεύουσες → χαμηλά ιεραρχικά επίπεδα</li>
+                </ul>
+            </div>
+            
+            <div class="system-card s4">
+                <div class="system-header">
+                    <div class="system-number">4</div>
+                    <div>
+                        <h4>Συμμετοχικός Ηγέτης</h4>
+                        <span class="english">Participative / Democratic</span>
+                    </div>
+                </div>
+                <ul class="characteristics">
+                    <li>Αποφάσεις <strong>από κοινού</strong> με υφισταμένους</li>
+                    <li>Διαδικασίες που <strong>συμμετέχουν όλοι</strong></li>
+                    <li>Ισχύει η αρχή της <strong>πλειοψηφίας</strong></li>
+                    <li>Υψηλή εμπιστοσύνη και δέσμευση</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Best System -->
+        <div class="best-system">
+            <div class="star">⭐</div>
+            <h4>Το Ιδανικό: Σύστημα 4 - Συμμετοχική Ηγεσία</h4>
+            <p>
+                Σύμφωνα με τον Likert, το <strong>Σύστημα 4</strong> οδηγεί σε υψηλότερη 
+                παραγωγικότητα, καλύτερες σχέσεις και μεγαλύτερη ικανοποίηση εργαζομένων.
+            </p>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Συστημάτων Likert</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>likert-systems.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Ο <strong>Rensis Likert</strong> ανέπτυξε τη θεωρία των <strong>Συστημάτων Διοίκησης</strong> 
+                (Management Systems) στο Πανεπιστήμιο του Michigan. Ταξινόμησε τα στυλ ηγεσίας 
+                σε τέσσερα συστήματα βασισμένα στον τρόπο λήψης αποφάσεων και την επικοινωνία.
+            </p>
+            <p style="margin-top: 1rem;">
+                Η θεωρία του βασίζεται στην ιδέα ότι όσο πιο <strong>συμμετοχικό</strong> είναι 
+                το στυλ ηγεσίας, τόσο πιο <strong>αποτελεσματικός</strong> είναι ο οργανισμός 
+                μακροπρόθεσμα.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Likert Systems</span>
+                <span class="keyword">Rensis Likert</span>
+                <span class="keyword">Αυταρχικός Ηγέτης</span>
+                <span class="keyword">Καλοπροαίρετος Αυταρχικός</span>
+                <span class="keyword">Συμβουλευτικός</span>
+                <span class="keyword">Συμμετοχικός</span>
+                <span class="keyword">Management Systems</span>
+                <span class="keyword">Participative Leadership</span>
+            </div>
+        </section>
+
+        <!-- Πίνακας Σύγκρισης -->
+        <section class="section">
+            <h2>📋 Πίνακας Σύγκρισης Συστημάτων</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Χαρακτηριστικό</th>
+                        <th style="background: var(--system1);">Σύστημα 1</th>
+                        <th style="background: var(--system2);">Σύστημα 2</th>
+                        <th style="background: var(--system3);">Σύστημα 3</th>
+                        <th style="background: var(--system4);">Σύστημα 4</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Λήψη Αποφάσεων</strong></td>
+                        <td>Στην κορυφή</td>
+                        <td>Κυρίως κορυφή</td>
+                        <td>Διαβούλευση</td>
+                        <td>Ομαδική</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Επικοινωνία</strong></td>
+                        <td>Μονόδρομη ↓</td>
+                        <td>Κυρίως ↓</td>
+                        <td>Αμφίδρομη ↕</td>
+                        <td>Πολύπλευρη ↔</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Εμπιστοσύνη</strong></td>
+                        <td>Καμία</td>
+                        <td>Λίγη</td>
+                        <td>Σημαντική</td>
+                        <td>Πλήρης</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Κίνητρα</strong></td>
+                        <td>Φόβος/Τιμωρία</td>
+                        <td>Ανταμοιβή/Τιμωρία</td>
+                        <td>Ανταμοιβή/Συμμετοχή</td>
+                        <td>Συμμετοχή/Δέσμευση</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ομαδική Εργασία</strong></td>
+                        <td>Καμία</td>
+                        <td>Ελάχιστη</td>
+                        <td>Μέτρια</td>
+                        <td>Υψηλή</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Visual Comparison -->
+        <section class="section">
+            <h2>📊 Οπτική Σύγκριση</h2>
+            
+            <div class="comparison-visual">
+                <div class="end-label authoritarian">
+                    <div style="font-size: 1.5rem;">👤</div>
+                    <div>Αυταρχικό</div>
+                    <div style="font-size: 0.8rem;">(Σύστημα 1-2)</div>
+                </div>
+                <div class="arrow"></div>
+                <div class="end-label participative">
+                    <div style="font-size: 1.5rem;">👥</div>
+                    <div>Συμμετοχικό</div>
+                    <div style="font-size: 0.8rem;">(Σύστημα 3-4)</div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                Η μετάβαση από το Σύστημα 1 στο Σύστημα 4 αντιπροσωπεύει αύξηση της 
+                συμμετοχής, εμπιστοσύνης και αποτελεσματικότητας.
+            </p>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Σύστημα</th>
+                        <th>Συμπεριφορά Διευθυντή Σχολείου</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--system1); font-weight: 600;">Σύστημα 1</td>
+                        <td>Επιβάλλει κανόνες χωρίς συζήτηση, αυστηρός έλεγχος, μονόλογος</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--system2); font-weight: 600;">Σύστημα 2</td>
+                        <td>Εξηγεί ότι οι αποφάσεις είναι για το καλό του σχολείου, πατερναλισμός</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--system3); font-weight: 600;">Σύστημα 3</td>
+                        <td>Ρωτά τους εκπαιδευτικούς, ακούει ιδέες, αποφασίζει μόνος</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--system4); font-weight: 600;">Σύστημα 4</td>
+                        <td>Συλλογικές αποφάσεις, σύλλογος διδασκόντων, κοινή ευθύνη</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Πρακτικό Παράδειγμα</h4>
+                <p>
+                    <strong>Θέμα:</strong> Οργάνωση σχολικής γιορτής
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Σύστημα 1:</strong> Ο Διευθυντής αποφασίζει μόνος και ανακοινώνει</li>
+                    <li><strong>Σύστημα 2:</strong> Ο Διευθυντής αποφασίζει και εξηγεί γιατί είναι καλή απόφαση</li>
+                    <li><strong>Σύστημα 3:</strong> Ρωτά τους εκπαιδευτικούς για ιδέες, αποφασίζει μόνος</li>
+                    <li><strong>Σύστημα 4:</strong> Σύλλογος διδασκόντων αποφασίζει με ψηφοφορία</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Σύγκριση με άλλες θεωρίες -->
+        <section class="section">
+            <h2>🔗 Σύνδεση με Άλλες Θεωρίες</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Θεωρία</th>
+                        <th>Likert Σύστημα 1-2</th>
+                        <th>Likert Σύστημα 3-4</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>McGregor</strong></td>
+                        <td>Θεωρία X</td>
+                        <td>Θεωρία Y</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blake & Mouton</strong></td>
+                        <td>Manager Εξουσίας (9,1)</td>
+                        <td>Ομαδικός Manager (9,9)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Κλασικά Στυλ</strong></td>
+                        <td>Αυταρχικό</td>
+                        <td>Δημοκρατικό</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>4 Συστήματα Likert:</strong> Αυταρχικό → Καλοπροαίρετο → Συμβουλευτικό → Συμμετοχικό</li>
+                <li><strong>Σύστημα 1:</strong> Διαταγές, έντονος συγκεντρωτικός έλεγχος</li>
+                <li><strong>Σύστημα 2:</strong> Πείθει ότι ενεργεί για το συμφέρον τους</li>
+                <li><strong>Σύστημα 3:</strong> Αμφίδρομη επικοινωνία, σημαντικές αποφάσεις ο ηγέτης</li>
+                <li><strong>Σύστημα 4:</strong> Κοινές αποφάσεις, αρχή πλειοψηφίας</li>
+                <li>Το <strong>Σύστημα 4</strong> θεωρείται το πιο αποτελεσματικό</li>
+                <li>Σχέση με <strong>Θεωρία X/Y</strong>: Σύστημα 1-2 = X, Σύστημα 3-4 = Y</li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«MANEDU_1.pdf»</strong>, Διαφάνεια με Συστήματα Ηγεσίας Likert
+            </p>
+            <a href="../pdfs/MANEDU_1.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiedler - Μοντέλο Ενδεχομένου | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --secondary: #2d3748;
+            --accent: #a78bfa;
+            --accent-light: #ede9fe;
+            --bg-cream: #faf5ff;
+            --bg-paper: #ede9fe;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #16a34a;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #dc2626;
+            --task: #ef4444;
+            --relationship: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Core Concept Box */
+        .core-concept {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .core-concept h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .core-concept .concept-text {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .core-concept .concept-text strong {
+            color: var(--primary);
+        }
+
+        /* LPC Scale Display */
+        .lpc-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .lpc-display {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .lpc-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .lpc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .lpc-card.task {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border: 3px solid var(--task);
+        }
+
+        .lpc-card.relationship {
+            background: linear-gradient(135deg, #eff6ff 0%, #bfdbfe 100%);
+            border: 3px solid var(--relationship);
+        }
+
+        .lpc-card .emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lpc-card h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .lpc-card.task h4 { color: var(--task); }
+        .lpc-card.relationship h4 { color: var(--relationship); }
+
+        .lpc-card .lpc-score {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            margin: 0.5rem 0;
+        }
+
+        .lpc-card.task .lpc-score { background: var(--task); }
+        .lpc-card.relationship .lpc-score { background: var(--relationship); }
+
+        .lpc-card .english {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        /* Three Variables */
+        .variables-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .variables-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .variable-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--primary);
+        }
+
+        .variable-card .number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .variable-card h5 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .variable-card .options {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .variable-card .option {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .variable-card .option.good {
+            background: #d1fae5;
+            color: var(--success);
+        }
+
+        .variable-card .option.bad {
+            background: #fecaca;
+            color: var(--danger);
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #ddd6fe 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.6rem;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        .highlight-row {
+            background: #d1fae5 !important;
+            font-weight: 600;
+        }
+
+        /* Predictions Box */
+        .predictions-box {
+            background: var(--bg-paper);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .prediction {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .prediction:last-child {
+            margin-bottom: 0;
+        }
+
+        .prediction .icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .prediction .content h5 {
+            margin-bottom: 0.25rem;
+        }
+
+        .prediction.task .content h5 { color: var(--task); }
+        .prediction.relationship .content h5 { color: var(--relationship); }
+
+        /* Key Principle Box */
+        .key-principle {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .key-principle h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Quiz Box */
+        .quiz-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .quiz-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-leadership.html">📝 Quiz Ηγεσίας</a>
+    </nav>
+
+    <header>
+        <h1>Μοντέλο Ενδεχομένου</h1>
+        <p class="theorist">Fred Fiedler (Contingency Model)</p>
+    </header>
+
+    <div class="container">
+        <!-- Core Concept -->
+        <div class="core-concept">
+            <h3>🎯 Η Βασική Ιδέα</h3>
+            <div class="concept-text">
+                <p>
+                    Η καλή ηγεσία εξαρτάται από το <strong>ταίριασμα</strong> του ηγετικού στυλ 
+                    και των <strong>απαιτήσεων των καταστάσεων</strong>.<br>
+                    Το στυλ ηγεσίας είναι <strong>σταθερό</strong> - δύσκολο να αλλάξει!
+                </p>
+            </div>
+        </div>
+
+        <!-- LPC Display -->
+        <div class="lpc-display">
+            <div class="lpc-card task">
+                <div class="emoji">📋</div>
+                <h4>Προσανατολισμός στην Εργασία</h4>
+                <span class="lpc-score">Χαμηλό LPC</span>
+                <p>Ηγέτες με κίνητρο την <strong>εργασία</strong></p>
+                <span class="english">Task-Oriented</span>
+            </div>
+            <div class="lpc-card relationship">
+                <div class="emoji">👥</div>
+                <h4>Προσανατολισμός στις Σχέσεις</h4>
+                <span class="lpc-score">Υψηλό LPC</span>
+                <p>Ηγέτες με κίνητρο τις <strong>σχέσεις</strong></p>
+                <span class="english">Relationship-Oriented</span>
+            </div>
+        </div>
+
+        <!-- LPC Explanation -->
+        <div class="key-principle">
+            <h4>🔑 Τι είναι το LPC;</h4>
+            <p>
+                <strong>LPC = Least Preferred Coworker Scale</strong> (Κλίμακα Λιγότερο Προτιμώμενου Συνεργάτη)
+            </p>
+            <p style="margin-top: 0.5rem;">
+                Ερωτηματολόγιο που μετρά πώς ο ηγέτης περιγράφει το άτομο με το οποίο δυσκολεύεται 
+                περισσότερο να συνεργαστεί. Αποκαλύπτει αν ο ηγέτης είναι προσανατολισμένος στην 
+                εργασία ή στις σχέσεις.
+            </p>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Μοντέλου Fiedler</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>fiedler-contingency.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Το <strong>Μοντέλο Ενδεχομένου</strong> (Contingency Model) του Fred Fiedler 
+                είναι η πρώτη σημαντική <strong>ενδεχομενική θεωρία ηγεσίας</strong>.
+            </p>
+            <p style="margin-top: 1rem;">
+                Σε αντίθεση με άλλες θεωρίες που υποστηρίζουν ότι οι ηγέτες μπορούν να αλλάξουν 
+                στυλ, ο Fiedler πίστευε ότι το <strong>ηγετικό στυλ είναι σταθερό</strong> (μέρος 
+                της προσωπικότητας). Επομένως, αντί να αλλάξουμε τον ηγέτη, πρέπει να 
+                <strong>ταιριάξουμε τον ηγέτη με την κατάλληλη κατάσταση</strong>.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Μοντέλο Ενδεχομένου</span>
+                <span class="keyword">Contingency Model</span>
+                <span class="keyword">Fred Fiedler</span>
+                <span class="keyword">LPC Scale</span>
+                <span class="keyword">Σχέση Ηγέτη-Μέλους</span>
+                <span class="keyword">Δομή Εργασίας</span>
+                <span class="keyword">Ισχύς Θέσης</span>
+                <span class="keyword">Task-Oriented</span>
+                <span class="keyword">Relationship-Oriented</span>
+            </div>
+        </section>
+
+        <!-- 3 Μεταβλητές Κατάστασης -->
+        <section class="section">
+            <h2>📊 Οι 3 Μεταβλητές Κατάστασης</h2>
+            
+            <div class="variables-grid">
+                <div class="variable-card">
+                    <span class="number">1</span>
+                    <h5>Σχέση Ηγέτη-Μέλους</h5>
+                    <p>Ποιότητα σχέσεων μεταξύ ηγέτη και υφισταμένων</p>
+                    <div class="options">
+                        <span class="option good">Καλή/Θετική</span>
+                        <span class="option bad">Κακή/Αρνητική</span>
+                    </div>
+                </div>
+                <div class="variable-card">
+                    <span class="number">2</span>
+                    <h5>Δομή Εργασίας</h5>
+                    <p>Βαθμός σαφήνειας των καθηκόντων</p>
+                    <div class="options">
+                        <span class="option good">Δομημένη</span>
+                        <span class="option bad">Μη Δομημένη</span>
+                    </div>
+                </div>
+                <div class="variable-card">
+                    <span class="number">3</span>
+                    <h5>Ισχύς Θέσης</h5>
+                    <p>Εξουσία του ηγέτη (ανταμοιβές, τιμωρίες)</p>
+                    <div class="options">
+                        <span class="option good">Ισχυρή</span>
+                        <span class="option bad">Περιορισμένη</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8 Καταστάσεις -->
+        <section class="section">
+            <h2>📋 Οι 8 Καταστάσεις του Μοντέλου</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Κατηγορία</th>
+                        <th>Σχέση Ηγέτη-Μέλους</th>
+                        <th>Δομή Εργασίας</th>
+                        <th>Ισχύς Θέσης</th>
+                        <th>Καλύτερος Ηγέτης</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight-row">
+                        <td>1</td>
+                        <td>Θετική ✓</td>
+                        <td>Δομημένη ✓</td>
+                        <td>Ισχυρή ✓</td>
+                        <td style="color: var(--task);">📋 Εργασία</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>2</td>
+                        <td>Θετική ✓</td>
+                        <td>Δομημένη ✓</td>
+                        <td>Περιορισμένη</td>
+                        <td style="color: var(--task);">📋 Εργασία</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>3</td>
+                        <td>Θετική ✓</td>
+                        <td>Μη Δομημένη</td>
+                        <td>Ισχυρή ✓</td>
+                        <td style="color: var(--task);">📋 Εργασία</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Θετική ✓</td>
+                        <td>Μη Δομημένη</td>
+                        <td>Περιορισμένη</td>
+                        <td style="color: var(--relationship);">👥 Σχέσεις</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Αρνητική</td>
+                        <td>Δομημένη ✓</td>
+                        <td>Ισχυρή ✓</td>
+                        <td style="color: var(--relationship);">👥 Σχέσεις</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Αρνητική</td>
+                        <td>Δομημένη ✓</td>
+                        <td>Περιορισμένη</td>
+                        <td style="color: var(--relationship);">👥 Σχέσεις</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Αρνητική</td>
+                        <td>Μη Δομημένη</td>
+                        <td>Ισχυρή ✓</td>
+                        <td style="color: var(--relationship);">👥 Σχέσεις</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>8</td>
+                        <td>Αρνητική</td>
+                        <td>Μη Δομημένη</td>
+                        <td>Περιορισμένη</td>
+                        <td style="color: var(--task);">📋 Εργασία</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+                * Οι επισημασμένες σειρές δείχνουν τις καταστάσεις όπου οι ηγέτες προσανατολισμένοι στην εργασία είναι πιο αποτελεσματικοί
+            </p>
+        </section>
+
+        <!-- Προβλέψεις -->
+        <section class="section">
+            <h2>🔮 Βασικές Προβλέψεις του Μοντέλου</h2>
+            
+            <div class="predictions-box">
+                <div class="prediction task">
+                    <div class="icon">📋</div>
+                    <div class="content">
+                        <h5>Ηγέτες Προσανατολισμένοι στην Εργασία</h5>
+                        <p>
+                            Πιο επιτυχημένοι σε <strong>πολύ ευνοϊκές</strong> (υψηλού ελέγχου) 
+                            <strong>ΚΑΙ πολύ δυσμενείς</strong> (χαμηλού ελέγχου) καταστάσεις.
+                        </p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                            → Καταστάσεις 1, 2, 3, 8
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="prediction relationship">
+                    <div class="icon">👥</div>
+                    <div class="content">
+                        <h5>Ηγέτες Προσανατολισμένοι στις Σχέσεις</h5>
+                        <p>
+                            Πιο επιτυχημένοι σε καταστάσεις <strong>μέτριου ελέγχου</strong>.
+                        </p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                            → Καταστάσεις 4, 5, 6, 7
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Κατάσταση στο Σχολείο</th>
+                        <th>Κατάλληλος Ηγέτης</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Νέο σχολείο, καλές σχέσεις, σαφείς ρόλοι</td>
+                        <td style="color: var(--task);">Προσανατολισμένος στην Εργασία</td>
+                    </tr>
+                    <tr>
+                        <td>Κρίση, χαμηλή εμπιστοσύνη, ασάφεια</td>
+                        <td style="color: var(--task);">Προσανατολισμένος στην Εργασία</td>
+                    </tr>
+                    <tr>
+                        <td>Μέτρια κατάσταση, ανάγκη για συνεργασία</td>
+                        <td style="color: var(--relationship);">Προσανατολισμένος στις Σχέσεις</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Πρακτικό Παράδειγμα</h4>
+                <p>
+                    Ένας νέος Διευθυντής τοποθετείται σε σχολείο με προβλήματα (κακές σχέσεις, 
+                    ασαφή καθήκοντα, περιορισμένη εξουσία = κατάσταση 8). Σύμφωνα με τον Fiedler, 
+                    ένας <strong>ηγέτης προσανατολισμένος στην εργασία</strong> θα είναι πιο 
+                    αποτελεσματικός σε αυτή την πολύ δυσμενή κατάσταση.
+                </p>
+            </div>
+        </section>
+
+        <!-- Quiz Ερώτηση -->
+        <section class="section">
+            <h2>❓ Τυπική Ερώτηση Εξετάσεων</h2>
+            
+            <div class="quiz-box">
+                <h4>📝 Ερώτηση Πολλαπλής Επιλογής (Εξετάσεις 2024)</h4>
+                <p>
+                    <em>«Στο μοντέλο του Fiedler, τόσο οι ευνοϊκές όσο και οι πολύ δυσμενείς 
+                    καταστάσεις αντιμετωπίζονται καλύτερα από έναν ηγέτη που:»</em>
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; list-style: none;">
+                    <li>Α) Είναι φιλελεύθερος</li>
+                    <li><strong style="color: var(--success);">Β) Επικεντρώνεται στην εργασία ✓</strong></li>
+                    <li>Γ) Είναι συμμετοχικός</li>
+                    <li>Δ) Επικεντρώνεται στις σχέσεις</li>
+                    <li>Ε) Επικεντρώνεται στους στόχους</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Σύγκριση με άλλες θεωρίες -->
+        <section class="section">
+            <h2>🔗 Σύγκριση Ενδεχομενικών Θεωριών</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Θεωρία</th>
+                        <th>Θεωρητικός</th>
+                        <th>Βασική Ιδέα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: var(--accent-light);">
+                        <td><strong>Μοντέλο Ενδεχομένου</strong></td>
+                        <td><strong>Fiedler</strong></td>
+                        <td><strong>LPC + 3 μεταβλητές (σταθερό στυλ)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Μονοπατιών-Στόχων</td>
+                        <td>House</td>
+                        <td>4 στυλ προσαρμοσμένα στην κατάσταση</td>
+                    </tr>
+                    <tr>
+                        <td>Ηγεσία Καταστάσεων</td>
+                        <td>Hersey-Blanchard</td>
+                        <td>Προσαρμογή στην ετοιμότητα υφισταμένων</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Το μοντέλο Fiedler είναι <strong>ενδεχομενική θεωρία</strong> (Contingency Theory)</li>
+                <li><strong>LPC</strong> = Least Preferred Coworker (Λιγότερο Προτιμώμενος Συνεργάτης)</li>
+                <li>Το στυλ ηγεσίας είναι <strong>σταθερό</strong> - δεν αλλάζει εύκολα</li>
+                <li><strong>3 μεταβλητές:</strong> Σχέση Ηγέτη-Μέλους, Δομή Εργασίας, Ισχύς Θέσης</li>
+                <li><strong>Ηγέτες εργασίας</strong> → ευνοϊκές ΚΑΙ δυσμενείς καταστάσεις</li>
+                <li><strong>Ηγέτες σχέσεων</strong> → μέτριες καταστάσεις</li>
+                <li>Συχνή ερώτηση: Ποιος ηγέτης είναι καλύτερος σε ακραίες καταστάσεις;</li>
+                <li>Απάντηση: <strong>Επικεντρωμένος στην εργασία</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf»</strong>, Διαφάνειες 25-29
+            </p>
+            <a href="../pdfs/ΔΕ_6_Ηγεσία_Καθοδήγηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Ηγεσίας
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

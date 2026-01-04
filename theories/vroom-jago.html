@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vroom-Jago - Μοντέλο Ηγέτη-Συμμετοχής | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c2d12;
+            --primary-dark: #6c2510;
+            --secondary: #2d3748;
+            --accent: #ea580c;
+            --accent-light: #ffedd5;
+            --bg-cream: #fff7ed;
+            --bg-paper: #ffedd5;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #16a34a;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #dc2626;
+            --authority: #dc2626;
+            --consult: #f59e0b;
+            --facilitate: #3b82f6;
+            --delegate: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Core Concept Box */
+        .core-concept {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(124, 45, 18, 0.3);
+        }
+
+        .core-concept h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .core-concept .concept-text {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .core-concept .concept-text strong {
+            color: var(--primary);
+        }
+
+        /* Three Factors Display */
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .factors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .factor-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--accent);
+        }
+
+        .factor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .factor-card .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .factor-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .factor-card .question {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Decision Methods */
+        .methods-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .methods-container h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .decision-spectrum {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .method-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .method-item:hover {
+            transform: translateX(10px);
+        }
+
+        .method-item.authority {
+            background: linear-gradient(90deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid var(--authority);
+        }
+
+        .method-item.consult-ind {
+            background: linear-gradient(90deg, #fffbeb 0%, #fef3c7 100%);
+            border-left: 4px solid #d97706;
+        }
+
+        .method-item.consult-group {
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--consult);
+        }
+
+        .method-item.facilitate {
+            background: linear-gradient(90deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--facilitate);
+        }
+
+        .method-item.delegate {
+            background: linear-gradient(90deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid var(--delegate);
+        }
+
+        .method-item .number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .method-item.authority .number { background: var(--authority); }
+        .method-item.consult-ind .number { background: #d97706; }
+        .method-item.consult-group .number { background: var(--consult); }
+        .method-item.facilitate .number { background: var(--facilitate); }
+        .method-item.delegate .number { background: var(--delegate); }
+
+        .method-item .content h5 {
+            margin-bottom: 0.1rem;
+        }
+
+        .method-item.authority .content h5 { color: var(--authority); }
+        .method-item.consult-ind .content h5 { color: #d97706; }
+        .method-item.consult-group .content h5 { color: #b45309; }
+        .method-item.facilitate .content h5 { color: var(--facilitate); }
+        .method-item.delegate .content h5 { color: var(--delegate); }
+
+        .method-item .english {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .spectrum-arrow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-top: 1rem;
+            border-top: 2px dashed #e5e7eb;
+        }
+
+        .spectrum-label {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .spectrum-label.low {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .spectrum-label.high {
+            background: #d1fae5;
+            color: var(--success);
+        }
+
+        .spectrum-label.middle {
+            color: var(--text-muted);
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #fed7aa 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Two Columns Layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .column-box {
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .column-box.authority-when {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid var(--authority);
+        }
+
+        .column-box.participative-when {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid var(--delegate);
+        }
+
+        .column-box h4 {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .column-box.authority-when h4 { color: var(--authority); }
+        .column-box.participative-when h4 { color: var(--delegate); }
+
+        .column-box ul {
+            margin-left: 1.25rem;
+        }
+
+        .column-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Benefits & Drawbacks */
+        .benefits-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .benefits-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .drawbacks-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid var(--danger);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .drawbacks-box h4 {
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-leadership.html">📝 Quiz Ηγεσίας</a>
+    </nav>
+
+    <header>
+        <h1>Μοντέλο Ηγέτη-Συμμετοχής</h1>
+        <p class="theorist">Victor Vroom & Arthur Jago (Leader-Participation Model)</p>
+    </header>
+
+    <div class="container">
+        <!-- Core Concept -->
+        <div class="core-concept">
+            <h3>🎯 Η Βασική Ιδέα</h3>
+            <div class="concept-text">
+                <p>
+                    Η επιτυχία της ηγεσίας εξαρτάται από το <strong>ακολουθούμενο μοντέλο λήψης αποφάσεων</strong>.<br>
+                    Ο ηγέτης επιλέγει τη μέθοδο που ταιριάζει καλύτερα στη <strong>φύση του προβλήματος</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Three Factors -->
+        <div class="factors-grid">
+            <div class="factor-card">
+                <div class="emoji">📊</div>
+                <h4>Ποιότητα Απόφασης</h4>
+                <p>Ποιος έχει τις πληροφορίες που απαιτούνται;</p>
+                <p class="question">Ηγέτης ↔ Υφιστάμενοι</p>
+            </div>
+            <div class="factor-card">
+                <div class="emoji">🤝</div>
+                <h4>Αποδοχή Απόφασης</h4>
+                <p>Πόσο σημαντική είναι η δέσμευση για την εφαρμογή;</p>
+                <p class="question">Όχι ↔ Ναι</p>
+            </div>
+            <div class="factor-card">
+                <div class="emoji">⏱️</div>
+                <h4>Χρόνος Απόφασης</h4>
+                <p>Πόση είναι η πίεση χρόνου;</p>
+                <p class="question">Υψηλή ↔ Χαμηλή</p>
+            </div>
+        </div>
+
+        <!-- Decision Methods -->
+        <div class="methods-container">
+            <h3>📋 Οι 5 Μέθοδοι Λήψης Αποφάσεων</h3>
+            
+            <div class="decision-spectrum">
+                <div class="method-item authority">
+                    <div class="number">1</div>
+                    <div class="content">
+                        <h5>Αποφάσισε Μόνος</h5>
+                        <span class="english">Decide Alone / Authority Decision</span>
+                        <p>Ο ηγέτης παίρνει την απόφαση μόνος του χωρίς εισροές</p>
+                    </div>
+                </div>
+                
+                <div class="method-item consult-ind">
+                    <div class="number">2</div>
+                    <div class="content">
+                        <h5>Συμβουλέψου Ατομικά</h5>
+                        <span class="english">Consult Individually</span>
+                        <p>Ο ηγέτης ζητά γνώμες από άτομα ξεχωριστά</p>
+                    </div>
+                </div>
+                
+                <div class="method-item consult-group">
+                    <div class="number">3</div>
+                    <div class="content">
+                        <h5>Διασκέψου με την Ομάδα</h5>
+                        <span class="english">Consult with Group</span>
+                        <p>Ο ηγέτης συζητά με την ομάδα, αποφασίζει μόνος</p>
+                    </div>
+                </div>
+                
+                <div class="method-item facilitate">
+                    <div class="number">4</div>
+                    <div class="content">
+                        <h5>Διευκόλυνε την Ομάδα</h5>
+                        <span class="english">Facilitate Group Decision</span>
+                        <p>Ο ηγέτης διευκολύνει συζήτηση, συναινετική απόφαση</p>
+                    </div>
+                </div>
+                
+                <div class="method-item delegate">
+                    <div class="number">5</div>
+                    <div class="content">
+                        <h5>Εξουσιοδότησε την Ομάδα</h5>
+                        <span class="english">Delegate to Group</span>
+                        <p>Η ομάδα αποφασίζει αυτόνομα, ο ηγέτης υποστηρίζει</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="spectrum-arrow">
+                <span class="spectrum-label low">⬅️ Χαμηλή Συμμετοχή</span>
+                <span class="spectrum-label middle">Βαθμός Συμμετοχής →</span>
+                <span class="spectrum-label high">Υψηλή Συμμετοχή ➡️</span>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Μοντέλου Vroom-Jago</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>vroom-jago-model.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Το <strong>Μοντέλο Ηγέτη-Συμμετοχής</strong> (Leader-Participation Model) των 
+                Victor Vroom και Arthur Jago βοηθά τους ηγέτες να επιλέξουν την κατάλληλη 
+                <strong>μέθοδο λήψης αποφάσεων</strong> ανάλογα με την κατάσταση.
+            </p>
+            <p style="margin-top: 1rem;">
+                Η βασική ιδέα είναι ότι δεν υπάρχει ένας "σωστός" τρόπος λήψης αποφάσεων - 
+                ο ηγέτης πρέπει να <strong>προσαρμόζει τη μέθοδο</strong> ανάλογα με τη φύση 
+                του προβλήματος και τις συνθήκες.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Vroom-Jago</span>
+                <span class="keyword">Leader-Participation</span>
+                <span class="keyword">Λήψη Αποφάσεων</span>
+                <span class="keyword">Απόφαση Εξουσίας</span>
+                <span class="keyword">Γνωμοδοτική Απόφαση</span>
+                <span class="keyword">Ομαδική Απόφαση</span>
+                <span class="keyword">Εξουσιοδότηση</span>
+                <span class="keyword">Ποιότητα Απόφασης</span>
+                <span class="keyword">Αποδοχή Απόφασης</span>
+            </div>
+        </section>
+
+        <!-- Πότε κάθε μέθοδος -->
+        <section class="section">
+            <h2>📊 Πότε Χρησιμοποιείται Κάθε Μέθοδος</h2>
+            
+            <div class="two-columns">
+                <div class="column-box authority-when">
+                    <h4>🔴 Μέθοδοι Εξουσίας (1-2)</h4>
+                    <p>Χρήση όταν:</p>
+                    <ul>
+                        <li>Ο ηγέτης <strong>διαθέτει την εξειδικευμένη γνώση</strong></li>
+                        <li>Ο ηγέτης έχει <strong>αυτοπεποίθηση</strong> να ενεργήσει μόνος</li>
+                        <li>Οι άλλοι είναι πιθανό να <strong>δεχτούν</strong> την απόφαση</li>
+                        <li>Υπάρχει <strong>ελάχιστος χρόνος</strong> για συζήτηση</li>
+                    </ul>
+                </div>
+                
+                <div class="column-box participative-when">
+                    <h4>🟢 Γνωμοδοτικές & Ομαδικές (3-5)</h4>
+                    <p>Χρήση όταν:</p>
+                    <ul>
+                        <li>Ο ηγέτης <strong>υστερεί σε γνώση/πληροφόρηση</strong></li>
+                        <li>Το πρόβλημα <strong>δεν είναι ξεκάθαρο</strong></li>
+                        <li>Η <strong>αποδοχή και δέσμευση</strong> είναι απαραίτητες</li>
+                        <li>Υπάρχει <strong>αρκετός χρόνος</strong> για συμμετοχή</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Πίνακας Μεθόδων -->
+        <section class="section">
+            <h2>📋 Πίνακας Μεθόδων Λήψης Αποφάσεων</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Μέθοδος</th>
+                        <th>Ρόλος Ηγέτη</th>
+                        <th>Ρόλος Ομάδας</th>
+                        <th>Συμμετοχή</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--authority); font-weight: 600;">Αποφάσισε Μόνος</td>
+                        <td>Αποφασίζει 100%</td>
+                        <td>Καμία</td>
+                        <td>Καθόλου</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #d97706; font-weight: 600;">Συμβουλέψου Ατομικά</td>
+                        <td>Αποφασίζει με εισροές</td>
+                        <td>Παρέχει γνώμες</td>
+                        <td>Χαμηλή</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--consult); font-weight: 600;">Διασκέψου με Ομάδα</td>
+                        <td>Αποφασίζει μετά από συζήτηση</td>
+                        <td>Συζητά, προτείνει</td>
+                        <td>Μέτρια</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--facilitate); font-weight: 600;">Διευκόλυνε Ομάδα</td>
+                        <td>Διευκολύνει διαδικασία</td>
+                        <td>Συναποφασίζει</td>
+                        <td>Υψηλή</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--delegate); font-weight: 600;">Εξουσιοδότησε</td>
+                        <td>Υποστηρίζει</td>
+                        <td>Αποφασίζει αυτόνομα</td>
+                        <td>Πλήρης</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Οφέλη & Μειονεκτήματα -->
+        <section class="section">
+            <h2>⚖️ Οφέλη & Μειονεκτήματα Συμμετοχικών Μεθόδων</h2>
+            
+            <div class="benefits-box">
+                <h4>✅ Οφέλη Συμμετοχικών Μεθόδων</h4>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Βελτίωση της <strong>ποιότητας</strong> των αποφάσεων</li>
+                    <li>Αύξηση της <strong>αποδοχής</strong> της απόφασης</li>
+                    <li>Ανάπτυξη <strong>ηγετικών προτύπων</strong> στην ομάδα</li>
+                    <li>Μεγαλύτερη <strong>δέσμευση</strong> στην εφαρμογή</li>
+                </ul>
+            </div>
+            
+            <div class="drawbacks-box">
+                <h4>❌ Πιθανά Μειονεκτήματα</h4>
+                <ul style="margin-left: 1.5rem;">
+                    <li><strong>Χρονοβόρες</strong> - μικρή αποτελεσματικότητα</li>
+                    <li>Δεν είναι χρήσιμες όταν τα προβλήματα πρέπει να λυθούν <strong>άμεσα</strong></li>
+                    <li>Κίνδυνος αδυναμίας επίτευξης <strong>συναίνεσης</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Κατάσταση στο Σχολείο</th>
+                        <th>Κατάλληλη Μέθοδος</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Επείγουσα απόφαση για θέμα ασφάλειας</td>
+                        <td style="color: var(--authority); font-weight: 600;">Αποφάσισε Μόνος</td>
+                    </tr>
+                    <tr>
+                        <td>Επιλογή ημερομηνίας σχολικής εκδήλωσης</td>
+                        <td style="color: #d97706; font-weight: 600;">Συμβουλέψου Ατομικά</td>
+                    </tr>
+                    <tr>
+                        <td>Σχεδιασμός εκπαιδευτικού προγράμματος</td>
+                        <td style="color: var(--consult); font-weight: 600;">Διασκέψου με Ομάδα</td>
+                    </tr>
+                    <tr>
+                        <td>Διαμόρφωση σχολικού κανονισμού</td>
+                        <td style="color: var(--facilitate); font-weight: 600;">Διευκόλυνε Ομάδα</td>
+                    </tr>
+                    <tr>
+                        <td>Οργάνωση ενός project από ομάδα εκπαιδευτικών</td>
+                        <td style="color: var(--delegate); font-weight: 600;">Εξουσιοδότησε</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Πρακτικό Παράδειγμα</h4>
+                <p>
+                    Ένας Διευθυντής πρέπει να αποφασίσει για την <strong>αναδιοργάνωση του ωρολογίου 
+                    προγράμματος</strong>. Σύμφωνα με τη θεωρία Vroom-Jago:
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Ποιότητα:</strong> Οι εκπαιδευτικοί γνωρίζουν τις ανάγκες τους → Χρειάζεται εισροή</li>
+                    <li><strong>Αποδοχή:</strong> Η συνεργασία τους είναι απαραίτητη → Υψηλή σημασία</li>
+                    <li><strong>Χρόνος:</strong> Υπάρχει χρόνος μέχρι το τέλος του τριμήνου → Αρκετός</li>
+                </ul>
+                <p style="margin-top: 0.75rem;">
+                    <strong>Κατάλληλη μέθοδος:</strong> Διασκέψου με την Ομάδα ή Διευκόλυνε την Ομάδα
+                </p>
+            </div>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Η θεωρία εστιάζει στη <strong>λήψη αποφάσεων</strong>, όχι γενικά στην ηγεσία</li>
+                <li><strong>3 παράγοντες επιλογής:</strong> Ποιότητα, Αποδοχή, Χρόνος</li>
+                <li><strong>5 μέθοδοι:</strong> από Απόφαση Εξουσίας έως Εξουσιοδότηση</li>
+                <li><strong>Μέθοδοι εξουσίας:</strong> όταν ο ηγέτης έχει γνώση + λίγος χρόνος</li>
+                <li><strong>Συμμετοχικές μέθοδοι:</strong> όταν χρειάζεται αποδοχή + αρκετός χρόνος</li>
+                <li>Οι συμμετοχικές μέθοδοι <strong>βελτιώνουν ποιότητα και αποδοχή</strong></li>
+                <li>Μειονέκτημα συμμετοχικών: <strong>χρονοβόρες</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf»</strong>, Διαφάνειες 43-49
+            </p>
+            <a href="../pdfs/ΔΕ_6_Ηγεσία_Καθοδήγηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Ηγεσίας
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blake & Mouton - Πλέγμα Ηγεσίας | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --secondary: #2d3748;
+            --accent: #34d399;
+            --accent-light: #d1fae5;
+            --bg-cream: #ecfdf5;
+            --bg-paper: #d1fae5;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #16a34a;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #dc2626;
+            --team: #059669;
+            --authority: #dc2626;
+            --country-club: #3b82f6;
+            --impoverished: #6b7280;
+            --middle: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Core Concept Box */
+        .core-concept {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(5, 150, 105, 0.3);
+        }
+
+        .core-concept h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .core-concept .concept-text {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .core-concept .concept-text strong {
+            color: var(--primary);
+        }
+
+        /* Two Dimensions Display */
+        .dimensions-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .dimensions-display {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .dimension-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dimension-card.production {
+            border-top: 4px solid var(--authority);
+        }
+
+        .dimension-card.people {
+            border-top: 4px solid var(--country-club);
+        }
+
+        .dimension-card .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-card h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-card.production h4 { color: var(--authority); }
+        .dimension-card.people h4 { color: var(--country-club); }
+
+        .dimension-card .axis {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-card.production .axis { background: var(--authority); }
+        .dimension-card.people .axis { background: var(--country-club); }
+
+        /* Grid Visual */
+        .grid-visual {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .grid-visual h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr 1fr auto;
+            gap: 0.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grid-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .grid-label.y-axis {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            padding: 0.5rem;
+        }
+
+        .grid-label.x-axis {
+            grid-column: 2 / 5;
+            padding-top: 0.5rem;
+        }
+
+        .grid-cell {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .grid-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .grid-cell .coords {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .grid-cell .name {
+            font-size: 0.7rem;
+            line-height: 1.2;
+        }
+
+        .grid-cell.team {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid var(--team);
+        }
+        .grid-cell.team .coords { color: var(--team); }
+
+        .grid-cell.country-club {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid var(--country-club);
+        }
+        .grid-cell.country-club .coords { color: var(--country-club); }
+
+        .grid-cell.authority {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid var(--authority);
+        }
+        .grid-cell.authority .coords { color: var(--authority); }
+
+        .grid-cell.impoverished {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border: 2px solid var(--impoverished);
+        }
+        .grid-cell.impoverished .coords { color: var(--impoverished); }
+
+        .grid-cell.middle {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--middle);
+        }
+        .grid-cell.middle .coords { color: var(--middle); }
+
+        .grid-cell.empty {
+            background: #f9fafb;
+            border: 1px dashed #d1d5db;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #a7f3d0 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Five Styles Cards */
+        .styles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .style-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-radius: 10px;
+            align-items: flex-start;
+        }
+
+        .style-item.team {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid var(--team);
+        }
+
+        .style-item.authority {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid var(--authority);
+        }
+
+        .style-item.country-club {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--country-club);
+        }
+
+        .style-item.impoverished {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-left: 4px solid var(--impoverished);
+        }
+
+        .style-item.middle {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left: 4px solid var(--middle);
+        }
+
+        .style-item .coords-badge {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .style-item.team .coords-badge { background: var(--team); }
+        .style-item.authority .coords-badge { background: var(--authority); }
+        .style-item.country-club .coords-badge { background: var(--country-club); }
+        .style-item.impoverished .coords-badge { background: var(--impoverished); }
+        .style-item.middle .coords-badge { background: var(--middle); }
+
+        .style-item .content h5 {
+            margin-bottom: 0.25rem;
+        }
+
+        .style-item.team .content h5 { color: var(--team); }
+        .style-item.authority .content h5 { color: var(--authority); }
+        .style-item.country-club .content h5 { color: var(--country-club); }
+        .style-item.impoverished .content h5 { color: var(--impoverished); }
+        .style-item.middle .content h5 { color: #b45309; }
+
+        .style-item .english {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .style-item .description {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .style-item .tag {
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .style-item .tag.high-prod { background: #fecaca; color: var(--danger); }
+        .style-item .tag.low-prod { background: #fee2e2; color: #9b1c1c; }
+        .style-item .tag.high-people { background: #bfdbfe; color: var(--info); }
+        .style-item .tag.low-people { background: #dbeafe; color: #1e40af; }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Best Style Box */
+        .best-style {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 3px solid var(--team);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .best-style h4 {
+            color: var(--team);
+            margin-bottom: 0.5rem;
+        }
+
+        .best-style .star {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-leadership.html">📝 Quiz Ηγεσίας</a>
+    </nav>
+
+    <header>
+        <h1>Πλέγμα Ηγεσίας</h1>
+        <p class="theorist">Robert Blake & Jane Mouton (Managerial Grid)</p>
+    </header>
+
+    <div class="container">
+        <!-- Core Concept -->
+        <div class="core-concept">
+            <h3>🎯 Η Βασική Ιδέα</h3>
+            <div class="concept-text">
+                <p>
+                    Το στυλ ηγεσίας καθορίζεται από δύο διαστάσεις:<br>
+                    <strong>Μέριμνα για την Παραγωγή</strong> (X) και 
+                    <strong>Μέριμνα για τους Ανθρώπους</strong> (Y)
+                </p>
+            </div>
+        </div>
+
+        <!-- Two Dimensions -->
+        <div class="dimensions-display">
+            <div class="dimension-card production">
+                <div class="emoji">📊</div>
+                <h4>Μέριμνα για την Παραγωγή</h4>
+                <span class="axis">Άξονας X (1-9)</span>
+                <p>Εστίαση στα αποτελέσματα, την αποδοτικότητα, τους στόχους</p>
+            </div>
+            <div class="dimension-card people">
+                <div class="emoji">👥</div>
+                <h4>Μέριμνα για τους Ανθρώπους</h4>
+                <span class="axis">Άξονας Y (1-9)</span>
+                <p>Εστίαση στις σχέσεις, τις ανάγκες, την ευημερία</p>
+            </div>
+        </div>
+
+        <!-- Grid Visual -->
+        <div class="grid-visual">
+            <h3>📐 Το Πλέγμα 9×9</h3>
+            <div class="management-grid">
+                <div class="grid-label y-axis">Μέριμνα για Ανθρώπους ↑</div>
+                
+                <div class="grid-cell country-club">
+                    <span class="coords">(1,9)</span>
+                    <span class="name">Μάνατζερ Κλειστής Ομάδας</span>
+                </div>
+                <div class="grid-cell empty"></div>
+                <div class="grid-cell team">
+                    <span class="coords">(9,9)</span>
+                    <span class="name">Ομαδικός Μάνατζερ</span>
+                </div>
+                
+                <div class="grid-cell empty"></div>
+                <div class="grid-cell middle">
+                    <span class="coords">(5,5)</span>
+                    <span class="name">Μέση του Δρόμου</span>
+                </div>
+                <div class="grid-cell empty"></div>
+                
+                <div class="grid-cell impoverished">
+                    <span class="coords">(1,1)</span>
+                    <span class="name">Αποδυναμωμένος</span>
+                </div>
+                <div class="grid-cell empty"></div>
+                <div class="grid-cell authority">
+                    <span class="coords">(9,1)</span>
+                    <span class="name">Εξουσίας-Υπακοής</span>
+                </div>
+                
+                <div class="grid-label x-axis">Μέριμνα για Παραγωγή →</div>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Πλέγμα Ηγεσίας Blake & Mouton</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>blake-mouton-grid.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Το <strong>Πλέγμα Ηγεσίας</strong> (Managerial Grid / Leadership Grid) των 
+                Robert Blake και Jane Mouton είναι ένα από τα πιο γνωστά μοντέλα 
+                <strong>ηγετικής συμπεριφοράς</strong>.
+            </p>
+            <p style="margin-top: 1rem;">
+                Βασίζεται στην ιδέα ότι οι ηγέτες μπορούν να ταξινομηθούν με βάση δύο 
+                διαστάσεις: τη <strong>μέριμνα για την παραγωγή</strong> (εργασία, αποτελέσματα) 
+                και τη <strong>μέριμνα για τους ανθρώπους</strong> (σχέσεις, ευημερία). Κάθε 
+                διάσταση κυμαίνεται από 1 (χαμηλή) έως 9 (υψηλή).
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Πλέγμα Ηγεσίας</span>
+                <span class="keyword">Managerial Grid</span>
+                <span class="keyword">Blake & Mouton</span>
+                <span class="keyword">Μέριμνα Παραγωγής</span>
+                <span class="keyword">Μέριμνα Ανθρώπων</span>
+                <span class="keyword">Ομαδικός Manager</span>
+                <span class="keyword">Manager Εξουσίας</span>
+                <span class="keyword">Country Club</span>
+                <span class="keyword">Team Manager</span>
+            </div>
+        </section>
+
+        <!-- 5 Στυλ Αναλυτικά -->
+        <section class="section">
+            <h2>📊 Τα 5 Βασικά Στυλ Ηγεσίας</h2>
+            
+            <div class="styles-list">
+                <div class="style-item team">
+                    <div class="coords-badge">9,9</div>
+                    <div class="content">
+                        <h5>Ομαδικός Manager (Ανοιχτής Ομάδας)</h5>
+                        <span class="english">Team Manager</span>
+                        <p>Επικεντρώνεται στο χτίσιμο συμμετοχής και υποστήριξης για έναν <strong>κοινό σκοπό</strong>.</p>
+                        <div class="description">
+                            <span class="tag high-prod">Υψηλή Παραγωγή</span>
+                            <span class="tag high-people">Υψηλή Μέριμνα Ανθρώπων</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="style-item authority">
+                    <div class="coords-badge">9,1</div>
+                    <div class="content">
+                        <h5>Manager Εξουσίας-Υπακοής</h5>
+                        <span class="english">Authority-Compliance Manager</span>
+                        <p>Επικεντρώνεται στην <strong>αποτελεσματικότητα των εργασιών</strong> και δραστηριοτήτων.</p>
+                        <div class="description">
+                            <span class="tag high-prod">Υψηλή Παραγωγή</span>
+                            <span class="tag low-people">Χαμηλή Μέριμνα Ανθρώπων</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="style-item country-club">
+                    <div class="coords-badge">1,9</div>
+                    <div class="content">
+                        <h5>Manager Κλειστής Ομάδας (Λέσχης)</h5>
+                        <span class="english">Country Club Manager</span>
+                        <p>Επικεντρώνεται στις <strong>ανάγκες των ανθρώπων</strong>, δημιουργώντας προσωπικές σχέσεις.</p>
+                        <div class="description">
+                            <span class="tag low-prod">Χαμηλή Παραγωγή</span>
+                            <span class="tag high-people">Υψηλή Μέριμνα Ανθρώπων</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="style-item impoverished">
+                    <div class="coords-badge">1,1</div>
+                    <div class="content">
+                        <h5>Αποδυναμωμένος Manager</h5>
+                        <span class="english">Impoverished Manager</span>
+                        <p>Επικεντρώνεται στην όσο το δυνατόν <strong>λιγότερη προσπάθεια</strong> για να γίνει η εργασία.</p>
+                        <div class="description">
+                            <span class="tag low-prod">Χαμηλή Παραγωγή</span>
+                            <span class="tag low-people">Χαμηλή Μέριμνα Ανθρώπων</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="style-item middle">
+                    <div class="coords-badge">5,5</div>
+                    <div class="content">
+                        <h5>Manager στη Μέση του Δρόμου</h5>
+                        <span class="english">Middle-of-the-Road Manager</span>
+                        <p>Επικεντρώνεται στο να <strong>ισορροπεί</strong> τα αποτελέσματα της δουλειάς και το ηθικό.</p>
+                        <div class="description">
+                            <span class="tag" style="background: #fde68a; color: #92400e;">Μέτρια Παραγωγή</span>
+                            <span class="tag" style="background: #fef3c7; color: #b45309;">Μέτρια Μέριμνα</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ιδανικό Στυλ -->
+        <div class="best-style">
+            <div class="star">⭐</div>
+            <h4>Το Ιδανικό Στυλ: Ομαδικός Manager (9,9)</h4>
+            <p>
+                Σύμφωνα με τους Blake & Mouton, το <strong>(9,9)</strong> είναι το πιο αποτελεσματικό 
+                στυλ ηγεσίας, γιατί συνδυάζει υψηλή μέριμνα τόσο για την παραγωγή όσο και για τους ανθρώπους.
+            </p>
+        </div>
+
+        <!-- Πίνακας Σύγκρισης -->
+        <section class="section">
+            <h2>📋 Πίνακας Σύγκρισης Στυλ</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στυλ</th>
+                        <th>Συντ/νες</th>
+                        <th>Παραγωγή</th>
+                        <th>Άνθρωποι</th>
+                        <th>Χαρακτηριστικό</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #d1fae5;">
+                        <td style="color: var(--team); font-weight: 600;">Ομαδικός</td>
+                        <td>(9,9)</td>
+                        <td>Υψηλή</td>
+                        <td>Υψηλή</td>
+                        <td>Συμμετοχή & Κοινός σκοπός</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--authority); font-weight: 600;">Εξουσίας-Υπακοής</td>
+                        <td>(9,1)</td>
+                        <td>Υψηλή</td>
+                        <td>Χαμηλή</td>
+                        <td>Αποδοτικότητα</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--country-club); font-weight: 600;">Κλειστής Ομάδας</td>
+                        <td>(1,9)</td>
+                        <td>Χαμηλή</td>
+                        <td>Υψηλή</td>
+                        <td>Προσωπικές σχέσεις</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--impoverished); font-weight: 600;">Αποδυναμωμένος</td>
+                        <td>(1,1)</td>
+                        <td>Χαμηλή</td>
+                        <td>Χαμηλή</td>
+                        <td>Ελάχιστη προσπάθεια</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Μέση του Δρόμου</td>
+                        <td>(5,5)</td>
+                        <td>Μέτρια</td>
+                        <td>Μέτρια</td>
+                        <td>Ισορροπία</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στυλ Διευθυντή</th>
+                        <th>Συμπεριφορά στο Σχολείο</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--team); font-weight: 600;">Ομαδικός (9,9)</td>
+                        <td>Συνεργατικές αποφάσεις, κοινό όραμα, υποστήριξη εκπαιδευτικών</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--authority); font-weight: 600;">Εξουσίας (9,1)</td>
+                        <td>Αυστηρά deadline, έλεγχος απόδοσης, μικρή συμμετοχή</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--country-club); font-weight: 600;">Κλειστής Ομάδας (1,9)</td>
+                        <td>Άνετο κλίμα, αποφυγή συγκρούσεων, χαλαρά όρια</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--impoverished); font-weight: 600;">Αποδυναμωμένος (1,1)</td>
+                        <td>Παθητική στάση, αποφυγή ευθυνών, απομόνωση</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Μέση Δρόμου (5,5)</td>
+                        <td>Συμβιβασμοί, μέτρια αποτελέσματα, "safe player"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Πρακτικό Παράδειγμα</h4>
+                <p>
+                    Ένας Διευθυντής με στυλ <strong>(9,9) Ομαδικός</strong> για την οργάνωση 
+                    σχολικής εκδήλωσης:
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Καλεί συνάντηση με όλους τους εκπαιδευτικούς</li>
+                    <li>Ζητά ιδέες και προτάσεις από όλους</li>
+                    <li>Θέτει σαφείς στόχους και deadline</li>
+                    <li>Υποστηρίζει τους εκπαιδευτικούς σε τυχόν δυσκολίες</li>
+                    <li>Αναγνωρίζει τη συνεισφορά όλων στην επιτυχία</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Το πλέγμα έχει <strong>2 άξονες:</strong> Παραγωγή (X) και Άνθρωποι (Y)</li>
+                <li>Κλίμακα <strong>1-9</strong> για κάθε διάσταση</li>
+                <li><strong>(9,9) Ομαδικός</strong> = το ιδανικό στυλ</li>
+                <li><strong>(9,1) Εξουσίας</strong> = υψηλή παραγωγή, χαμηλοί άνθρωποι</li>
+                <li><strong>(1,9) Country Club</strong> = χαμηλή παραγωγή, υψηλοί άνθρωποι</li>
+                <li><strong>(1,1) Αποδυναμωμένος</strong> = ελάχιστη προσπάθεια</li>
+                <li><strong>(5,5) Μέση</strong> = ισορροπία/συμβιβασμός</li>
+                <li>Η θεωρία ανήκει στις <strong>θεωρίες ηγετικής συμπεριφοράς</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf»</strong>, Διαφάνειες 20-23
+            </p>
+            <a href="../pdfs/ΔΕ_6_Ηγεσία_Καθοδήγηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Ηγεσίας
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

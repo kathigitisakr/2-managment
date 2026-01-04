@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House - Θεωρία Μονοπατιών-Στόχων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #2d3748;
+            --accent: #22d3ee;
+            --accent-light: #cffafe;
+            --bg-cream: #ecfeff;
+            --bg-paper: #cffafe;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #16a34a;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #dc2626;
+            --directive: #ef4444;
+            --supportive: #22c55e;
+            --participative: #3b82f6;
+            --achievement: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Exam Badge */
+        .exam-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Core Concept Box */
+        .core-concept {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(8, 145, 178, 0.3);
+        }
+
+        .core-concept h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .core-concept .concept-text {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .core-concept .concept-text strong {
+            color: var(--primary);
+        }
+
+        /* Path Visual */
+        .path-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .path-box {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .path-box.leader {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .path-box.path {
+            background: linear-gradient(135deg, var(--accent) 0%, #67e8f9 100%);
+            color: var(--primary-dark);
+        }
+
+        .path-box.goal {
+            background: linear-gradient(135deg, var(--success) 0%, #4ade80 100%);
+        }
+
+        .path-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        /* Four Styles Grid */
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .styles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .style-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .style-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .style-card.directive {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border: 3px solid var(--directive);
+        }
+
+        .style-card.supportive {
+            background: linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%);
+            border: 3px solid var(--supportive);
+        }
+
+        .style-card.participative {
+            background: linear-gradient(135deg, #eff6ff 0%, #bfdbfe 100%);
+            border: 3px solid var(--participative);
+        }
+
+        .style-card.achievement {
+            background: linear-gradient(135deg, #fffbeb 0%, #fde68a 100%);
+            border: 3px solid var(--achievement);
+        }
+
+        .style-card .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .style-card h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .style-card.directive h4 { color: var(--directive); }
+        .style-card.supportive h4 { color: var(--supportive); }
+        .style-card.participative h4 { color: var(--participative); }
+        .style-card.achievement h4 { color: #b45309; }
+
+        .style-card .english {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .style-card .when-to-use {
+            background: rgba(255,255,255,0.8);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .style-card .when-label {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .style-card.directive .when-label { color: var(--directive); }
+        .style-card.supportive .when-label { color: var(--supportive); }
+        .style-card.participative .when-label { color: var(--participative); }
+        .style-card.achievement .when-label { color: #b45309; }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #a5f3fc 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Model Diagram */
+        .model-diagram {
+            background: var(--bg-paper);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .model-box {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .model-box.factors {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--warning);
+        }
+
+        .model-box.styles {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border: 2px solid #6366f1;
+        }
+
+        .model-box.effectiveness {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid var(--success);
+        }
+
+        .model-box h5 {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .model-box.factors h5 { color: #b45309; }
+        .model-box.styles h5 { color: #4f46e5; }
+        .model-box.effectiveness h5 { color: var(--success); }
+
+        .model-box ul {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .model-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-leadership.html">📝 Quiz Ηγεσίας</a>
+    </nav>
+
+    <header>
+        <h1>Θεωρία Μονοπατιών-Στόχων</h1>
+        <p class="theorist">Robert House (Path-Goal Theory)</p>
+        <span class="exam-badge">📝 ΘΕΜΑ ΕΞΕΤΑΣΕΩΝ 2024</span>
+    </header>
+
+    <div class="container">
+        <!-- Core Concept -->
+        <div class="core-concept">
+            <h3>🎯 Η Βασική Ιδέα</h3>
+            <div class="concept-text">
+                <p>
+                    Ο <strong>αποτελεσματικός ηγέτης</strong> καθορίζει τα <strong>μονοπάτια</strong> 
+                    μέσα από τα οποία μπορούν οι υφιστάμενοι να επιτύχουν τους <strong>στόχους</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Path Visual -->
+        <div class="path-visual">
+            <div class="path-box leader">👔 Ηγέτης</div>
+            <span class="path-arrow">→</span>
+            <div class="path-box path">🛤️ Μονοπάτι</div>
+            <span class="path-arrow">→</span>
+            <div class="path-box goal">🎯 Στόχος</div>
+        </div>
+
+        <!-- Four Leadership Styles -->
+        <div class="styles-grid">
+            <div class="style-card directive">
+                <div class="emoji">📋</div>
+                <h4>Αυταρχική / Κατευθυντική</h4>
+                <span class="english">Directive Leadership</span>
+                <p>Ο ηγέτης γνωστοποιεί τις προσδοκίες, δίνει οδηγίες, προγραμματίζει τη δουλειά, διατηρεί τα πρότυπα απόδοσης.</p>
+                <div class="when-to-use">
+                    <div class="when-label">📍 Πότε χρησιμοποιείται:</div>
+                    <p>Όταν οι αναθέσεις εργασιών <strong>δεν είναι ξεκάθαρες</strong></p>
+                </div>
+            </div>
+            
+            <div class="style-card supportive">
+                <div class="emoji">🤝</div>
+                <h4>Υποστηρικτική</h4>
+                <span class="english">Supportive Leadership</span>
+                <p>Ο ηγέτης κάνει την εργασία ευχάριστη, μεταχειρίζεται τα μέλη ως ίσα, είναι φιλικός και προσιτός, δείχνει ενδιαφέρον.</p>
+                <div class="when-to-use">
+                    <div class="when-label">📍 Πότε χρησιμοποιείται:</div>
+                    <p>Όταν η <strong>αυτοπεποίθηση</strong> των εργαζομένων είναι χαμηλή</p>
+                </div>
+            </div>
+            
+            <div class="style-card participative">
+                <div class="emoji">👥</div>
+                <h4>Συμμετοχική</h4>
+                <span class="english">Participative Leadership</span>
+                <p>Ο ηγέτης εντάσσει τους υφισταμένους στη λήψη αποφάσεων, συσκέπτεται μαζί τους, ζητά και χρησιμοποιεί τις προτάσεις τους.</p>
+                <div class="when-to-use">
+                    <div class="when-label">📍 Πότε χρησιμοποιείται:</div>
+                    <p>Όταν τα <strong>κίνητρα απόδοσης</strong> είναι πτωχά</p>
+                </div>
+            </div>
+            
+            <div class="style-card achievement">
+                <div class="emoji">🏆</div>
+                <h4>Προσανατολισμένη στο Αποτέλεσμα</h4>
+                <span class="english">Achievement-Oriented Leadership</span>
+                <p>Ο ηγέτης θέτει ανταγωνιστικούς στόχους, αναμένει υψηλά επίπεδα απόδοσης, δίνει έμφαση στη συνεχή βελτίωση.</p>
+                <div class="when-to-use">
+                    <div class="when-label">📍 Πότε χρησιμοποιείται:</div>
+                    <p>Όταν οι <strong>προκλήσεις</strong> της εργασίας είναι ανεπαρκείς</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Θεωρίας Μονοπατιών-Στόχων</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>house-path-goal.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Η <strong>Θεωρία Μονοπατιών-Στόχων</strong> (Path-Goal Theory) του Robert House 
+                είναι μία από τις σημαντικότερες <strong>ενδεχομενικές θεωρίες ηγεσίας</strong>.
+            </p>
+            <p style="margin-top: 1rem;">
+                Η βασική ιδέα είναι ότι ο ηγέτης πρέπει να <strong>προσαρμόζει το στυλ του</strong> 
+                ανάλογα με τις καταστάσεις των υφισταμένων και του περιβάλλοντος, ώστε να 
+                «καθαρίσει το μονοπάτι» που οδηγεί τους υφισταμένους στην επίτευξη των στόχων.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Θεωρία Μονοπατιών-Στόχων</span>
+                <span class="keyword">Path-Goal Theory</span>
+                <span class="keyword">Robert House</span>
+                <span class="keyword">Αυταρχική Ηγεσία</span>
+                <span class="keyword">Υποστηρικτική Ηγεσία</span>
+                <span class="keyword">Συμμετοχική Ηγεσία</span>
+                <span class="keyword">Achievement-Oriented</span>
+                <span class="keyword">Contingency Theory</span>
+                <span class="keyword">Ενδεχομενική Θεωρία</span>
+            </div>
+        </section>
+
+        <!-- Μοντέλο -->
+        <section class="section">
+            <h2>📊 Το Μοντέλο Path-Goal</h2>
+            
+            <div class="model-diagram">
+                <div class="model-row">
+                    <div class="model-box factors">
+                        <h5>📋 Καταστάσεις Υφισταμένων</h5>
+                        <ul>
+                            <li>• Ικανότητα</li>
+                            <li>• Εμπειρία</li>
+                            <li>• Σημείο ελέγχου</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="model-row">
+                    <div class="model-box styles">
+                        <h5>👔 Ηγετικό Στυλ</h5>
+                        <ul>
+                            <li>• Αυταρχικό</li>
+                            <li>• Υποστηρικτικό</li>
+                            <li>• Συμμετοχικό</li>
+                            <li>• Προσαν. Αποτέλεσμα</li>
+                        </ul>
+                    </div>
+                    <span class="model-arrow">→</span>
+                    <div class="model-box effectiveness">
+                        <h5>✅ Αποτελεσματικότητα</h5>
+                        <ul>
+                            <li>• Ικανοποίηση</li>
+                            <li>• Απόδοση</li>
+                            <li>• Παρακίνηση</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="model-row">
+                    <div class="model-box factors">
+                        <h5>🏢 Καταστάσεις Περιβάλλοντος</h5>
+                        <ul>
+                            <li>• Εργασιακή δομή</li>
+                            <li>• Σύστημα αρμοδιοτήτων</li>
+                            <li>• Ομαδική δουλειά</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Πίνακας Στυλ -->
+        <section class="section">
+            <h2>📋 Τα 4 Στυλ Ηγεσίας Αναλυτικά</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στυλ</th>
+                        <th>Χαρακτηριστικά</th>
+                        <th>Πότε Χρησιμοποιείται</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--directive); font-weight: 600;">Αυταρχική</td>
+                        <td>Οδηγίες, προγραμματισμός, πρότυπα απόδοσης</td>
+                        <td>Ασαφείς αναθέσεις εργασιών</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--supportive); font-weight: 600;">Υποστηρικτική</td>
+                        <td>Φιλικός, ίση μεταχείριση, ενδιαφέρον για ευημερία</td>
+                        <td>Χαμηλή αυτοπεποίθηση</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--participative); font-weight: 600;">Συμμετοχική</td>
+                        <td>Συσκέψεις, ένταξη στη λήψη αποφάσεων</td>
+                        <td>Πτωχά κίνητρα απόδοσης</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Προσ. Αποτέλεσμα</td>
+                        <td>Υψηλοί στόχοι, εμπιστοσύνη, συνεχής βελτίωση</td>
+                        <td>Ανεπαρκείς προκλήσεις</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στυλ</th>
+                        <th>Εφαρμογή στη Σχολική Μονάδα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--directive); font-weight: 600;">Αυταρχική</td>
+                        <td>Νέοι εκπαιδευτικοί, νέες διαδικασίες, έκτακτες καταστάσεις</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--supportive); font-weight: 600;">Υποστηρικτική</td>
+                        <td>Εκπαιδευτικοί με χαμηλή αυτοπεποίθηση, δύσκολες περίοδοι</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--participative); font-weight: 600;">Συμμετοχική</td>
+                        <td>Έμπειροι εκπαιδευτικοί, σχεδιασμός δράσεων σχολείου</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Προσ. Αποτέλεσμα</td>
+                        <td>Ικανοί εκπαιδευτικοί που χρειάζονται πρόκληση</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                <h4>⚠️ Θέμα Εξετάσεων 2024</h4>
+                <p>
+                    <em>«Σύμφωνα με τη θεωρία ηγεσίας "μονοπατιών-στόχων" του R. House, ποιο στυλ 
+                    ηγεσίας θεωρείται καταλληλότερο για το Διευθυντή της Εκπαιδευτικής Μονάδας; 
+                    Τεκμηριώστε με συγκεκριμένα παραδείγματα την επιλογή σας.»</em>
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Υπόδειγμα Απάντησης</h4>
+                <p>
+                    Για τον Διευθυντή μιας Εκπαιδευτικής Μονάδας, η <strong>υποστηρικτική ηγεσία</strong> 
+                    σε συνδυασμό με τη <strong>συμμετοχική</strong> θεωρείται καταλληλότερη γιατί:
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Οι εκπαιδευτικοί είναι συνήθως <strong>υψηλής ειδίκευσης</strong> επαγγελματίες</li>
+                    <li>Χρειάζονται <strong>υποστήριξη</strong> και αναγνώριση του έργου τους</li>
+                    <li>Η <strong>συμμετοχή</strong> στη λήψη αποφάσεων αυξάνει τα κίνητρα</li>
+                    <li>Ο εκπαιδευτικός χώρος απαιτεί <strong>συνεργατικό πνεύμα</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Ερώτηση Quiz -->
+        <section class="section">
+            <h2>❓ Τυπική Ερώτηση Εξετάσεων</h2>
+            
+            <div class="example-box">
+                <h4>📝 Ερώτηση Πολλαπλής Επιλογής</h4>
+                <p>
+                    <em>«Σύμφωνα με τους θεωρητικούς μονοπατιών-στόχων, ποιο ύφος ηγεσίας 
+                    ακολουθεί ένας διευθυντής που αντιμετωπίζει τα μέλη ομάδας ως ίσους 
+                    και είναι φιλικός και προσιτός;»</em>
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; list-style: none;">
+                    <li>Α) Καθοδηγητική ηγεσία</li>
+                    <li><strong style="color: var(--success);">Β) Υποστηρικτική ηγεσία ✓</strong></li>
+                    <li>Γ) Ηγεσία προσανατολισμένη στα επιτεύγματα</li>
+                    <li>Δ) Συμμετοχική ηγεσία</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Η θεωρία House είναι <strong>ενδεχομενική θεωρία</strong> (Contingency Theory)</li>
+                <li>Ο ηγέτης προσαρμόζει το στυλ ανάλογα με τις <strong>καταστάσεις</strong></li>
+                <li><strong>Υποστηρικτική</strong> → χαμηλή αυτοπεποίθηση, φιλικός, ίση μεταχείριση</li>
+                <li><strong>Αυταρχική</strong> → ασαφείς οδηγίες, δομή, πρότυπα</li>
+                <li><strong>Συμμετοχική</strong> → λήψη αποφάσεων, συμβουλεύεται υφισταμένους</li>
+                <li><strong>Προσαν. Αποτέλεσμα</strong> → υψηλοί στόχοι, προκλήσεις</li>
+                <li>Στην εκπαίδευση συνήθως προτιμάται η <strong>υποστηρικτική + συμμετοχική</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf»</strong>, Διαφάνειες 35-39
+            </p>
+            <a href="../pdfs/ΔΕ_6_Ηγεσία_Καθοδήγηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Ηγεσίας
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>
