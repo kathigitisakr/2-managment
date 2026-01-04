@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alderfer - Θεωρία ERG | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --secondary: #2d3748;
+            --accent: #34d399;
+            --accent-light: #d1fae5;
+            --bg-cream: #ecfdf5;
+            --bg-paper: #d1fae5;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --existence: #ef4444;
+            --relatedness: #f59e0b;
+            --growth: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ERG Acronym Display */
+        .erg-acronym {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .erg-letter {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .erg-letter:hover {
+            transform: scale(1.1);
+        }
+
+        .erg-letter.e { background: linear-gradient(135deg, var(--existence) 0%, #f87171 100%); }
+        .erg-letter.r { background: linear-gradient(135deg, var(--relatedness) 0%, #fbbf24 100%); }
+        .erg-letter.g { background: linear-gradient(135deg, var(--growth) 0%, #34d399 100%); }
+
+        .erg-letter .letter {
+            font-size: 2.5rem;
+        }
+
+        .erg-letter .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Three Needs Visual */
+        .needs-pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .need-level {
+            padding: 1.25rem 2rem;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: default;
+        }
+
+        .need-level:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .need-level.growth {
+            background: linear-gradient(135deg, var(--growth) 0%, #059669 100%);
+            width: 60%;
+        }
+
+        .need-level.relatedness {
+            background: linear-gradient(135deg, var(--relatedness) 0%, #d97706 100%);
+            width: 75%;
+        }
+
+        .need-level.existence {
+            background: linear-gradient(135deg, var(--existence) 0%, #dc2626 100%);
+            width: 90%;
+        }
+
+        .need-level .english {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #a7f3d0 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Need Cards */
+        .needs-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .need-card {
+            background: var(--bg-paper);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 5px solid;
+            position: relative;
+        }
+
+        .need-card.existence { border-color: var(--existence); }
+        .need-card.relatedness { border-color: var(--relatedness); }
+        .need-card.growth { border-color: var(--growth); }
+
+        .need-card .badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .need-card.existence .badge { background: var(--existence); }
+        .need-card.relatedness .badge { background: var(--relatedness); }
+        .need-card.growth .badge { background: var(--growth); }
+
+        .need-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .need-card .english {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .need-card p {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .need-card ul {
+            margin-left: 1.25rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Principle Box */
+        .principle-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .principle-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Comparison Box */
+        .comparison-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Maslow Comparison Visual */
+        .maslow-erg-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .maslow-erg-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-column {
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .comparison-column.maslow {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--warning);
+        }
+
+        .comparison-column.erg {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #a7f3d0 100%);
+            border: 2px solid var(--primary);
+        }
+
+        .comparison-column h5 {
+            text-align: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .comparison-column.maslow h5 { color: #b45309; }
+        .comparison-column.erg h5 { color: var(--primary); }
+
+        .comparison-column ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .comparison-column li {
+            padding: 0.4rem;
+            margin: 0.25rem 0;
+            background: rgba(255,255,255,0.6);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-motivation.html">📝 Quiz Παρακίνησης</a>
+    </nav>
+
+    <header>
+        <h1>Θεωρία ERG</h1>
+        <p class="theorist">Clayton Alderfer (ERG Theory)</p>
+    </header>
+
+    <div class="container">
+        <!-- ERG Acronym Display -->
+        <div class="erg-acronym">
+            <div class="erg-letter e">
+                <span class="letter">E</span>
+                <span class="label">Existence</span>
+            </div>
+            <div class="erg-letter r">
+                <span class="letter">R</span>
+                <span class="label">Relatedness</span>
+            </div>
+            <div class="erg-letter g">
+                <span class="letter">G</span>
+                <span class="label">Growth</span>
+            </div>
+        </div>
+
+        <!-- Needs Pyramid -->
+        <div class="needs-pyramid">
+            <div class="need-level growth">
+                🌱 Ανάγκες Ανάπτυξης
+                <div class="english">Growth Needs</div>
+            </div>
+            <div class="need-level relatedness">
+                👥 Ανάγκες Συσχέτισης
+                <div class="english">Relatedness Needs</div>
+            </div>
+            <div class="need-level existence">
+                🏠 Ανάγκες Ύπαρξης
+                <div class="english">Existence Needs</div>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Θεωρίας ERG</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>erg-theory.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Η <strong>Θεωρία ERG</strong> του Clayton Alderfer είναι μία από τις βασικές 
+                <strong>θεωρίες περιεχομένου</strong> (Content Theories) στην παρακίνηση. Αναπτύχθηκε 
+                ως τροποποίηση και απλούστευση της θεωρίας ιεράρχησης αναγκών του Maslow.
+            </p>
+            <p style="margin-top: 1rem;">
+                Ο Alderfer συμπύκνωσε τις πέντε ανάγκες του Maslow σε <strong>τρεις βασικές κατηγορίες</strong>: 
+                Ύπαρξης (Existence), Συσχέτισης (Relatedness) και Ανάπτυξης (Growth) - εξ ου και το 
+                ακρωνύμιο <strong>ERG</strong>.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Θεωρία ERG</span>
+                <span class="keyword">ERG Theory</span>
+                <span class="keyword">Ανάγκες Ύπαρξης</span>
+                <span class="keyword">Existence Needs</span>
+                <span class="keyword">Ανάγκες Συσχέτισης</span>
+                <span class="keyword">Relatedness Needs</span>
+                <span class="keyword">Ανάγκες Ανάπτυξης</span>
+                <span class="keyword">Growth Needs</span>
+                <span class="keyword">Αρχή Ματαίωσης-Παλινδρόμησης</span>
+                <span class="keyword">Clayton Alderfer</span>
+            </div>
+        </section>
+
+        <!-- Τα 3 Επίπεδα Αναγκών -->
+        <section class="section">
+            <h2>📊 Τα 3 Επίπεδα Αναγκών</h2>
+            
+            <div class="needs-grid">
+                <div class="need-card existence">
+                    <span class="badge">E</span>
+                    <h4>1. Ανάγκες Ύπαρξης</h4>
+                    <p class="english">Existence Needs</p>
+                    <p>
+                        Επιθυμίες για <strong>φυσιολογική και υλική ευημερία</strong>.
+                    </p>
+                    <ul>
+                        <li>Τροφή, νερό, στέγη</li>
+                        <li>Μισθός και παροχές</li>
+                        <li>Ασφαλείς συνθήκες εργασίας</li>
+                        <li>Εργασιακή ασφάλεια</li>
+                    </ul>
+                </div>
+                
+                <div class="need-card relatedness">
+                    <span class="badge">R</span>
+                    <h4>2. Ανάγκες Συσχέτισης</h4>
+                    <p class="english">Relatedness Needs</p>
+                    <p>
+                        Επιθυμίες για <strong>ικανοποίηση των διαπροσωπικών σχέσεων</strong>.
+                    </p>
+                    <ul>
+                        <li>Σχέσεις με συναδέλφους</li>
+                        <li>Οικογενειακοί δεσμοί</li>
+                        <li>Φιλίες και κοινωνική αποδοχή</li>
+                        <li>Αίσθημα του «ανήκειν»</li>
+                    </ul>
+                </div>
+                
+                <div class="need-card growth">
+                    <span class="badge">G</span>
+                    <h4>3. Ανάγκες Ανάπτυξης</h4>
+                    <p class="english">Growth Needs</p>
+                    <p>
+                        Επιθυμίες για <strong>διαρκή ανάπτυξη και εξέλιξη</strong>.
+                    </p>
+                    <ul>
+                        <li>Προσωπική ανάπτυξη</li>
+                        <li>Δημιουργικότητα</li>
+                        <li>Αυτοπραγμάτωση</li>
+                        <li>Επαγγελματική εξέλιξη</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Αρχή Ματαίωσης-Παλινδρόμησης -->
+        <section class="section">
+            <h2>🔄 Αρχή Ματαίωσης-Παλινδρόμησης</h2>
+            
+            <div class="principle-box">
+                <h4>⚠️ Frustration-Regression Principle</h4>
+                <p>
+                    Μια <strong>ήδη ικανοποιημένη χαμηλότερη ανάγκη μπορεί να επανενεργοποιηθεί</strong> 
+                    όταν ματαιωθεί μια υψηλότερη ανάγκη.
+                </p>
+                <p style="margin-top: 0.75rem;">
+                    <strong>Παράδειγμα:</strong> Αν ένας εργαζόμενος δεν μπορεί να ικανοποιήσει τις 
+                    ανάγκες ανάπτυξης (π.χ. προαγωγή), μπορεί να επιστρέψει και να επικεντρωθεί 
+                    περισσότερο στις ανάγκες συσχέτισης (π.χ. σχέσεις με συναδέλφους).
+                </p>
+            </div>
+
+            <div class="comparison-box">
+                <h4>📌 Διαφορά από Maslow</h4>
+                <p>
+                    Σε αντίθεση με τον Maslow που υποστήριζε αυστηρή ιεράρχηση, ο Alderfer πιστεύει ότι:
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Περισσότερες από μία ανάγκες</strong> μπορούν να επηρεάσουν τη συμπεριφορά ταυτόχρονα</li>
+                    <li>Δεν υπάρχει αυστηρή <strong>προοδευτική σειρά</strong></li>
+                    <li>Η <strong>παλινδρόμηση</strong> σε χαμηλότερες ανάγκες είναι δυνατή</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Σύγκριση με Maslow -->
+        <section class="section">
+            <h2>🔗 Αντιστοίχιση με Θεωρία Maslow</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Maslow (5 επίπεδα)</th>
+                        <th>ERG (3 επίπεδα)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Φυσιολογικές Ανάγκες</td>
+                        <td rowspan="2" style="vertical-align: middle; background: linear-gradient(135deg, #fecaca, #fca5a5); color: var(--existence); font-weight: 600;">
+                            Ανάγκες Ύπαρξης (E)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες Ασφάλειας</td>
+                    </tr>
+                    <tr>
+                        <td>Κοινωνικές Ανάγκες</td>
+                        <td style="background: linear-gradient(135deg, #fde68a, #fcd34d); color: #b45309; font-weight: 600;">
+                            Ανάγκες Συσχέτισης (R)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες Εκτίμησης</td>
+                        <td rowspan="2" style="vertical-align: middle; background: linear-gradient(135deg, #a7f3d0, #6ee7b7); color: var(--primary); font-weight: 600;">
+                            Ανάγκες Ανάπτυξης (G)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες Αυτοπραγμάτωσης</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="maslow-erg-comparison">
+                <div class="comparison-column maslow">
+                    <h5>🔺 Maslow</h5>
+                    <ul>
+                        <li>5 επίπεδα αναγκών</li>
+                        <li>Αυστηρή ιεράρχηση</li>
+                        <li>Μία ανάγκη κάθε φορά</li>
+                        <li>Αρχή προοδευτικότητας</li>
+                    </ul>
+                </div>
+                <div class="comparison-column erg">
+                    <h5>🎯 ERG</h5>
+                    <ul>
+                        <li>3 επίπεδα αναγκών</li>
+                        <li>Ευέλικτη ιεράρχηση</li>
+                        <li>Πολλαπλές ανάγκες ταυτόχρονα</li>
+                        <li>Αρχή ματαίωσης-παλινδρόμησης</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ανάγκη ERG</th>
+                        <th>Εφαρμογή στο Σχολείο</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--existence); font-weight: 600;">Ύπαρξης (E)</td>
+                        <td>Ικανοποιητικός μισθός, καλές συνθήκες εργασίας, μονιμότητα</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Συσχέτισης (R)</td>
+                        <td>Καλές σχέσεις με συναδέλφους, συνεργασία, θετικό κλίμα</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--primary); font-weight: 600;">Ανάπτυξης (G)</td>
+                        <td>Επιμόρφωση, καινοτομία, αυτονομία, επαγγελματική εξέλιξη</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Εφαρμογή σε Σχολική Μονάδα</h4>
+                <p>
+                    Ένας εκπαιδευτικός που δεν μπορεί να ικανοποιήσει τις ανάγκες ανάπτυξης (π.χ. δεν 
+                    υπάρχουν ευκαιρίες καινοτομίας) μπορεί να «παλινδρομήσει» και να δώσει μεγαλύτερη 
+                    έμφαση στις ανάγκες συσχέτισης - αναζητώντας περισσότερη κοινωνική υποστήριξη 
+                    από τους συναδέλφους του.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Συμβουλή για Διευθυντές</h4>
+                <p>
+                    Ο Διευθυντής πρέπει να αναγνωρίζει ότι οι εκπαιδευτικοί μπορεί να έχουν 
+                    <strong>ταυτόχρονα ενεργές διαφορετικές ανάγκες</strong>. Για παράδειγμα, ένας 
+                    νέος εκπαιδευτικός μπορεί να χρειάζεται ταυτόχρονα: ασφάλεια (E), αποδοχή από 
+                    συναδέλφους (R) και ευκαιρίες επαγγελματικής ανάπτυξης (G).
+                </p>
+            </div>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Η θεωρία ERG είναι <strong>θεωρία περιεχομένου</strong> (Content Theory)</li>
+                <li>Δημιουργός: <strong>Clayton Alderfer</strong></li>
+                <li><strong>ERG</strong> = Existence, Relatedness, Growth</li>
+                <li>Οι ανάγκες <strong>χαμηλότερου βαθμού</strong> του Maslow αντιστοιχούν στις ανάγκες <strong>ύπαρξης</strong> της θεωρίας ERG</li>
+                <li>Η <strong>αρχή ματαίωσης-παλινδρόμησης</strong> είναι βασική διαφορά από Maslow</li>
+                <li>Συχνή ερώτηση: <em>«Οι ανάγκες χαμηλότερου βαθμού στην ιεραρχία του Maslow αντιστοιχούν στις ανάγκες ... της θεωρίας ERG»</em></li>
+                <li>Απάντηση: <strong>Ύπαρξης</strong></li>
+            </ul>
+        </section>
+
+        <!-- Θεωρίες Περιεχομένου -->
+        <section class="section">
+            <h2>🔗 Θεωρίες Περιεχομένου (Content Theories)</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Θεωρία</th>
+                        <th>Θεωρητικός</th>
+                        <th>Βασική Ιδέα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ιεράρχηση Αναγκών</td>
+                        <td>Maslow</td>
+                        <td>5 επίπεδα πυραμίδας</td>
+                    </tr>
+                    <tr style="background: var(--accent-light);">
+                        <td><strong>Θεωρία ERG</strong></td>
+                        <td><strong>Alderfer</strong></td>
+                        <td>E-R-G + Ματαίωση-Παλινδρόμηση</td>
+                    </tr>
+                    <tr>
+                        <td>Δύο Παραγόντων</td>
+                        <td>Herzberg</td>
+                        <td>Υγιεινής vs Κινήτρων</td>
+                    </tr>
+                    <tr>
+                        <td>Επίκτητων Αναγκών</td>
+                        <td>McClelland</td>
+                        <td>Επίτευξη, Ισχύς, Συσχέτιση</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«2α Παρακίνηση.pdf»</strong>, Διαφάνειες 8-10
+            </p>
+            <a href="../pdfs/2α_Παρακίνηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Παρακίνησης
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

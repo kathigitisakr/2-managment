@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skinner - Θεωρία Ενίσχυσης | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ea580c;
+            --primary-dark: #c2410c;
+            --secondary: #2d3748;
+            --accent: #fb923c;
+            --accent-light: #ffedd5;
+            --bg-cream: #fff7ed;
+            --bg-paper: #ffedd5;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #16a34a;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #dc2626;
+            --positive: #16a34a;
+            --negative: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Law of Effect Box */
+        .law-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(234, 88, 12, 0.3);
+        }
+
+        .law-box h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .law-box .law-text {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .law-box .law-text strong {
+            color: var(--primary);
+        }
+
+        /* Four Strategies Grid */
+        .strategies-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .strategies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .strategy-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .strategy-card.positive-reinforcement {
+            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+            border: 3px solid var(--positive);
+        }
+
+        .strategy-card.negative-reinforcement {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid var(--warning);
+        }
+
+        .strategy-card.punishment {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border: 3px solid var(--negative);
+        }
+
+        .strategy-card.extinction {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border: 3px solid #64748b;
+        }
+
+        .strategy-card .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .strategy-card h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .strategy-card.positive-reinforcement h4 { color: var(--positive); }
+        .strategy-card.negative-reinforcement h4 { color: #b45309; }
+        .strategy-card.punishment h4 { color: var(--negative); }
+        .strategy-card.extinction h4 { color: #475569; }
+
+        .strategy-card .english {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .strategy-card .effect {
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .strategy-card.positive-reinforcement .effect,
+        .strategy-card.negative-reinforcement .effect {
+            background: var(--positive);
+            color: white;
+        }
+
+        .strategy-card.punishment .effect,
+        .strategy-card.extinction .effect {
+            background: var(--negative);
+            color: white;
+        }
+
+        .strategy-card p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #fed7aa 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Laws of Reinforcement */
+        .laws-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 500px) {
+            .laws-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .law-card {
+            background: var(--bg-paper);
+            border-radius: 10px;
+            padding: 1.25rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .law-card h5 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .law-card p {
+            font-size: 0.9rem;
+        }
+
+        /* Schedule Comparison */
+        .schedule-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 500px) {
+            .schedule-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .schedule-card {
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .schedule-card.continuous {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid var(--info);
+        }
+
+        .schedule-card.intermittent {
+            background: linear-gradient(135deg, #fae8ff 0%, #f5d0fe 100%);
+            border: 2px solid #a855f7;
+        }
+
+        .schedule-card h5 {
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-card.continuous h5 { color: var(--info); }
+        .schedule-card.intermittent h5 { color: #a855f7; }
+
+        .schedule-card .feature {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .schedule-card.continuous .feature {
+            background: var(--info);
+            color: white;
+        }
+
+        .schedule-card.intermittent .feature {
+            background: #a855f7;
+            color: white;
+        }
+
+        /* Shaping Box */
+        .shaping-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .shaping-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(251, 146, 60, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-motivation.html">📝 Quiz Παρακίνησης</a>
+    </nav>
+
+    <header>
+        <h1>Θεωρία Ενίσχυσης</h1>
+        <p class="theorist">B.F. Skinner (Reinforcement Theory)</p>
+    </header>
+
+    <div class="container">
+        <!-- Law of Effect -->
+        <div class="law-box">
+            <h3>⚖️ Νόμος του Αποτελέσματος (Law of Effect)</h3>
+            <div class="law-text">
+                <p>
+                    Η συμπεριφορά που ακολουθείται από μια <strong>θετική συνέπεια</strong> 
+                    είναι πιθανόν να <strong>επαναληφθεί</strong>, ενώ η συμπεριφορά που 
+                    ακολουθείται από μια <strong>ανεπιθύμητη συνέπεια</strong> δεν είναι 
+                    πιθανόν να επαναληφθεί.
+                </p>
+            </div>
+        </div>
+
+        <!-- Four Strategies -->
+        <div class="strategies-grid">
+            <div class="strategy-card positive-reinforcement">
+                <div class="emoji">➕✨</div>
+                <h4>Θετική Ενίσχυση</h4>
+                <span class="english">Positive Reinforcement</span>
+                <div class="effect">↑ ΑΥΞΑΝΕΙ συχνότητα</div>
+                <p>Παρουσίαση <strong>ευχάριστης</strong> συνέπειας</p>
+            </div>
+            <div class="strategy-card negative-reinforcement">
+                <div class="emoji">➖✨</div>
+                <h4>Αρνητική Ενίσχυση</h4>
+                <span class="english">Negative Reinforcement</span>
+                <div class="effect">↑ ΑΥΞΑΝΕΙ συχνότητα</div>
+                <p>Εξάλειψη <strong>δυσάρεστης</strong> συνέπειας</p>
+            </div>
+            <div class="strategy-card punishment">
+                <div class="emoji">⚠️</div>
+                <h4>Τιμωρία</h4>
+                <span class="english">Punishment</span>
+                <div class="effect">↓ ΜΕΙΩΝΕΙ συχνότητα</div>
+                <p>Παρουσίαση <strong>δυσάρεστης</strong> συνέπειας</p>
+            </div>
+            <div class="strategy-card extinction">
+                <div class="emoji">🚫</div>
+                <h4>Εξαφάνιση</h4>
+                <span class="english">Extinction</span>
+                <div class="effect">↓ ΜΕΙΩΝΕΙ συχνότητα</div>
+                <p>Εξάλειψη <strong>ευχάριστης</strong> συνέπειας</p>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Στρατηγικών Ενίσχυσης Skinner</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>skinner-reinforcement.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Η <strong>Θεωρία Ενίσχυσης</strong> (Reinforcement Theory) του B.F. Skinner 
+                επικεντρώνεται στην <strong>επίδραση των περιβαλλοντικών συνεπειών στη συμπεριφορά</strong>.
+            </p>
+            <p style="margin-top: 1rem;">
+                Σε αντίθεση με τις θεωρίες περιεχομένου (Maslow, Herzberg) που εξετάζουν τις εσωτερικές 
+                ανάγκες, ο Skinner ανέπτυξε την <strong>εξαρτημένη απόκριση</strong> (Operant Conditioning) 
+                που εφαρμόζει τον νόμο του αποτελέσματος για να ελέγχει τη συμπεριφορά μέσω του 
+                <strong>χειρισμού των συνεπειών</strong> της.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Θεωρία Ενίσχυσης</span>
+                <span class="keyword">Reinforcement Theory</span>
+                <span class="keyword">Νόμος Αποτελέσματος</span>
+                <span class="keyword">Εξαρτημένη Απόκριση</span>
+                <span class="keyword">Θετική Ενίσχυση</span>
+                <span class="keyword">Αρνητική Ενίσχυση</span>
+                <span class="keyword">Τιμωρία</span>
+                <span class="keyword">Εξαφάνιση</span>
+                <span class="keyword">Διαμόρφωση (Shaping)</span>
+                <span class="keyword">B.F. Skinner</span>
+            </div>
+        </section>
+
+        <!-- 4 Στρατηγικές Αναλυτικά -->
+        <section class="section">
+            <h2>📊 Οι 4 Στρατηγικές Εξαρτημένης Απόκρισης</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στρατηγική</th>
+                        <th>Ενέργεια</th>
+                        <th>Αποτέλεσμα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--positive); font-weight: 600;">Θετική Ενίσχυση</td>
+                        <td>Προσθήκη ευχάριστου ερεθίσματος</td>
+                        <td>↑ Αύξηση συμπεριφοράς</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Αρνητική Ενίσχυση</td>
+                        <td>Αφαίρεση δυσάρεστου ερεθίσματος</td>
+                        <td>↑ Αύξηση συμπεριφοράς</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--negative); font-weight: 600;">Τιμωρία</td>
+                        <td>Προσθήκη δυσάρεστου ερεθίσματος</td>
+                        <td>↓ Μείωση συμπεριφοράς</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #475569; font-weight: 600;">Εξαφάνιση</td>
+                        <td>Αφαίρεση ευχάριστου ερεθίσματος</td>
+                        <td>↓ Μείωση συμπεριφοράς</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Παραδείγματα στην Εκπαίδευση</h4>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Θετική Ενίσχυση:</strong> Έπαινος σε εκπαιδευτικό που ολοκληρώνει καινοτόμο πρόγραμμα</li>
+                    <li><strong>Αρνητική Ενίσχυση:</strong> Μείωση γραφειοκρατίας για εκπαιδευτικούς που τηρούν προθεσμίες</li>
+                    <li><strong>Τιμωρία:</strong> Παρατήρηση για επανειλημμένες καθυστερήσεις</li>
+                    <li><strong>Εξαφάνιση:</strong> Αγνόηση ανεπιθύμητης συμπεριφοράς (π.χ. γκρίνια)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Νόμοι Επιτυχημένης Ενίσχυσης -->
+        <section class="section">
+            <h2>📜 Νόμοι Επιτυχημένης Θετικής Ενίσχυσης</h2>
+            
+            <div class="laws-grid">
+                <div class="law-card">
+                    <h5>1️⃣ Νόμος Διαρκούς Ενίσχυσης</h5>
+                    <p>
+                        Η ανταμοιβή δίδεται <strong>μόνο αν εκδηλωθεί</strong> η επιθυμητή συμπεριφορά.
+                    </p>
+                </div>
+                <div class="law-card">
+                    <h5>2️⃣ Νόμος Άμεσης Ενίσχυσης</h5>
+                    <p>
+                        Όσο <strong>πιο άμεση</strong> είναι η παροχή ανταμοιβής, τόσο <strong>μεγαλύτερη 
+                        αξία ενίσχυσης</strong> έχει.
+                    </p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Σημαντικό για τις Εξετάσεις</h4>
+                <p>
+                    <em>«Το να πληρώνεσαι την Παρασκευή ενισχύει ένα άτομο να έρθει στην εργασία, 
+                    αλλά δεν το ενισχύει να κάνει εξαιρετική δουλειά την Πέμπτη.»</em>
+                </p>
+                <p style="margin-top: 0.5rem;">
+                    Αυτό συμβαίνει διότι η πληρωμή της Παρασκευής δεν πληροί τα στοιχεία του νόμου 
+                    της <strong>άμεσης</strong> ενίσχυσης!
+                </p>
+            </div>
+        </section>
+
+        <!-- Χρονοδιαγράμματα Ενίσχυσης -->
+        <section class="section">
+            <h2>📅 Χρονοδιαγράμματα Ενίσχυσης</h2>
+            
+            <div class="schedule-comparison">
+                <div class="schedule-card continuous">
+                    <h5>Διαρκής Ενίσχυση</h5>
+                    <p>Ανταμοιβή <strong>κάθε φορά</strong> που εμφανίζεται η επιθυμητή συμπεριφορά</p>
+                    <span class="feature">🚀 Πιο γρήγορη μάθηση</span>
+                </div>
+                <div class="schedule-card intermittent">
+                    <h5>Περιοδική Ενίσχυση</h5>
+                    <p>Ανταμοιβή <strong>περιοδικά</strong> μόνο</p>
+                    <span class="feature">💪 Πιο μόνιμη συμπεριφορά</span>
+                </div>
+            </div>
+
+            <div class="shaping-box">
+                <h4>🎯 Διαμόρφωση (Shaping)</h4>
+                <p>
+                    Η <strong>διαμόρφωση</strong> είναι η δημιουργία μιας νέας συμπεριφοράς μέσω της 
+                    θετικής ενίσχυσης <strong>διαδοχικών προσεγγίσεων</strong> της επιθυμητής συμπεριφοράς.
+                </p>
+                <p style="margin-top: 0.5rem;">
+                    Αντί να περιμένουμε την τέλεια συμπεριφορά, ανταμείβουμε κάθε βήμα που 
+                    πλησιάζει τον στόχο.
+                </p>
+            </div>
+        </section>
+
+        <!-- Οδηγίες για Τιμωρία -->
+        <section class="section">
+            <h2>⚠️ Οδηγίες για τη Χρήση Τιμωρίας</h2>
+            <div class="warning-box">
+                <h4>📋 Κανόνες Αποτελεσματικής Τιμωρίας</h4>
+                <ul>
+                    <li><strong>Πες στο άτομο τι κάνει λάθος</strong></li>
+                    <li><strong>Πες στο άτομο τι κάνει σωστά</strong></li>
+                    <li>Βεβαιώσου ότι η τιμωρία είναι <strong>ανάλογη με τη συμπεριφορά</strong></li>
+                    <li>Να επιβάλλεις την τιμωρία <strong>κατ' ιδίαν</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στρατηγική</th>
+                        <th>Εφαρμογή στο Σχολείο</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--positive); font-weight: 600;">Θετική Ενίσχυση</td>
+                        <td>Έπαινος, αναγνώριση, βραβεία, ανάθεση ευθυνών, επιμόρφωση</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #b45309; font-weight: 600;">Αρνητική Ενίσχυση</td>
+                        <td>Μείωση εφημεριών, απαλλαγή από γραφειοκρατικά καθήκοντα</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--negative); font-weight: 600;">Τιμωρία</td>
+                        <td>Προφορική παρατήρηση, γραπτή επίπληξη (με σύνεση)</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #475569; font-weight: 600;">Εξαφάνιση</td>
+                        <td>Αγνόηση μικρών παραπτωμάτων, μη παροχή προσοχής</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Πρακτικό Παράδειγμα: Διαμόρφωση</h4>
+                <p>
+                    Ο Διευθυντής θέλει να ενθαρρύνει έναν εκπαιδευτικό να συμμετέχει σε 
+                    καινοτόμα προγράμματα:
+                </p>
+                <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Αρχικά, επαινεί απλή συμμετοχή σε συνάντηση</li>
+                    <li>Στη συνέχεια, επαινεί πρόταση ιδέας</li>
+                    <li>Τέλος, αναθέτει συντονισμό προγράμματος</li>
+                </ol>
+                <p style="margin-top: 0.5rem;">
+                    Κάθε βήμα ανταμείβεται, οδηγώντας σταδιακά στην επιθυμητή συμπεριφορά.
+                </p>
+            </div>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Σωστό ζευγάρι: <strong>Skinner – Θεωρία Ενίσχυσης</strong></li>
+                <li>Ο <strong>νόμος του αποτελέσματος</strong> δηλώνει ότι η συμπεριφορά με θετική συνέπεια επαναλαμβάνεται</li>
+                <li>Η <strong>διαμόρφωση (shaping)</strong> ανταμείβει διαδοχικές προσεγγίσεις της επιθυμητής συμπεριφοράς</li>
+                <li>Ο νόμος της <strong>άμεσης ενίσχυσης</strong>: όσο πιο άμεση η ανταμοιβή, τόσο μεγαλύτερη η αξία</li>
+                <li>Η <strong>περιοδική ενίσχυση</strong> δημιουργεί πιο μόνιμη συμπεριφορά</li>
+                <li>Συχνή ερώτηση: <em>«... είναι μια θετική στρατηγική ενίσχυσης η οποία ανταμείβει διαδοχικές προσεγγίσεις...»</em></li>
+                <li>Απάντηση: <strong>Η Διαμόρφωση</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«2α Παρακίνηση.pdf»</strong>, Διαφάνειες 35-42
+            </p>
+            <a href="../pdfs/2α_Παρακίνηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Παρακίνησης
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

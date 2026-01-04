@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herzberg - Θεωρία Δύο Παραγόντων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #2d3748;
+            --accent: #2dd4bf;
+            --accent-light: #ccfbf1;
+            --bg-cream: #f0fdfa;
+            --bg-paper: #e6fffa;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --hygiene: #e53e3e;
+            --motivator: #38a169;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Two Columns Visual */
+        .two-factors-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .two-factors-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .factor-column {
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .factor-column.hygiene {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            border: 3px solid var(--hygiene);
+        }
+
+        .factor-column.motivator {
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            border: 3px solid var(--motivator);
+        }
+
+        .factor-column h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .factor-column.hygiene h3 { color: var(--hygiene); }
+        .factor-column.motivator h3 { color: var(--motivator); }
+
+        .factor-column .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .factor-column ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .factor-column li {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            background: rgba(255,255,255,0.7);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .factor-column.hygiene li::before { content: "⚠️ "; }
+        .factor-column.motivator li::before { content: "✅ "; }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #99f6e4 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Key Concept Box */
+        .key-concept {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: white;
+            text-align: center;
+        }
+
+        .key-concept h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .key-concept .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .key-concept .concept-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .key-concept .concept-box {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .key-concept .concept-box strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .key-concept .vs {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Factor Detail Cards */
+        .factor-details {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .factor-card {
+            background: var(--bg-paper);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .factor-card.hygiene { border-color: var(--hygiene); }
+        .factor-card.motivator { border-color: var(--motivator); }
+
+        .factor-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .factor-card .tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .factor-card.hygiene .tag { background: var(--hygiene); }
+        .factor-card.motivator .tag { background: var(--motivator); }
+
+        .factor-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Comparison Box */
+        .comparison-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Manager Tips */
+        .manager-tips {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .manager-tips {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tip-card {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .tip-card.hygiene {
+            background: linear-gradient(135deg, #fed7d7 0%, #fecaca 100%);
+            border: 2px solid var(--hygiene);
+        }
+
+        .tip-card.motivator {
+            background: linear-gradient(135deg, #c6f6d5 0%, #a7f3d0 100%);
+            border: 2px solid var(--motivator);
+        }
+
+        .tip-card h5 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tip-card.hygiene h5 { color: var(--hygiene); }
+        .tip-card.motivator h5 { color: var(--motivator); }
+
+        .tip-card ul {
+            margin-left: 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(45, 212, 191, 0.4);
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-motivation.html">📝 Quiz Παρακίνησης</a>
+    </nav>
+
+    <header>
+        <h1>Θεωρία Δύο Παραγόντων</h1>
+        <p class="theorist">Frederick Herzberg (Two-Factor Theory / Motivation-Hygiene Theory)</p>
+    </header>
+
+    <div class="container">
+        <!-- Two Factors Visual -->
+        <div class="two-factors-container">
+            <div class="factor-column hygiene">
+                <h3>🛡️ Παράγοντες Υγιεινής</h3>
+                <p class="subtitle">Hygiene Factors (Αντικίνητρα)</p>
+                <ul>
+                    <li>Διοίκηση & πολιτική οργανισμού</li>
+                    <li>Επίβλεψη</li>
+                    <li>Συνθήκες εργασίας</li>
+                    <li>Διαπροσωπικές σχέσεις</li>
+                    <li>Μισθός / Αμοιβή</li>
+                    <li>Κύρος & θέση</li>
+                    <li>Ασφάλεια εργασίας</li>
+                    <li>Προσωπική ζωή</li>
+                </ul>
+            </div>
+            <div class="factor-column motivator">
+                <h3>🚀 Παράγοντες Κινήτρων</h3>
+                <p class="subtitle">Motivators (Κίνητρα)</p>
+                <ul>
+                    <li>Επίτευξη στόχου</li>
+                    <li>Αναγνώριση προσπάθειας</li>
+                    <li>Το ίδιο το αντικείμενο εργασίας</li>
+                    <li>Υπευθυνότητα</li>
+                    <li>Εξέλιξη στην εργασία</li>
+                    <li>Δυνατότητα προσωπικής ανάπτυξης</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Key Concept -->
+        <div class="key-concept">
+            <h3>🔑 Η Βασική Ιδέα</h3>
+            <div class="concept-grid">
+                <div class="concept-box">
+                    <strong>Παράγοντες Υγιεινής</strong>
+                    Αποτρέπουν τη δυσαρέσκεια<br>
+                    (αλλά ΔΕΝ δημιουργούν ικανοποίηση)
+                </div>
+                <span class="vs">≠</span>
+                <div class="concept-box">
+                    <strong>Παράγοντες Κινήτρων</strong>
+                    Δημιουργούν ικανοποίηση<br>
+                    (και πραγματική παρακίνηση)
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Θεωρίας Herzberg</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>herzberg-two-factor.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Η <strong>Θεωρία Δύο Παραγόντων</strong> του Frederick Herzberg είναι μία από τις κλασικές 
+                <strong>θεωρίες περιεχομένου</strong> (Content Theories) στην παρακίνηση. Αναπτύχθηκε στα 
+                τέλη της δεκαετίας του 1950 μέσα από έρευνες που εξέταζαν τι κάνει τους εργαζόμενους 
+                ικανοποιημένους ή δυσαρεστημένους.
+            </p>
+            <p style="margin-top: 1rem;">
+                Η βασική ανακάλυψη του Herzberg ήταν ότι <strong>ικανοποίηση και δυσαρέσκεια δεν είναι 
+                αντίθετα άκρα της ίδιας κλίμακας</strong>, αλλά δύο ξεχωριστές διαστάσεις που επηρεάζονται 
+                από διαφορετικούς παράγοντες.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Θεωρία Δύο Παραγόντων</span>
+                <span class="keyword">Two-Factor Theory</span>
+                <span class="keyword">Παράγοντες Υγιεινής</span>
+                <span class="keyword">Hygiene Factors</span>
+                <span class="keyword">Παράγοντες Κινήτρων</span>
+                <span class="keyword">Motivators</span>
+                <span class="keyword">Περιεχόμενο Εργασίας</span>
+                <span class="keyword">Πλαίσιο Εργασίας</span>
+                <span class="keyword">Εμπλουτισμός Εργασίας</span>
+            </div>
+        </section>
+
+        <!-- Δύο Διαστάσεις -->
+        <section class="section">
+            <h2>📊 Περιεχόμενο vs Πλαίσιο Εργασίας</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Διάσταση</th>
+                        <th>Αφορά</th>
+                        <th>Παράγοντες</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Περιεχόμενο Εργασίας</strong><br>(Job Content)</td>
+                        <td>Τι κάνουν οι άνθρωποι σε σχέση με τα εργασιακά τους καθήκοντα</td>
+                        <td>Παράγοντες Κινήτρων (Motivators)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Πλαίσιο Εργασίας</strong><br>(Job Context)</td>
+                        <td>Το εργασιακό περιβάλλον στο οποίο εργάζονται</td>
+                        <td>Παράγοντες Υγιεινής (Hygiene)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Αναλυτικά οι Παράγοντες -->
+        <section class="section">
+            <h2>📋 Αναλυτική Περιγραφή Παραγόντων</h2>
+            
+            <div class="factor-details">
+                <div class="factor-card hygiene">
+                    <h4>Παράγοντες Υγιεινής <span class="tag">HYGIENE</span></h4>
+                    <p>
+                        <strong>Στοιχεία του εργασιακού περιβάλλοντος</strong> που αποτελούν πηγές 
+                        εργασιακής <strong>δυσαρέσκειας</strong>. Η παρουσία τους δεν δημιουργεί 
+                        ικανοποίηση, αλλά η <strong>απουσία τους δημιουργεί δυσαρέσκεια</strong>.
+                    </p>
+                </div>
+                
+                <div class="factor-card motivator">
+                    <h4>Παράγοντες Κινήτρων <span class="tag">MOTIVATORS</span></h4>
+                    <p>
+                        <strong>Στοιχεία του περιεχομένου της εργασίας</strong> που αποτελούν πηγές 
+                        εργασιακής <strong>ικανοποίησης και πραγματικής παρακίνησης</strong>. Η παρουσία 
+                        τους δημιουργεί κίνητρα για καλύτερη απόδοση.
+                    </p>
+                </div>
+            </div>
+
+            <div class="comparison-box" style="margin-top: 1.5rem;">
+                <h4>⚠️ Σημαντική Διάκριση</h4>
+                <p>
+                    <strong>Ο μισθός είναι παράγοντας υγιεινής!</strong> Αυτό σημαίνει ότι ένας καλός 
+                    μισθός δεν θα παρακινήσει τον εργαζόμενο, αλλά ένας κακός μισθός θα τον κάνει 
+                    δυσαρεστημένο. Για να παρακινηθεί πραγματικά, χρειάζονται παράγοντες κινήτρων.
+                </p>
+            </div>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Παράγοντες Υγιεινής</th>
+                        <th>Παράγοντες Κινήτρων</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Μισθός και συνθήκες εργασίας</td>
+                        <td>Αναγνώριση και εξέλιξη</td>
+                    </tr>
+                    <tr>
+                        <td>Σχέσεις με Διεύθυνση & συναδέλφους</td>
+                        <td>Ευκαιρίες καινοτομίας στη διδασκαλία</td>
+                    </tr>
+                    <tr>
+                        <td>Πολιτική σχολείου & ασφάλεια</td>
+                        <td>Συμμετοχή στη λήψη αποφάσεων</td>
+                    </tr>
+                    <tr>
+                        <td>Φόρτος εργασίας</td>
+                        <td>Αυτονομία στη διδασκαλία</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Διευθυντής παρακινεί εκπαιδευτικούς</h4>
+                <p>
+                    Ένας Διευθυντής που θέλει να παρακινήσει τους εκπαιδευτικούς πρέπει:
+                </p>
+                <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Πρώτα:</strong> Να εξασφαλίσει τους παράγοντες υγιεινής (καλές συνθήκες, δίκαιη μεταχείριση, σαφής πολιτική)</li>
+                    <li><strong>Μετά:</strong> Να προσθέσει παράγοντες κινήτρων (αναγνώριση, ευθύνες, ευκαιρίες ανάπτυξης)</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Ενδυνάμωση εκπαιδευτικού</h4>
+                <p>
+                    Σύμφωνα με τον Herzberg, ο Διευθυντής μπορεί να παρακινήσει αναθέτοντας 
+                    <strong>ρόλους-ευθύνης</strong>: υπεύθυνος προγράμματος, παιδαγωγικός συντονιστής, 
+                    υπεύθυνος έργου Erasmus+. Η <strong>συμμετοχή στη λήψη αποφάσεων</strong> ενισχύει 
+                    το αίσθημα ανήκειν και επιρροής.
+                </p>
+            </div>
+        </section>
+
+        <!-- Οδηγίες για Managers -->
+        <section class="section">
+            <h2>👔 Συμβολή Herzberg στο Management</h2>
+            
+            <p>Ο Herzberg πρότεινε δύο βασικές στρατηγικές:</p>
+            
+            <div class="manager-tips">
+                <div class="tip-card hygiene">
+                    <h5>🛡️ Βήμα 1: Εμπλουτισμός Πλαισίου</h5>
+                    <ul>
+                        <li>Εξάλειψη πηγών δυσαρέσκειας</li>
+                        <li>Βελτίωση συνθηκών εργασίας</li>
+                        <li>Δίκαιη πολιτική & επίβλεψη</li>
+                        <li>Καλές διαπροσωπικές σχέσεις</li>
+                    </ul>
+                </div>
+                <div class="tip-card motivator">
+                    <h5>🚀 Βήμα 2: Εμπλουτισμός Εργασίας</h5>
+                    <ul>
+                        <li>Παροχή παραγόντων ικανοποίησης</li>
+                        <li>Αυτονομία & υπευθυνότητα</li>
+                        <li>Αναγνώριση επιτευγμάτων</li>
+                        <li>Ευκαιρίες ανάπτυξης</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="comparison-box" style="margin-top: 1.5rem;">
+                <h4>💡 Εμπλουτισμός Εργασίας (Job Enrichment)</h4>
+                <p>
+                    Η <strong>προσθήκη περισσότερων ευθυνών προγραμματισμού και ελέγχου</strong> σε μια 
+                    εργασία αποτελεί παράδειγμα της στρατηγικής του <strong>εμπλουτισμού εργασίας</strong> 
+                    (job enrichment) - ένα βασικό εργαλείο που προέκυψε από τη θεωρία του Herzberg.
+                </p>
+            </div>
+        </section>
+
+        <!-- Σύνδεση με Maslow -->
+        <section class="section">
+            <h2>🔗 Αντιστοίχιση με Θεωρία Maslow</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Maslow</th>
+                        <th>Herzberg</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Φυσιολογικές Ανάγκες</td>
+                        <td rowspan="3" style="vertical-align: middle; background: #fed7d7;"><strong>Παράγοντες Υγιεινής</strong><br>(Μισθός, Συνθήκες, Ασφάλεια, Σχέσεις, Επίβλεψη, Πολιτική)</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες Ασφάλειας</td>
+                    </tr>
+                    <tr>
+                        <td>Κοινωνικές Ανάγκες</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες Εκτίμησης</td>
+                        <td rowspan="2" style="vertical-align: middle; background: #c6f6d5;"><strong>Παράγοντες Κινήτρων</strong><br>(Επίτευξη, Αναγνώριση, Εξέλιξη, Ανάπτυξη, Ενδιαφέρον)</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες Αυτοπραγμάτωσης</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Η <strong>βασική αμοιβή (μισθός)</strong> είναι παράγοντας <strong>υγιεινής</strong></li>
+                <li>Η θεωρία Herzberg είναι <strong>θεωρία περιεχομένου</strong> (Content Theory)</li>
+                <li><strong>Εμπλουτισμός εργασίας</strong> = προσθήκη ευθυνών προγραμματισμού & ελέγχου</li>
+                <li>Παράγοντες υγιεινής: αποτρέπουν δυσαρέσκεια (αλλά ΔΕΝ παρακινούν)</li>
+                <li>Παράγοντες κινήτρων: δημιουργούν ικανοποίηση (πραγματική παρακίνηση)</li>
+                <li>Συχνή ερώτηση: <em>«Η βασική αμοιβή στη θεωρία Herzberg είναι παράγοντας...;»</em></li>
+                <li>Απάντηση: <strong>Υγιεινής</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στα αρχεία:<br>
+                • <strong>«2α Παρακίνηση.pdf»</strong>, Διαφάνειες 10-14<br>
+                • <strong>«2β Παρακίνηση εκπαιδευτικών.pdf»</strong> - Εφαρμογή στην εκπαίδευση
+            </p>
+            <a href="../pdfs/2α_Παρακίνηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Παρακίνησης
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

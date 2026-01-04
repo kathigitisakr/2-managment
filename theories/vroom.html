@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vroom - Θεωρία Προσδοκιών | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #553c9a;
+            --primary-dark: #44337a;
+            --secondary: #2d3748;
+            --accent: #9f7aea;
+            --accent-light: #e9d8fd;
+            --bg-cream: #faf5ff;
+            --bg-paper: #f3e8ff;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Formula Display */
+        .formula-container {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(85, 60, 154, 0.3);
+        }
+
+        .formula {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            font-family: 'Georgia', serif;
+            letter-spacing: 2px;
+        }
+
+        .formula-subtitle {
+            color: rgba(255,255,255,0.9);
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .formula-expanded {
+            color: var(--accent-light);
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .formula-warning {
+            background: rgba(229, 62, 62, 0.2);
+            border: 2px solid var(--danger);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            color: white;
+        }
+
+        .formula-warning strong {
+            color: #fed7d7;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #d6bcfa 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 3px dashed var(--primary);
+        }
+
+        .image-placeholder p {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Keywords */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Variable Cards */
+        .variables-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .variable-card {
+            background: var(--bg-paper);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid;
+            position: relative;
+        }
+
+        .variable-card.expectancy { border-color: #3182ce; }
+        .variable-card.instrumentality { border-color: #38a169; }
+        .variable-card.valence { border-color: #ed8936; }
+
+        .variable-card .symbol {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .variable-card.expectancy .symbol { background: #3182ce; }
+        .variable-card.instrumentality .symbol { background: #38a169; }
+        .variable-card.valence .symbol { background: #ed8936; }
+
+        .variable-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .variable-card .english {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .variable-card p {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .variable-card .question {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--text-muted);
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        tr:hover {
+            background: var(--accent-light);
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Manager Box */
+        .manager-box {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .manager-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .manager-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .manager-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Process Flow */
+        .process-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--bg-paper);
+            border-radius: 10px;
+        }
+
+        .process-step {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .process-arrow {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        /* PDF Reference */
+        .pdf-reference {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .pdf-reference:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(159, 122, 234, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .formula { font-size: 1.8rem; }
+            .process-flow { flex-direction: column; }
+            .process-arrow { transform: rotate(90deg); }
+        }
+
+        /* Print Styles */
+        @media print {
+            nav.top-nav, .back-link { display: none; }
+            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../index.html">← Αρχική</a>
+        <a href="../quizzes/quiz-motivation.html">📝 Quiz Παρακίνησης</a>
+    </nav>
+
+    <header>
+        <span class="sos-badge">⚠️ SOS - ΣΗΜΑΝΤΙΚΟ ΘΕΜΑ</span>
+        <h1>Θεωρία Προσδοκιών</h1>
+        <p class="theorist">Victor Vroom (Expectancy Theory)</p>
+    </header>
+
+    <div class="container">
+        <!-- Formula Display -->
+        <div class="formula-container">
+            <div class="formula">Π = ΠΡ × Σ × ΣΘ</div>
+            <p class="formula-subtitle">Παρακίνηση = Προσδοκία × Συνδρομή × Σθένος</p>
+            <p class="formula-expanded">Motivation = Expectancy × Instrumentality × Valence</p>
+            <div class="formula-warning">
+                <strong>⚠️ ΠΡΟΣΟΧΗ:</strong> Αν οποιοσδήποτε παράγοντας είναι <strong>μηδέν (0)</strong>, 
+                τότε η παρακίνηση είναι μηδέν! (Πολλαπλασιαστική σχέση)
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <div class="image-placeholder">
+            <p>🖼️ Εικόνα: Διάγραμμα Θεωρίας Προσδοκιών Vroom</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Προσθέστε εικόνα: <code>vroom-expectancy.png</code>
+            </p>
+        </div>
+
+        <!-- Περιγραφή -->
+        <section class="section">
+            <h2>📖 Περιγραφή Θεωρίας</h2>
+            <p>
+                Η <strong>Θεωρία Προσδοκιών</strong> του Victor Vroom είναι μία από τις σημαντικότερες 
+                <strong>θεωρίες διαδικασίας</strong> (Process Theories) στην παρακίνηση. Σε αντίθεση με 
+                τις θεωρίες περιεχομένου που εξετάζουν <em>τι</em> παρακινεί τους ανθρώπους, η θεωρία 
+                του Vroom εστιάζει στο <em>πώς</em> οι άνθρωποι αποφασίζουν να καταβάλουν προσπάθεια.
+            </p>
+            <p style="margin-top: 1rem;">
+                Η βασική ιδέα είναι ότι η παρακίνηση εξαρτάται από τις <strong>προσδοκίες</strong> του 
+                ατόμου για το αποτέλεσμα της προσπάθειάς του και την <strong>αξία</strong> που αποδίδει 
+                στις πιθανές ανταμοιβές.
+            </p>
+        </section>
+
+        <!-- Λέξεις Κλειδιά -->
+        <section class="section">
+            <h2>🔑 Λέξεις-Κλειδιά</h2>
+            <div class="keywords">
+                <span class="keyword">Θεωρία Προσδοκιών</span>
+                <span class="keyword">Expectancy Theory</span>
+                <span class="keyword">Προσδοκία (Expectancy)</span>
+                <span class="keyword">Συνδρομή (Instrumentality)</span>
+                <span class="keyword">Σθένος (Valence)</span>
+                <span class="keyword">Process Theory</span>
+                <span class="keyword">Πολλαπλασιαστική Σχέση</span>
+                <span class="keyword">Victor Vroom</span>
+            </div>
+        </section>
+
+        <!-- Process Flow -->
+        <section class="section">
+            <h2>🔄 Η Διαδικασία της Παρακίνησης</h2>
+            <div class="process-flow">
+                <div class="process-step">Προσπάθεια</div>
+                <span class="process-arrow">→</span>
+                <div class="process-step">Απόδοση</div>
+                <span class="process-arrow">→</span>
+                <div class="process-step">Αποτέλεσμα</div>
+                <span class="process-arrow">→</span>
+                <div class="process-step">Ανταμοιβή</div>
+            </div>
+            <p style="text-align: center; color: var(--text-muted); font-style: italic;">
+                Effort → Performance → Outcome → Reward
+            </p>
+        </section>
+
+        <!-- Οι 3 Μεταβλητές -->
+        <section class="section">
+            <h2>📊 Οι 3 Βασικές Μεταβλητές</h2>
+            
+            <div class="variables-grid">
+                <div class="variable-card expectancy">
+                    <span class="symbol">ΠΡ</span>
+                    <h4>1. Προσδοκία (Expectancy)</h4>
+                    <p class="english">Effort → Performance</p>
+                    <p>
+                        Η πεποίθηση ότι η <strong>σκληρή δουλειά θα έχει ως αποτέλεσμα το επιθυμητό 
+                        επίπεδο απόδοσης</strong>.
+                    </p>
+                    <div class="question">
+                        💭 «Αν δουλέψω σκληρά, θα τα καταφέρω;»
+                    </div>
+                </div>
+                
+                <div class="variable-card instrumentality">
+                    <span class="symbol">Σ</span>
+                    <h4>2. Συνδρομή (Instrumentality)</h4>
+                    <p class="english">Performance → Outcome</p>
+                    <p>
+                        Η πεποίθηση ότι η <strong>επιτυχημένη απόδοση θα ακολουθηθεί από ανταμοιβές</strong>.
+                    </p>
+                    <div class="question">
+                        💭 «Αν τα καταφέρω, θα ανταμειφθώ;»
+                    </div>
+                </div>
+                
+                <div class="variable-card valence">
+                    <span class="symbol">ΣΘ</span>
+                    <h4>3. Σθένος (Valence)</h4>
+                    <p class="english">Outcome Value</p>
+                    <p>
+                        Η <strong>αξία που αποδίδει ένα άτομο στις ανταμοιβές</strong> και άλλες εκβάσεις 
+                        που σχετίζονται με την εργασία.
+                    </p>
+                    <div class="question">
+                        💭 «Αξίζει η ανταμοιβή για μένα;»
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Πίνακας Σύνοψης -->
+        <section class="section">
+            <h2>📋 Συνοπτικός Πίνακας</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Μεταβλητή</th>
+                        <th>Αγγλικά</th>
+                        <th>Σύντμηση</th>
+                        <th>Ερώτηση που Απαντά</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Προσδοκία</strong></td>
+                        <td>Expectancy</td>
+                        <td>E / ΠΡ</td>
+                        <td>Μπορώ να το κάνω;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Συνδρομή</strong></td>
+                        <td>Instrumentality</td>
+                        <td>I / Σ</td>
+                        <td>Θα λάβω ανταμοιβή;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Σθένος</strong></td>
+                        <td>Valence</td>
+                        <td>V / ΣΘ</td>
+                        <td>Αξίζει η ανταμοιβή;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Εφαρμογή στην Εκπαίδευση -->
+        <section class="section">
+            <h2>🏫 Εφαρμογή στην Εκπαίδευση</h2>
+            
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Εκπαιδευτικός και Καινοτόμο Πρόγραμμα</h4>
+                <p>Ένας Διευθυντής θέλει να παρακινήσει εκπαιδευτικό να αναλάβει ένα Erasmus+ project:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Προσδοκία (ΠΡ):</strong> «Αν αφιερώσω χρόνο, θα καταφέρω να υλοποιήσω το πρόγραμμα;» → Ο Διευθυντής παρέχει εκπαίδευση και υποστήριξη.</li>
+                    <li><strong>Συνδρομή (Σ):</strong> «Αν πετύχω, θα αναγνωριστεί η προσπάθειά μου;» → Ο Διευθυντής διασφαλίζει ότι η επιτυχία θα ανταμειφθεί.</li>
+                    <li><strong>Σθένος (ΣΘ):</strong> «Αξίζει η ανταμοιβή για μένα;» → Ο Διευθυντής μαθαίνει τι κινητοποιεί τον εκπαιδευτικό (αναγνώριση, εξέλιξη, ταξίδια).</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h4>📌 Παράδειγμα: Χαμηλή Παρακίνηση Εκπαιδευτικού</h4>
+                <p>Αν ένας εκπαιδευτικός δεν παρακινείται, ο Διευθυντής πρέπει να εξετάσει:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Είναι χαμηλή η <strong>Προσδοκία</strong>; → Χρειάζεται εκπαίδευση, υποστήριξη, πόρους</li>
+                    <li>Είναι χαμηλή η <strong>Συνδρομή</strong>; → Χρειάζεται σύνδεση απόδοσης-ανταμοιβής</li>
+                    <li>Είναι χαμηλό το <strong>Σθένος</strong>; → Χρειάζεται εξατομίκευση ανταμοιβών</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Συμβουλές για Managers -->
+        <section class="section">
+            <h2>👔 Οδηγίες για Διευθυντές (Managers)</h2>
+            
+            <div class="manager-box">
+                <h4>✅ Για να αυξήσουν την ΠΡΟΣΔΟΚΙΑ:</h4>
+                <ul>
+                    <li>Να επιλέγουν άτομα με τις κατάλληλες ικανότητες</li>
+                    <li>Να παρέχουν εκπαίδευση και υποστήριξη</li>
+                    <li>Να θέτουν σαφείς και εφικτούς στόχους</li>
+                    <li>Να εξασφαλίζουν τους απαραίτητους πόρους</li>
+                </ul>
+            </div>
+
+            <div class="manager-box">
+                <h4>✅ Για να αυξήσουν τη ΣΥΝΔΡΟΜΗ:</h4>
+                <ul>
+                    <li>Να διευκρινίζουν τα «ψυχολογικά συμβόλαια»</li>
+                    <li>Να γνωστοποιούν τις πιθανότητες των αποτελεσμάτων</li>
+                    <li>Να κατανέμουν ανταμοιβές με βάση την απόδοση</li>
+                    <li>Να είναι συνεπείς στις υποσχέσεις τους</li>
+                </ul>
+            </div>
+
+            <div class="manager-box">
+                <h4>✅ Για να αυξήσουν το ΣΘΕΝΟΣ:</h4>
+                <ul>
+                    <li>Να ταυτοποιούν τις ατομικές ανάγκες</li>
+                    <li>Να προσαρμόζουν τις ανταμοιβές στις ατομικές ανάγκες</li>
+                    <li>Να προσφέρουν ποικιλία ανταμοιβών</li>
+                    <li>Να ρωτούν τι εκτιμούν οι εργαζόμενοι</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Σύγκριση με άλλες θεωρίες -->
+        <section class="section">
+            <h2>🔗 Διάκριση: Θεωρίες Περιεχομένου vs Διαδικασίας</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Θεωρίες Περιεχομένου</th>
+                        <th>Θεωρίες Διαδικασίας</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Maslow, Herzberg, ERG, McClelland</td>
+                        <td><strong>Vroom</strong>, Adams, Locke</td>
+                    </tr>
+                    <tr>
+                        <td>Εστιάζουν στο <strong>ΤΙ</strong> παρακινεί</td>
+                        <td>Εστιάζουν στο <strong>ΠΩΣ</strong> λειτουργεί η παρακίνηση</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάγκες, επιθυμίες</td>
+                        <td>Γνωστικές διαδικασίες, αποφάσεις</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Σημαντικές Επισημάνσεις -->
+        <section class="section">
+            <h2>⚠️ Σημαντικά για τις Εξετάσεις</h2>
+            <ul style="margin-left: 1.5rem;">
+                <li>Ο τύπος είναι <strong>Π = ΠΡ × Σ × ΣΘ</strong> (πολλαπλασιαστικός!)</li>
+                <li>Αν <strong>οποιοσδήποτε παράγοντας = 0</strong>, τότε Π = 0</li>
+                <li>Η θεωρία Vroom είναι <strong>θεωρία διαδικασίας</strong> (Process Theory)</li>
+                <li>Σωστό ζευγάρι: <strong>Skinner – θεωρία ενίσχυσης</strong> (ΟΧΙ Vroom – θεωρία εξίσωσης)</li>
+                <li>Συχνή ερώτηση: <em>«Η θεωρία προσδοκιών υποστηρίζει: Π = Προσδοκία × ... × ...»</em></li>
+                <li>Απάντηση: <strong>Σπουδαιότητα (Instrumentality), Σθένος (Valence)</strong></li>
+            </ul>
+        </section>
+
+        <!-- Αναφορά PDF -->
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο:<br>
+                • <strong>«2α Παρακίνηση.pdf»</strong>, Διαφάνειες 23-29
+            </p>
+            <a href="../pdfs/2α_Παρακίνηση.pdf" class="pdf-reference">
+                📕 Άνοιγμα PDF Παρακίνησης
+            </a>
+        </section>
+
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>
