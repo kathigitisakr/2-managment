@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Προγραμματισμού - Διοίκηση Εκπαίδευσης</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        header h1 {
+            color: white;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .question-card.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .category-tag {
+            background: #e8f4f8;
+            color: #0f3460;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .theory-toggle {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theory-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+        }
+        
+        .theory-toggle .icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .theory-toggle.open .icon {
+            transform: rotate(180deg);
+        }
+        
+        .theory-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            border-left: 5px solid #11998e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: none;
+            animation: expandIn 0.4s ease;
+        }
+        
+        .theory-box.show {
+            display: block;
+        }
+        
+        @keyframes expandIn {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+        
+        .theory-title {
+            color: #0f3460;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theory-title::before {
+            content: "📚";
+        }
+        
+        .theory-section {
+            margin-bottom: 15px;
+        }
+        
+        .theory-section h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        
+        .theory-section p {
+            color: #444;
+            line-height: 1.7;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .keyword {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .example-box {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px dashed #11998e;
+        }
+        
+        .example-box::before {
+            content: "🏫 ";
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #e8edff;
+        }
+        
+        .option.correct {
+            border-color: #11998e;
+            background: #e6f9f1;
+        }
+        
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: #fdeaea;
+        }
+        
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.correct .option-letter {
+            background: #11998e;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #e74c3c;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .feedback.correct {
+            background: linear-gradient(135deg, #e6f9f1, #d0f0e4);
+            border-left: 5px solid #11998e;
+        }
+        
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #fdeaea, #fad4d4);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .feedback-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .feedback.correct .feedback-title {
+            color: #11998e;
+        }
+        
+        .feedback.incorrect .feedback-title {
+            color: #e74c3c;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .results-card.active {
+            display: block;
+        }
+        
+        .results-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .results-title {
+            font-size: 2em;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+        
+        .results-score {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        .results-message {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .results-breakdown {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .intro-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .intro-card h2 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+        
+        .intro-card p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .feature h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .feature p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.6em;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Quiz Προγραμματισμού</h1>
+            <p>Διοίκηση Εκπαίδευσης - Μελέτη & Εξάσκηση</p>
+        </header>
+        
+        <!-- Intro Screen -->
+        <div class="intro-card" id="introCard">
+            <h2>🎓 Καλώς ήρθατε στο Quiz Προγραμματισμού!</h2>
+            <p>Αυτό το quiz καλύπτει τις βασικές έννοιες και θεωρίες του Προγραμματισμού στη Διοίκηση Εκπαίδευσης. Κάθε ερώτηση συνοδεύεται από θεωρητικό υλικό που μπορείτε να μελετήσετε πριν απαντήσετε.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📚</div>
+                    <h4>Θεωρία</h4>
+                    <p>Ενσωματωμένη θεωρία σε κάθε ερώτηση</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h4>20 Ερωτήσεις</h4>
+                    <p>Καλύπτουν 10 βασικές έννοιες</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🏫</div>
+                    <h4>Παραδείγματα</h4>
+                    <p>Εφαρμογές στην εκπαίδευση</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px; color: #667eea;">Έννοιες που καλύπτονται:</h3>
+            <div class="category-filter" style="margin-bottom: 30px;">
+                <span class="filter-btn active">Ορισμός Προγραμματισμού</span>
+                <span class="filter-btn active">Είδη Προγραμματισμού</span>
+                <span class="filter-btn active">Βήματα Προγραμματισμού</span>
+                <span class="filter-btn active">Ανάλυση SWOT</span>
+                <span class="filter-btn active">Ανάλυση PEST</span>
+                <span class="filter-btn active">Contingency Planning</span>
+                <span class="filter-btn active">Scenario Planning</span>
+                <span class="filter-btn active">MBO</span>
+                <span class="filter-btn active">Benchmarking</span>
+                <span class="filter-btn active">Στόχοι</span>
+            </div>
+            
+            <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.2em; padding: 18px 50px;">
+                🚀 Έναρξη Quiz
+            </button>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar" style="display: none;">
+            <div class="stat">
+                <div class="stat-value" id="currentQ">1</div>
+                <div class="stat-label">Ερώτηση</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="correctCount">0</div>
+                <div class="stat-label">Σωστές</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="totalQuestions">20</div>
+                <div class="stat-label">Σύνολο</div>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <!-- Questions Container -->
+        <div id="questionsContainer"></div>
+        
+        <!-- Results Card -->
+        <div class="results-card" id="resultsCard">
+            <div class="results-icon" id="resultsIcon">🏆</div>
+            <h2 class="results-title">Ολοκληρώσατε το Quiz!</h2>
+            <div class="results-score" id="finalScore">0%</div>
+            <p class="results-message" id="resultsMessage"></p>
+            
+            <div class="results-breakdown" id="resultsBreakdown">
+                <!-- Breakdown will be populated by JS -->
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="restartQuiz()">🔄 Επανάληψη Quiz</button>
+                <button class="btn btn-secondary" onclick="reviewAnswers()">📝 Επισκόπηση Απαντήσεων</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Πανεπιστήμιο Πατρών - Μεταπτυχιακό Διοίκησης Εκπαίδευσης</p>
+            <p>Βασισμένο στις διαλέξεις MANEDU_2.pdf</p>
+        </footer>
+    </div>
+    
+    <script>
+        const questions = [
+            // === ΟΡΙΣΜΟΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ ===
+            {
+                id: 1,
+                category: "Ορισμός Προγραμματισμού",
+                theory: {
+                    title: "Τι είναι ο Προγραμματισμός;",
+                    description: "Ο προγραμματισμός είναι η διαδικασία καθορισμού των στόχων της επιχείρησης ή του οργανισμού και η επιλογή των μέσων για την επίτευξή τους σε συγκεκριμένο χρόνο, με αντίστοιχα προβλεπόμενο όφελος και κόστος. Προσδιορίζει πόσο αποδοτική και αποτελεσματική είναι η επιχείρηση και ορίζει τη στρατηγική της.",
+                    keywords: ["Στόχοι", "Στρατηγικές", "Πολιτικές", "Χρονοδιάγραμμα", "Πόροι"],
+                    example: "Ο Διευθυντής και ο Σύλλογος Διδασκόντων θέτουν στόχους για τη χρονιά, όπως 'Να βελτιωθούν οι μαθητικές επιδόσεις στα Μαθηματικά κατά 10%'. Ορίζεται πλάνο ενισχυτικής διδασκαλίας και προγραμματίζονται δράσεις."
+                },
+                question: "Ο προγραμματισμός αποφασίζει πέντε βασικά στοιχεία. Ποιο από τα παρακάτω ΔΕΝ αποτελεί στοιχείο του προγραμματισμού;",
+                options: [
+                    "ΤΙ θα γίνει (Στόχοι)",
+                    "ΠΩΣ θα γίνει (Στρατηγικές)",
+                    "ΓΙΑΤΙ θα γίνει (Αιτιολόγηση)",
+                    "ΠΟΤΕ θα γίνει (Χρονοδιάγραμμα)"
+                ],
+                correct: 2,
+                explanation: "Ο προγραμματισμός αποφασίζει: ΤΙ (στόχοι), ΠΩΣ (στρατηγικές-πολιτικές), ΜΕ ΤΙ (πόροι-προϋπολογισμοί), ΠΟΤΕ (χρονοδιάγραμμα) και ΠΟΙΟΣ (κατανομή αρμοδιοτήτων). Το 'ΓΙΑΤΙ' δεν αποτελεί ξεχωριστό στοιχείο του προγραμματισμού."
+            },
+            {
+                id: 2,
+                category: "Ορισμός Προγραμματισμού",
+                theory: {
+                    title: "Τι περιλαμβάνει ο Προγραμματισμός;",
+                    description: "Ο προγραμματισμός περιλαμβάνει τρία βασικά στοιχεία: 1) τον καθορισμό των στόχων, 2) τη διαμόρφωση των στρατηγικών και πολιτικών, και 3) τα λειτουργικά προγράμματα δράσης. Στο σχολείο, είναι η λειτουργία του καθορισμού των αντικειμενικών στόχων και των διαδικασιών με τις οποίες θα εκπληρωθούν οι εκπαιδευτικές, παιδαγωγικές και διοικητικές δραστηριότητες.",
+                    keywords: ["Καθορισμός στόχων", "Στρατηγικές", "Πολιτικές", "Προγράμματα δράσης"],
+                    example: "Το σχολείο προγραμματίζει την υλοποίηση καινοτόμων προγραμμάτων όπως η ευέλικτη ζώνη, την ανάπτυξη θετικού παιδαγωγικού κλίματος και τη συμμετοχή σε κοινωνικές εκδηλώσεις."
+                },
+                question: "Ποια από τα παρακάτω αποτελούν τα τρία βασικά στοιχεία που περιλαμβάνει ο προγραμματισμός;",
+                options: [
+                    "Στόχοι, Έλεγχος, Αξιολόγηση",
+                    "Στόχοι, Στρατηγικές/Πολιτικές, Λειτουργικά Προγράμματα Δράσης",
+                    "Οργάνωση, Διεύθυνση, Έλεγχος",
+                    "Ανάλυση, Σχεδιασμός, Υλοποίηση"
+                ],
+                correct: 1,
+                explanation: "Ο προγραμματισμός περιλαμβάνει: 1) τον καθορισμό των στόχων, 2) τη διαμόρφωση των στρατηγικών και πολιτικών, 3) τα λειτουργικά προγράμματα δράσης."
+            },
+            
+            // === ΕΙΔΗ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ ===
+            {
+                id: 3,
+                category: "Είδη Προγραμματισμού",
+                theory: {
+                    title: "Στρατηγικός vs Λειτουργικός Προγραμματισμός",
+                    description: "Υπάρχουν δύο βασικά είδη προγραμματισμού: α) Ο Λειτουργικός (ή τακτικός/επιχειρησιακός) προγραμματισμός έχει βραχυχρόνιο ορίζοντα και εστιάζει στις τρέχουσες λειτουργίες του οργανισμού. β) Ο Στρατηγικός προγραμματισμός έχει μακροχρόνιο ορίζοντα και εστιάζει στο σύνολο του οργανισμού, όχι στις επιμέρους λειτουργίες.",
+                    keywords: ["Στρατηγικός", "Λειτουργικός", "Τακτικός", "Επιχειρησιακός", "Μακροχρόνιος", "Βραχυχρόνιος"],
+                    example: "Στρατηγικός: Σχεδιασμός πενταετούς προγράμματος βελτίωσης σχολικού κλίματος. Λειτουργικός: Κατάρτιση ωρολογίου προγράμματος, οργάνωση σχολικών εκδρομών."
+                },
+                question: "Ο στρατηγικός προγραμματισμός στην εκπαίδευση αφορά κυρίως:",
+                options: [
+                    "Την κατάρτιση του ωρολογίου προγράμματος",
+                    "Τη λήψη αποφάσεων σχετικά με τους μακροπρόθεσμους στόχους",
+                    "Την αντικατάσταση απουσιάζοντος εκπαιδευτικού",
+                    "Την οργάνωση σχολικών εκδρομών"
+                ],
+                correct: 1,
+                explanation: "Ο στρατηγικός προγραμματισμός αφορά τη λήψη αποφάσεων σχετικά με τους μακροπρόθεσμους στόχους του εκπαιδευτικού συστήματος. Στην Ελλάδα, λόγω του συγκεντρωτικού χαρακτήρα, αφορά τα ανώτερα επίπεδα διοίκησης (Υπουργείο Παιδείας)."
+            },
+            {
+                id: 4,
+                category: "Είδη Προγραμματισμού",
+                theory: {
+                    title: "Λειτουργικός Προγραμματισμός στην Εκπαίδευση",
+                    description: "Ο λειτουργικός προγραμματισμός καλύπτει: α) Εκπαιδευτικά θέματα (ωρολόγιο πρόγραμμα, καινοτόμα προγράμματα), β) Θέματα εκπαιδευτικού προσωπικού (κατανομή διδακτικού έργου, επιμόρφωση), γ) Διοικητικά θέματα (αρχειοθέτηση, μηχανοργάνωση), δ) Υλικοτεχνική υποδομή, ε) Επικοινωνία με το εξωτερικό περιβάλλον.",
+                    keywords: ["Βραχυχρόνιος", "Τρέχουσες λειτουργίες", "Καθημερινές δραστηριότητες", "Ωρολόγιο πρόγραμμα"],
+                    example: "Κατάρτιση ωρολογίου προγράμματος, υλοποίηση αναλυτικού προγράμματος, εβδομαδιαίος προγραμματισμός διδασκαλίας, σχολικές εκδηλώσεις, ενδοσχολική επιμόρφωση."
+                },
+                question: "Ποιο από τα παρακάτω αποτελεί παράδειγμα λειτουργικού/τακτικού προγραμματισμού;",
+                options: [
+                    "Εισαγωγή καινοτόμων δράσεων STEM σε πενταετή ορίζοντα",
+                    "Σχεδιασμός προγράμματος βιώσιμης ανάπτυξης για τα επόμενα χρόνια",
+                    "Κατάρτιση ωρολογίου προγράμματος και οργάνωση σχολικών εκδρομών",
+                    "Ενίσχυση συνεργασίας σχολείου-τοπικής κοινωνίας μακροπρόθεσμα"
+                ],
+                correct: 2,
+                explanation: "Ο λειτουργικός/τακτικός προγραμματισμός εστιάζει στις καθημερινές και βραχυπρόθεσμες δραστηριότητες του σχολείου, όπως το ωρολόγιο πρόγραμμα και οι σχολικές εκδρομές."
+            },
+            
+            // === ΒΗΜΑΤΑ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ ===
+            {
+                id: 5,
+                category: "Βήματα Προγραμματισμού",
+                theory: {
+                    title: "Τα 6 Βήματα της Διαδικασίας Προγραμματισμού",
+                    description: "Σύμφωνα με το μοντέλο Πετρίδου, τα βήματα είναι: 1) Αποσαφήνιση αποστολής, 2) Προσδιορισμός σκοπών, 3) Ανάλυση περιβάλλοντος (SWOT), 4) Διαμόρφωση πολιτικών, 5) Καθορισμός αντικειμενικών στόχων, 6) Επιλογή δράσεων. Κάθε βήμα οδηγεί στο επόμενο με λογική αλληλουχία.",
+                    keywords: ["Αποστολή", "Σκοποί", "Ανάλυση περιβάλλοντος", "Πολιτικές", "Στόχοι", "Δράσεις"],
+                    example: "1) Αποστολή: 'Προαγωγή γνώσης και δεξιοτήτων 21ου αιώνα'. 2) Σκοπός: Ενίσχυση ψηφιακής εκπαίδευσης. 3) SWOT: Διαθέσιμα εργαστήρια (δυνατό) vs έλλειψη επιμόρφωσης (αδύνατο). 4) Πολιτική: Δημιουργία επιτροπής ψηφιακού μετασχηματισμού. 5) Στόχος: 80% εκπαιδευτικών επιμορφωμένοι. 6) Δράση: Σεμινάρια επιμόρφωσης."
+                },
+                question: "Ποια είναι η σωστή σειρά των βημάτων στη διαδικασία προγραμματισμού (μοντέλο Πετρίδου);",
+                options: [
+                    "Στόχοι → Αποστολή → Ανάλυση → Πολιτικές → Σκοποί → Δράσεις",
+                    "Αποστολή → Σκοποί → Ανάλυση περιβάλλοντος → Πολιτικές → Στόχοι → Δράσεις",
+                    "Ανάλυση → Αποστολή → Στόχοι → Σκοποί → Πολιτικές → Δράσεις",
+                    "Πολιτικές → Αποστολή → Σκοποί → Στόχοι → Ανάλυση → Δράσεις"
+                ],
+                correct: 1,
+                explanation: "Η σωστή σειρά είναι: 1) Αποσαφήνιση αποστολής, 2) Προσδιορισμός σκοπών, 3) Ανάλυση περιβάλλοντος, 4) Διαμόρφωση πολιτικών, 5) Καθορισμός στόχων, 6) Επιλογή δράσεων."
+            },
+            {
+                id: 6,
+                category: "Βήματα Προγραμματισμού",
+                theory: {
+                    title: "Καθορισμός Αντικειμενικών Στόχων",
+                    description: "Οι αντικειμενικοί στόχοι είναι η καταγραφή των εφικτών, ρεαλιστικών, μετρήσιμων και καθαρά διατυπωμένων προτύπων απόδοσης του σχολείου. Αποτελούν την συγκεκριμενοποίηση των σκοπών, οι οποίοι στο πλαίσιο των επιλεγμένων πολιτικών, θα επηρεάσουν τη διαμόρφωση και επιλογή των δράσεων.",
+                    keywords: ["Εφικτοί", "Ρεαλιστικοί", "Μετρήσιμοι", "Πρότυπα απόδοσης", "SMART"],
+                    example: "Αντί για γενικό σκοπό 'βελτίωση της ψηφιακής εκπαίδευσης', ο αντικειμενικός στόχος είναι: 'Επιμόρφωση του 80% των εκπαιδευτικών στη χρήση ψηφιακών πλατφορμών μέχρι το τέλος του σχολικού έτους'."
+                },
+                question: "Οι αντικειμενικοί στόχοι στον προγραμματισμό πρέπει να είναι:",
+                options: [
+                    "Γενικοί, ευέλικτοι και προσαρμόσιμοι",
+                    "Εφικτοί, ρεαλιστικοί, μετρήσιμοι και καθαρά διατυπωμένοι",
+                    "Φιλόδοξοι, αόριστοι και μακροπρόθεσμοι",
+                    "Απλοί, σύντομοι και χωρίς χρονικούς περιορισμούς"
+                ],
+                correct: 1,
+                explanation: "Οι αντικειμενικοί στόχοι πρέπει να είναι εφικτοί, ρεαλιστικοί, μετρήσιμοι και καθαρά διατυπωμένοι. Αποτελούν πρότυπα απόδοσης που μπορούν να αξιολογηθούν."
+            },
+            
+            // === ΑΝΑΛΥΣΗ SWOT ===
+            {
+                id: 7,
+                category: "Ανάλυση SWOT",
+                theory: {
+                    title: "Ανάλυση SWOT",
+                    description: "Η ανάλυση SWOT (Strengths-Weaknesses-Opportunities-Threats) είναι ένα στρατηγικό εργαλείο που αξιολογεί τις δυνατότητες και αδυναμίες του οργανισμού στο εσωτερικό του περιβάλλον, για να αντιμετωπίσει τις ευκαιρίες και απειλές που προέρχονται από το εξωτερικό περιβάλλον.",
+                    keywords: ["Strengths (Δυνατά)", "Weaknesses (Αδύνατα)", "Opportunities (Ευκαιρίες)", "Threats (Απειλές)", "Εσωτερικό", "Εξωτερικό"],
+                    example: "Σχολείο: Δυνατά σημεία: Διαθέσιμα εργαστήρια Πληροφορικής. Αδύνατα: Έλλειψη επιμόρφωσης σε νέα εργαλεία. Ευκαιρίες: Ευρωπαϊκά προγράμματα eTwinning. Απειλές: Άνιση πρόσβαση σε εξοπλισμό στο σπίτι."
+                },
+                question: "Στην ανάλυση SWOT, τα Strengths και Weaknesses αφορούν:",
+                options: [
+                    "Το εξωτερικό περιβάλλον του οργανισμού",
+                    "Το εσωτερικό περιβάλλον του οργανισμού",
+                    "Μόνο τους οικονομικούς πόρους",
+                    "Μόνο το ανθρώπινο δυναμικό"
+                ],
+                correct: 1,
+                explanation: "Τα Strengths (Δυνατά σημεία) και Weaknesses (Αδυναμίες) αφορούν το εσωτερικό περιβάλλον, ενώ τα Opportunities και Threats αφορούν το εξωτερικό περιβάλλον."
+            },
+            {
+                id: 8,
+                category: "Ανάλυση SWOT",
+                theory: {
+                    title: "Εφαρμογή SWOT στην Εκπαίδευση",
+                    description: "Η ανάλυση SWOT βοηθά τον εκπαιδευτικό οργανισμό να κατανοήσει τη θέση του και να σχεδιάσει τη μελλοντική του πορεία. Αποτελεί το τρίτο βήμα στη διαδικασία προγραμματισμού (Ανάλυση περιβάλλοντος) και είναι κρίσιμο για τη λήψη στρατηγικών αποφάσεων.",
+                    keywords: ["Στρατηγικό εργαλείο", "Ανάλυση περιβάλλοντος", "Θέση οργανισμού", "Σχεδιασμός πορείας"],
+                    example: "Ένα σχολείο αναλύει: Δυνατά: Έμπειρο διδακτικό προσωπικό. Αδύνατα: Παλαιές υποδομές. Ευκαιρίες: Χρηματοδότηση από ΕΣΠΑ. Απειλές: Μείωση μαθητικού πληθυσμού λόγω δημογραφικού."
+                },
+                question: "Ποιο από τα παρακάτω αποτελεί 'Απειλή' (Threat) για ένα σχολείο στην ανάλυση SWOT;",
+                options: [
+                    "Διαθέσιμα εργαστήρια Πληροφορικής",
+                    "Έλλειψη επιμόρφωσης εκπαιδευτικών",
+                    "Ευρωπαϊκά προγράμματα χρηματοδότησης",
+                    "Μείωση μαθητικού πληθυσμού λόγω δημογραφικού"
+                ],
+                correct: 3,
+                explanation: "Η μείωση μαθητικού πληθυσμού είναι εξωτερικός παράγοντας που απειλεί το σχολείο. Τα εργαστήρια είναι δυνατό σημείο, η έλλειψη επιμόρφωσης αδυναμία, και τα ευρωπαϊκά προγράμματα ευκαιρία."
+            },
+            
+            // === ΑΝΑΛΥΣΗ PEST ===
+            {
+                id: 9,
+                category: "Ανάλυση PEST",
+                theory: {
+                    title: "Ανάλυση PEST (Μάκρο-περιβάλλον)",
+                    description: "Η ανάλυση PEST εξετάζει το ευρύτερο μάκρο-περιβάλλον του οργανισμού σε τέσσερις διαστάσεις: P (Political-Πολιτικό), E (Economic-Οικονομικό), S (Social-Κοινωνικό), T (Technological-Τεχνολογικό). Υπάρχουν επεκτάσεις όπως PEST-EL (+ Environmental, Legal) και PEST-DG (+ Demographic, Global).",
+                    keywords: ["Political", "Economic", "Social", "Technological", "Μάκρο-περιβάλλον", "PEST-EL", "PEST-DG"],
+                    example: "Πολιτικό: Νομοθεσία για αξιολόγηση σχολείων. Οικονομικό: Προϋπολογισμός εκπαίδευσης. Κοινωνικό: Αλλαγές στις αξίες οικογένειας. Τεχνολογικό: Νέες ψηφιακές πλατφόρμες μάθησης."
+                },
+                question: "Η ανάλυση PEST εξετάζει:",
+                options: [
+                    "Μόνο τους εσωτερικούς πόρους του οργανισμού",
+                    "Το ευρύτερο μάκρο-περιβάλλον (Πολιτικό, Οικονομικό, Κοινωνικό, Τεχνολογικό)",
+                    "Μόνο τους ανταγωνιστές του οργανισμού",
+                    "Τις σχέσεις μεταξύ εργαζομένων"
+                ],
+                correct: 1,
+                explanation: "Η PEST αναλύει το μάκρο-περιβάλλον: Political (Πολιτικό), Economic (Οικονομικό), Social (Κοινωνικό), Technological (Τεχνολογικό)."
+            },
+            {
+                id: 10,
+                category: "Ανάλυση PEST",
+                theory: {
+                    title: "Επεκτάσεις PEST-EL και PEST-DG",
+                    description: "Η PEST-EL προσθέτει: Environmental (Περιβαλλοντικό) και Legal (Νομικό). Η PEST-DG προσθέτει: Demographic (Δημογραφικό) και Global (Παγκόσμιο). Αυτές οι επεκτάσεις δίνουν πληρέστερη εικόνα του εξωτερικού περιβάλλοντος.",
+                    keywords: ["PEST-EL", "Environmental", "Legal", "PEST-DG", "Demographic", "Global"],
+                    example: "Δημογραφικό: Ρυθμός γεννήσεων, κατανομή πληθυσμού κατά ηλικία. Παγκόσμιο: Νέες διεθνείς αγορές, διεθνή πολιτικά δρώμενα. Περιβαλλοντικό: Κλιματική αλλαγή. Νομικό: Νόμοι για προστασία δεδομένων."
+                },
+                question: "Στην ανάλυση PEST-DG, το 'D' αντιπροσωπεύει:",
+                options: [
+                    "Digital (Ψηφιακό)",
+                    "Demographic (Δημογραφικό)",
+                    "Development (Ανάπτυξη)",
+                    "Domestic (Εγχώριο)"
+                ],
+                correct: 1,
+                explanation: "Στην PEST-DG, το D αντιπροσωπεύει το Demographic (Δημογραφικό) περιβάλλον, που περιλαμβάνει ρυθμό αύξησης πληθυσμού, κατανομή κατά ηλικία, ρυθμό γεννήσεων κ.ά."
+            },
+            
+            // === CONTINGENCY PLANNING ===
+            {
+                id: 11,
+                category: "Contingency Planning",
+                theory: {
+                    title: "Προγραμματισμός Απροόπτου (Contingency Planning)",
+                    description: "Ο προγραμματισμός του απροόπτου προσδιορίζει εναλλακτικές πορείες δράσης που μπορούν να εφαρμοστούν αν μεταβληθούν οι συνθήκες. Τα σχέδια αντιμετώπισης του απροόπτου προβλέπουν τις μεταβαλλόμενες συνθήκες και προετοιμάζουν τον οργανισμό για έκτακτες καταστάσεις.",
+                    keywords: ["Εναλλακτικές λύσεις", "Μεταβαλλόμενες συνθήκες", "Κρίσεις", "Έκτακτες καταστάσεις", "Plan B"],
+                    example: "Δημιουργία σχεδίου τηλεκπαίδευσης σε περίπτωση που το σχολείο κλείσει (π.χ. λόγω πανδημίας). Σχέδιο διαχείρισης έκτακτων καιρικών φαινομένων. Εναλλακτικό πρόγραμμα εξετάσεων σε περίπτωση απεργιών."
+                },
+                question: "Ο προγραμματισμός του απροόπτου (contingency planning) χρησιμεύει για:",
+                options: [
+                    "Τον καθορισμό των ετήσιων στόχων",
+                    "Την εύρεση εναλλακτικών λύσεων σε περίπτωση απρόβλεπτων αλλαγών",
+                    "Την αξιολόγηση του προσωπικού",
+                    "Την κατάρτιση του προϋπολογισμού"
+                ],
+                correct: 1,
+                explanation: "Ο contingency planning προσδιορίζει εναλλακτικές πορείες δράσης για περιπτώσεις που οι συνθήκες μεταβληθούν απρόβλεπτα."
+            },
+            {
+                id: 12,
+                category: "Contingency Planning",
+                theory: {
+                    title: "Εφαρμογή Contingency Planning στο Σχολείο",
+                    description: "Στο σχολικό περιβάλλον, ο προγραμματισμός του απροόπτου περιλαμβάνει σχέδια για διάφορες έκτακτες καταστάσεις: υγειονομικές κρίσεις, φυσικές καταστροφές, τεχνικά προβλήματα, απεργίες, κ.ά. Στόχος είναι η συνέχεια της εκπαιδευτικής διαδικασίας.",
+                    keywords: ["Σχέδιο τηλεκπαίδευσης", "Διαχείριση κρίσης", "Εναλλακτικά προγράμματα", "Συνέχεια λειτουργίας"],
+                    example: "Κατά την πανδημία COVID-19, τα σχολεία που είχαν σχέδιο τηλεκπαίδευσης (contingency plan) μετέβησαν ομαλότερα στην εξ αποστάσεως διδασκαλία."
+                },
+                question: "Ποιο από τα παρακάτω αποτελεί παράδειγμα contingency planning στο σχολείο;",
+                options: [
+                    "Σχεδιασμός πενταετούς προγράμματος STEM",
+                    "Κατάρτιση ωρολογίου προγράμματος",
+                    "Σχέδιο τηλεκπαίδευσης σε περίπτωση κλεισίματος του σχολείου",
+                    "Ανάλυση SWOT του σχολείου"
+                ],
+                correct: 2,
+                explanation: "Το σχέδιο τηλεκπαίδευσης για περίπτωση κλεισίματος είναι κλασικό παράδειγμα contingency planning - προετοιμασία για απρόβλεπτη κατάσταση."
+            },
+            
+            // === SCENARIO PLANNING ===
+            {
+                id: 13,
+                category: "Scenario Planning",
+                theory: {
+                    title: "Προγραμματισμός με Σενάρια (Scenario Planning)",
+                    description: "Ο προγραμματισμός με χρήση σεναρίων είναι η μακροπρόθεσμη εκδοχή του contingency planning. Προσδιορίζει εναλλακτικά μελλοντικά σενάρια και καταστρώνει σχέδια για κάθε ένα. Αυξάνει την ευελιξία του οργανισμού και την προετοιμασία του για μελλοντικά 'σοκ'.",
+                    keywords: ["Μελλοντικά σενάρια", "Μακροπρόθεσμος", "Ευελιξία", "Προετοιμασία", "Εναλλακτικές πορείες"],
+                    example: "Σενάριο 1: Αύξηση μαθητικού πληθυσμού → ανάγκη για περισσότερους εκπαιδευτικούς. Σενάριο 2: Μείωση εγγραφών → συγχώνευση τάξεων. Σενάριο 3: Ψηφιακός μετασχηματισμός → επενδύσεις σε υποδομές."
+                },
+                question: "Η βασική διαφορά μεταξύ contingency planning και scenario planning είναι:",
+                options: [
+                    "Το scenario planning αφορά μόνο οικονομικά θέματα",
+                    "Το scenario planning έχει μακροπρόθεσμο ορίζοντα",
+                    "Το contingency planning είναι πιο περίπλοκο",
+                    "Δεν υπάρχει καμία διαφορά"
+                ],
+                correct: 1,
+                explanation: "Το scenario planning είναι η μακροπρόθεσμη εκδοχή του contingency planning. Ενώ το contingency αντιμετωπίζει βραχυπρόθεσμες κρίσεις, το scenario planning εξετάζει διαφορετικά μελλοντικά σενάρια."
+            },
+            {
+                id: 14,
+                category: "Scenario Planning",
+                theory: {
+                    title: "Οφέλη του Scenario Planning",
+                    description: "Τα κύρια οφέλη του προγραμματισμού με σενάρια είναι: 1) Αυξάνει την ευελιξία του οργανισμού, 2) Βελτιώνει την προετοιμασία για μελλοντικά 'σοκ', 3) Βοηθά στη λήψη στρατηγικών αποφάσεων, 4) Μειώνει την αβεβαιότητα μέσω προετοιμασίας.",
+                    keywords: ["Ευελιξία", "Προετοιμασία", "Στρατηγικές αποφάσεις", "Μείωση αβεβαιότητας"],
+                    example: "Ένα σχολείο που έχει σχεδιάσει σενάρια για αύξηση/μείωση μαθητών, ψηφιακό μετασχηματισμό κ.ά., είναι έτοιμο να αντιδράσει γρήγορα και αποτελεσματικά όταν αλλάξουν οι συνθήκες."
+                },
+                question: "Το scenario planning αυξάνει κυρίως:",
+                options: [
+                    "Τη γραφειοκρατία του οργανισμού",
+                    "Την ευελιξία και προετοιμασία για μελλοντικά 'σοκ'",
+                    "Τις δαπάνες λειτουργίας",
+                    "Τον αριθμό των εργαζομένων"
+                ],
+                correct: 1,
+                explanation: "Το scenario planning αυξάνει την ευελιξία του οργανισμού και την προετοιμασία του για μελλοντικά 'σοκ' μέσω της εξέτασης εναλλακτικών μελλοντικών σεναρίων."
+            },
+            
+            // === MBO ===
+            {
+                id: 15,
+                category: "MBO (Διοίκηση με Στόχους)",
+                theory: {
+                    title: "Διοίκηση με Στόχους (MBO)",
+                    description: "Η Διοίκηση με Στόχους (Management By Objectives - MBO) αναπτύχθηκε από τον Peter Drucker (1970). Είναι η διαδικασία κατά την οποία τα στελέχη αναγνωρίζουν από κοινού με τους υφισταμένους τους κοινούς στόχους, καθορίζουν τις περιοχές ευθύνης, και χρησιμοποιούν τα αποτελέσματα ως πρότυπα απόδοσης.",
+                    keywords: ["Peter Drucker", "Κοινοί στόχοι", "Συμμετοχή", "Ευθύνες", "Πρότυπα απόδοσης", "Αυτοέλεγχος"],
+                    example: "Ο Διευθυντής και οι εκπαιδευτικοί θέτουν μαζί τους στόχους της χρονιάς. Κάθε εκπαιδευτικός γνωρίζει τι αναμένεται από αυτόν και αξιολογείται με βάση την επίτευξη αυτών των στόχων."
+                },
+                question: "Η Διοίκηση με Στόχους (MBO) του Peter Drucker βασίζεται στην ιδέα ότι:",
+                options: [
+                    "Οι στόχοι τίθενται μόνο από τη διοίκηση",
+                    "Στελέχη και υφιστάμενοι καθορίζουν από κοινού τους στόχους",
+                    "Οι στόχοι είναι πάντα ποσοτικοί",
+                    "Δεν χρειάζεται αξιολόγηση απόδοσης"
+                ],
+                correct: 1,
+                explanation: "Το MBO προϋποθέτει ότι στελέχη και υφιστάμενοι αναγνωρίζουν από κοινού τους στόχους, καθορίζουν ευθύνες και χρησιμοποιούν τα αποτελέσματα ως πρότυπα."
+            },
+            {
+                id: 16,
+                category: "MBO (Διοίκηση με Στόχους)",
+                theory: {
+                    title: "Πλεονεκτήματα και Μειονεκτήματα MBO",
+                    description: "Πλεονεκτήματα: Διευκολύνει προγραμματισμό, βελτιώνει οργάνωση, δημιουργεί κίνητρα, αναπτύσσει αυτοέλεγχο, ενδυναμώνει επικοινωνία, δίνει συμμετοχή στη λήψη αποφάσεων. Μειονεκτήματα: Υπερβολική έμφαση σε ποσοτικούς στόχους, δύσκολος συντονισμός, αύξηση γραφειοκρατίας, κίνδυνος επιβολής επιθυμιών.",
+                    keywords: ["Πλεονεκτήματα", "Μειονεκτήματα", "Κίνητρα", "Αυτοέλεγχος", "Συμμετοχή", "Γραφειοκρατία"],
+                    example: "Πλεονέκτημα: Ο εκπαιδευτικός που συμμετέχει στον καθορισμό στόχων νιώθει περισσότερο δεσμευμένος. Μειονέκτημα: Η έμφαση μόνο σε ποσοτικούς δείκτες (π.χ. βαθμοί) μπορεί να αγνοήσει ποιοτικές διαστάσεις."
+                },
+                question: "Ποιο από τα παρακάτω αποτελεί μειονέκτημα της Διοίκησης με Στόχους (MBO);",
+                options: [
+                    "Δημιουργεί κίνητρα στους εργαζομένους",
+                    "Διευκολύνει τη λειτουργία του προγραμματισμού",
+                    "Υπερβολική έμφαση σε ποσοτικούς στόχους",
+                    "Ενδυναμώνει την επικοινωνία"
+                ],
+                correct: 2,
+                explanation: "Η υπερβολική έμφαση σε ποσοτικούς στόχους είναι ένα από τα βασικά μειονεκτήματα του MBO, καθώς μπορεί να παραβλέπει ποιοτικές διαστάσεις της απόδοσης."
+            },
+            
+            // === BENCHMARKING ===
+            {
+                id: 17,
+                category: "Benchmarking",
+                theory: {
+                    title: "Συγκριτική Προτυποποίηση (Benchmarking)",
+                    description: "Το Benchmarking είναι η χρήση εξωτερικών συγκρίσεων για καλύτερη αξιολόγηση της τρέχουσας απόδοσης και προσδιορισμό πιθανών δράσεων για το μέλλον. Περιλαμβάνει την υιοθέτηση των καλύτερων πρακτικών άλλων οργανισμών που επιτυγχάνουν ανώτερη απόδοση.",
+                    keywords: ["Εξωτερικές συγκρίσεις", "Καλύτερες πρακτικές", "Βελτίωση απόδοσης", "Σύγκριση με ηγέτες"],
+                    example: "Ένα ελληνικό σχολείο συγκρίνει τις πρακτικές του με σχολεία της Φινλανδίας (που έχουν υψηλές επιδόσεις στο PISA) για να βελτιώσει τη διδακτική μεθοδολογία."
+                },
+                question: "Το benchmarking αποσκοπεί στη:",
+                options: [
+                    "Μείωση του προσωπικού",
+                    "Υιοθέτηση καλύτερων πρακτικών από οργανισμούς με ανώτερη απόδοση",
+                    "Αποφυγή συνεργασίας με άλλους οργανισμούς",
+                    "Διατήρηση του status quo"
+                ],
+                correct: 1,
+                explanation: "Το benchmarking χρησιμοποιεί εξωτερικές συγκρίσεις για να εντοπίσει και υιοθετήσει τις καλύτερες πρακτικές οργανισμών που επιτυγχάνουν ανώτερη απόδοση."
+            },
+            {
+                id: 18,
+                category: "Benchmarking",
+                theory: {
+                    title: "Είδη Benchmarking στην Εκπαίδευση",
+                    description: "Στρατηγικό Benchmarking: Σύγκριση στρατηγικών και μακροπρόθεσμων επιλογών (π.χ. σύγκριση με Φινλανδία για αυτονομία σχολείων). Λειτουργικό Benchmarking: Σύγκριση διαδικασιών και μεθόδων καθημερινής λειτουργίας (π.χ. χρήση e-class, διαχείριση τάξης).",
+                    keywords: ["Στρατηγικό benchmarking", "Λειτουργικό benchmarking", "Σύγκριση πρακτικών", "Βελτίωση"],
+                    example: "Στρατηγικό: Σύγκριση εκπαιδευτικής στρατηγικής με σχολεία Σιγκαπούρης. Λειτουργικό: Σύγκριση χρήσης ψηφιακών εργαστηρίων μεταξύ σχολείων της ίδιας περιφέρειας."
+                },
+                question: "Ποια είναι η διαφορά μεταξύ στρατηγικού και λειτουργικού benchmarking;",
+                options: [
+                    "Το στρατηγικό αφορά μακροπρόθεσμες επιλογές, το λειτουργικό τις καθημερινές διαδικασίες",
+                    "Το λειτουργικό αφορά μόνο οικονομικά θέματα",
+                    "Δεν υπάρχει διαφορά, είναι συνώνυμα",
+                    "Το στρατηγικό είναι πιο σύντομο στη διάρκεια"
+                ],
+                correct: 0,
+                explanation: "Το στρατηγικό benchmarking συγκρίνει στρατηγικές και μακροπρόθεσμες επιλογές, ενώ το λειτουργικό συγκρίνει διαδικασίες και μεθόδους καθημερινής λειτουργίας."
+            },
+            
+            // === ΣΤΟΧΟΙ ===
+            {
+                id: 19,
+                category: "Στόχοι",
+                theory: {
+                    title: "Διαφορά Σκοπών και Στόχων",
+                    description: "Οι σκοποί είναι γενικές κατευθύνσεις που υπηρετούν την αποστολή του οργανισμού. Οι αντικειμενικοί στόχοι είναι η συγκεκριμενοποίηση των σκοπών - εφικτοί, ρεαλιστικοί, μετρήσιμοι. Πρώτα ορίζονται οι σκοποί, μετά οι στόχοι που τους εξυπηρετούν.",
+                    keywords: ["Σκοποί", "Αντικειμενικοί στόχοι", "Γενικές κατευθύνσεις", "Συγκεκριμενοποίηση", "Μετρήσιμοι"],
+                    example: "Σκοπός: Ενίσχυση της ψηφιακής εκπαίδευσης (γενικό). Στόχος: Επιμόρφωση του 80% των εκπαιδευτικών στη χρήση ψηφιακών πλατφορμών μέχρι τον Ιούνιο (συγκεκριμένο, μετρήσιμο)."
+                },
+                question: "Ποια είναι η σχέση μεταξύ σκοπών και αντικειμενικών στόχων στον προγραμματισμό;",
+                options: [
+                    "Είναι ταυτόσημες έννοιες",
+                    "Οι στόχοι προηγούνται των σκοπών",
+                    "Οι στόχοι είναι η συγκεκριμενοποίηση των σκοπών",
+                    "Οι σκοποί είναι πιο μετρήσιμοι από τους στόχους"
+                ],
+                correct: 2,
+                explanation: "Οι αντικειμενικοί στόχοι αποτελούν την συγκεκριμενοποίηση των σκοπών. Οι σκοποί είναι γενικές κατευθύνσεις, ενώ οι στόχοι είναι εφικτοί, ρεαλιστικοί και μετρήσιμοι."
+            },
+            {
+                id: 20,
+                category: "Στόχοι",
+                theory: {
+                    title: "Θεωρία Καθορισμού Στόχων και Παρακίνηση",
+                    description: "Η θεωρία καθορισμού στόχων δείχνει ότι η συμμετοχή στη θέσπιση στόχων ξεκλειδώνει τις δυνατότητες παρακίνησης. Η Διοίκηση με Στόχους (MBO) προάγει αυτή τη συμμετοχή. Όταν η συμμετοχή δεν είναι δυνατή, οι εργαζόμενοι αντιδρούν θετικά αν υπάρχει εμπιστοσύνη και υποστήριξη.",
+                    keywords: ["Συμμετοχή", "Παρακίνηση", "Εμπιστοσύνη", "Υποστήριξη", "MBO"],
+                    example: "Εκπαιδευτικοί που συμμετέχουν στον καθορισμό των στόχων της σχολικής χρονιάς (π.χ. σε συνεδρίαση συλλόγου) είναι πιο παρακινημένοι να τους επιτύχουν από ό,τι αν τους είχαν επιβληθεί μονομερώς."
+                },
+                question: "Σύμφωνα με τη θεωρία καθορισμού στόχων, η συμμετοχή στη θέσπιση στόχων:",
+                options: [
+                    "Μειώνει την αποδοτικότητα",
+                    "Ξεκλειδώνει τις δυνατότητες παρακίνησης",
+                    "Δεν έχει καμία επίδραση",
+                    "Αυξάνει μόνο τη γραφειοκρατία"
+                ],
+                correct: 1,
+                explanation: "Η συμμετοχή στη θέσπιση στόχων ξεκλειδώνει τις δυνατότητες παρακίνησης. Η Διοίκηση με Στόχους (MBO) προάγει ακριβώς αυτή τη συμμετοχική προσέγγιση."
+            }
+        ];
+        
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswers = [];
+        let categoryScores = {};
+        
+        function startQuiz() {
+            document.getElementById('introCard').style.display = 'none';
+            document.getElementById('statsBar').style.display = 'flex';
+            document.getElementById('progressContainer').style.display = 'block';
+            
+            // Initialize category scores
+            questions.forEach(q => {
+                if (!categoryScores[q.category]) {
+                    categoryScores[q.category] = { correct: 0, total: 0 };
+                }
+                categoryScores[q.category].total++;
+            });
+            
+            renderQuestion();
+        }
+        
+        function renderQuestion() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            const q = questions[currentQuestion];
+            
+            const card = document.createElement('div');
+            card.className = 'question-card active';
+            card.innerHTML = `
+                <div class="question-header">
+                    <span class="question-number">Ερώτηση ${currentQuestion + 1} / ${questions.length}</span>
+                    <span class="category-tag">${q.category}</span>
+                </div>
+                
+                <button class="theory-toggle" onclick="toggleTheory(this)">
+                    <span>📚 Δείτε τη Θεωρία</span>
+                    <span class="icon">▼</span>
+                </button>
+                
+                <div class="theory-box" id="theoryBox">
+                    <h3 class="theory-title">${q.theory.title}</h3>
+                    
+                    <div class="theory-section">
+                        <h4>📝 Περιγραφή:</h4>
+                        <p>${q.theory.description}</p>
+                    </div>
+                    
+                    <div class="theory-section">
+                        <h4>🔑 Λέξεις-Κλειδιά:</h4>
+                        <div class="keywords">
+                            ${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="theory-section">
+                        <h4>🏫 Παράδειγμα Εφαρμογής:</h4>
+                        <div class="example-box">
+                            ${q.theory.example}
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="question-text">${q.question}</p>
+                
+                <div class="options">
+                    ${q.options.map((opt, i) => `
+                        <div class="option" onclick="selectOption(${i})">
+                            <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                            <span>${opt}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Προηγούμενη</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Επόμενη →</button>
+                </div>
+            `;
+            
+            container.appendChild(card);
+            updateProgress();
+        }
+        
+        function toggleTheory(btn) {
+            const theoryBox = document.getElementById('theoryBox');
+            btn.classList.toggle('open');
+            theoryBox.classList.toggle('show');
+            
+            const text = btn.querySelector('span:first-child');
+            text.textContent = theoryBox.classList.contains('show') ? '📚 Απόκρυψη Θεωρίας' : '📚 Δείτε τη Θεωρία';
+        }
+        
+        function selectOption(index) {
+            if (answered) return;
+            answered = true;
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            userAnswers[currentQuestion] = index;
+            
+            if (index === q.correct) {
+                score++;
+                categoryScores[q.category].correct++;
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✅ Σωστά!</div>
+                    <p>${q.explanation}</p>
+                `;
+            } else {
+                feedback.className = 'feedback incorrect show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">❌ Λάθος</div>
+                    <p><strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</p>
+                    <p>${q.explanation}</p>
+                `;
+            }
+            
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('nextBtn').disabled = false;
+            
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('nextBtn').textContent = 'Δείτε τα Αποτελέσματα';
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                answered = false;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                answered = userAnswers[currentQuestion] !== undefined;
+                renderQuestion();
+                
+                if (answered) {
+                    // Re-show the answer
+                    const q = questions[currentQuestion];
+                    const options = document.querySelectorAll('.option');
+                    const feedback = document.getElementById('feedback');
+                    const userAnswer = userAnswers[currentQuestion];
+                    
+                    options.forEach((opt, i) => {
+                        opt.style.pointerEvents = 'none';
+                        if (i === q.correct) {
+                            opt.classList.add('correct');
+                        } else if (i === userAnswer) {
+                            opt.classList.add('incorrect');
+                        }
+                    });
+                    
+                    if (userAnswer === q.correct) {
+                        feedback.className = 'feedback correct show';
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✅ Σωστά!</div>
+                            <p>${q.explanation}</p>
+                        `;
+                    } else {
+                        feedback.className = 'feedback incorrect show';
+                        feedback.innerHTML = `
+                            <div class="feedback-title">❌ Λάθος</div>
+                            <p><strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</p>
+                            <p>${q.explanation}</p>
+                        `;
+                    }
+                    
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }
+        }
+        
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+        }
+        
+        function showResults() {
+            document.getElementById('questionsContainer').innerHTML = '';
+            document.getElementById('statsBar').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('resultsCard').classList.add('active');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = `${score} / ${questions.length} (${percentage}%)`;
+            
+            let icon, message;
+            if (percentage >= 90) {
+                icon = '🏆';
+                message = 'Εξαιρετική επίδοση! Έχετε κατακτήσει τη θεωρία του Προγραμματισμού!';
+            } else if (percentage >= 70) {
+                icon = '🎉';
+                message = 'Πολύ καλή επίδοση! Λίγη ακόμα μελέτη και θα είστε έτοιμοι για τις εξετάσεις!';
+            } else if (percentage >= 50) {
+                icon = '📚';
+                message = 'Καλή προσπάθεια! Συνιστάται να μελετήσετε ξανά τις ενότητες με χαμηλή βαθμολογία.';
+            } else {
+                icon = '💪';
+                message = 'Χρειάζεται περισσότερη μελέτη. Διαβάστε προσεκτικά τη θεωρία κάθε ερώτησης!';
+            }
+            
+            document.getElementById('resultsIcon').textContent = icon;
+            document.getElementById('resultsMessage').textContent = message;
+            
+            // Generate breakdown
+            let breakdown = '<h4 style="margin-bottom: 15px;">📊 Ανάλυση ανά Ενότητα:</h4>';
+            for (const [category, data] of Object.entries(categoryScores)) {
+                const catPercentage = Math.round((data.correct / data.total) * 100);
+                const color = catPercentage >= 70 ? '#11998e' : catPercentage >= 50 ? '#f39c12' : '#e74c3c';
+                breakdown += `
+                    <div class="breakdown-item">
+                        <span>${category}</span>
+                        <span style="color: ${color}; font-weight: bold;">${data.correct}/${data.total} (${catPercentage}%)</span>
+                    </div>
+                `;
+            }
+            document.getElementById('resultsBreakdown').innerHTML = breakdown;
+        }
+        
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            userAnswers = [];
+            categoryScores = {};
+            
+            document.getElementById('resultsCard').classList.remove('active');
+            document.getElementById('introCard').style.display = 'block';
+        }
+        
+        function reviewAnswers() {
+            document.getElementById('resultsCard').classList.remove('active');
+            document.getElementById('statsBar').style.display = 'flex';
+            document.getElementById('progressContainer').style.display = 'block';
+            currentQuestion = 0;
+            renderQuestion();
+            
+            // Show previous answer
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const userAnswer = userAnswers[currentQuestion];
+            
+            if (userAnswer !== undefined) {
+                options.forEach((opt, i) => {
+                    opt.style.pointerEvents = 'none';
+                    if (i === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (i === userAnswer && userAnswer !== q.correct) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+                
+                if (userAnswer === q.correct) {
+                    feedback.className = 'feedback correct show';
+                    feedback.innerHTML = `
+                        <div class="feedback-title">✅ Σωστά!</div>
+                        <p>${q.explanation}</p>
+                    `;
+                } else {
+                    feedback.className = 'feedback incorrect show';
+                    feedback.innerHTML = `
+                        <div class="feedback-title">❌ Λάθος</div>
+                        <p><strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</p>
+                        <p>${q.explanation}</p>
+                    `;
+                }
+                
+                document.getElementById('nextBtn').disabled = false;
+                answered = true;
+            }
+        }
+    </script>
+</body>
+</html>

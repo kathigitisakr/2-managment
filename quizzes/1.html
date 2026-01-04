@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Θεωριών Ηγεσίας - Διοίκηση Εκπαίδευσης</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        header h1 {
+            color: white;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+        
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            color: white;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .question-card.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .theory-section {
+            margin-bottom: 25px;
+        }
+        
+        .theory-toggle {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+        
+        .theory-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+        }
+        
+        .theory-toggle .icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .theory-toggle.open .icon {
+            transform: rotate(180deg);
+        }
+        
+        .theory-content {
+            display: none;
+            margin-top: 15px;
+            padding: 25px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            border-left: 5px solid #f5576c;
+            animation: slideDown 0.4s ease;
+        }
+        
+        .theory-content.show {
+            display: block;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 1000px; }
+        }
+        
+        .theory-content h4 {
+            color: #d63384;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theory-content p {
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .keyword {
+            background: #d63384;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .example-box {
+            background: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .example-box h5 {
+            color: #198754;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .example-box p {
+            margin: 0;
+            font-size: 0.95em;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .theory-tag {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 18px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #e8f4fd;
+            border-color: #667eea;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+        
+        .option.wrong .option-letter {
+            background: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .feedback.correct {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 1px solid #28a745;
+        }
+        
+        .feedback.wrong {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 1px solid #dc3545;
+        }
+        
+        .feedback h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .feedback.correct h4 {
+            color: #155724;
+        }
+        
+        .feedback.wrong h4 {
+            color: #721c24;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .results-card.active {
+            display: block;
+        }
+        
+        .results-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .results-card h2 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+        
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .score-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .score-item {
+            padding: 15px 25px;
+            border-radius: 15px;
+        }
+        
+        .score-item.correct-count {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .score-item.wrong-count {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .score-item .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .performance-message {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .theory-summary {
+            text-align: left;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .theory-summary h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .theory-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+        
+        .theory-result.good {
+            border-color: #28a745;
+        }
+        
+        .theory-result.bad {
+            border-color: #dc3545;
+        }
+        
+        .start-screen {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .start-screen h2 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+        
+        .start-screen p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .theories-list {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+        
+        .theories-list h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .theories-list ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .theories-list li {
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            font-size: 0.95em;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .sos-badge {
+            background: #dc3545;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.6em;
+            }
+            
+            .question-card {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.05em;
+            }
+            
+            .theories-list ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Quiz Θεωριών Ηγεσίας</h1>
+            <p>Διοίκηση Εκπαίδευσης - Προετοιμασία Εξετάσεων</p>
+        </header>
+        
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <h2>🎯 Καλωσορίσατε στο Quiz Ηγεσίας!</h2>
+            <p>Αυτό το quiz περιέχει <strong>20 ερωτήσεις</strong> που καλύπτουν όλες τις βασικές θεωρίες ηγεσίας του μαθήματος.</p>
+            <p><strong>📖 Χαρακτηριστικό:</strong> Κάθε ερώτηση συνοδεύεται από τη σχετική θεωρία που μπορείτε να διαβάσετε <em>πριν</em> απαντήσετε!</p>
+            
+            <div class="theories-list">
+                <h3>Θεωρίες που καλύπτονται:</h3>
+                <ul>
+                    <li>🔹 Κλασικά Στυλ Ηγεσίας</li>
+                    <li>🔹 Πλέγμα Blake & Mouton</li>
+                    <li>🔹 Μοντέλο Hersey-Blanchard <span class="sos-badge">SOS</span></li>
+                    <li>🔹 Θεωρία Fiedler (LPC)</li>
+                    <li>🔹 Θεωρία Path-Goal (House)</li>
+                    <li>🔹 Μοντέλο Vroom-Jago</li>
+                    <li>🔹 Συστήματα Likert</li>
+                    <li>🔹 Μετασχηματιστική Ηγεσία</li>
+                    <li>🔹 Χαρισματική Ηγεσία</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ Σημαντική Υπενθύμιση</h4>
+                <p>Το μοντέλο <strong>Hersey-Blanchard</strong> είναι σημειωμένο ως SOS από τον καθηγητή. Δώστε ιδιαίτερη προσοχή!</p>
+            </div>
+            
+            <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.2em; padding: 18px 40px;">
+                🚀 Έναρξη Quiz
+            </button>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Ερώτηση 1 από 20</div>
+        </div>
+        
+        <!-- Questions Container -->
+        <div id="questionsContainer"></div>
+        
+        <!-- Results Card -->
+        <div class="results-card" id="resultsCard">
+            <div class="results-icon" id="resultsIcon">🏆</div>
+            <h2 id="resultsTitle">Συγχαρητήρια!</h2>
+            <div class="score-display" id="scoreDisplay">0%</div>
+            
+            <div class="score-breakdown">
+                <div class="score-item correct-count">
+                    <div class="number" id="correctCount">0</div>
+                    <div>Σωστές</div>
+                </div>
+                <div class="score-item wrong-count">
+                    <div class="number" id="wrongCount">0</div>
+                    <div>Λάθος</div>
+                </div>
+            </div>
+            
+            <div class="performance-message" id="performanceMessage"></div>
+            
+            <div class="theory-summary" id="theorySummary">
+                <h3>📊 Απόδοση ανά Θεωρία</h3>
+                <div id="theoryResults"></div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 25px;">
+                🔄 Επανάληψη Quiz
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Κλασικά Στυλ Ηγεσίας - Ερώτηση 1
+            {
+                theory: "Κλασικά Στυλ Ηγεσίας",
+                theoryContent: {
+                    title: "Κλασικά Στυλ Ηγεσίας",
+                    description: "Τα κλασικά στυλ ηγεσίας περιγράφουν τρεις βασικούς τρόπους με τους οποίους οι ηγέτες συμπεριφέρονται απέναντι στους υφισταμένους τους. Διακρίνονται σε: <strong>Αυταρχικό</strong> (μονομερής έλεγχος), <strong>Δημοκρατικό</strong> (συμμετοχή και συνεργασία) και <strong>Φιλελεύθερο/Laissez-faire</strong> (ελάχιστη παρέμβαση).",
+                    keywords: ["Αυταρχικό", "Δημοκρατικό", "Φιλελεύθερο", "Laissez-faire", "Μονομερής έλεγχος", "Συμμετοχή"],
+                    example: "Ένας διευθυντής σχολείου που ενθαρρύνει τους εκπαιδευτικούς να συμμετέχουν στη λήψη αποφάσεων για το αναλυτικό πρόγραμμα, μοιράζεται πληροφορίες και βοηθά στην ανάπτυξη των ικανοτήτων τους, ασκεί δημοκρατικό στυλ ηγεσίας."
+                },
+                question: "Ποιο στυλ ηγεσίας χαρακτηρίζεται από τη φράση «κάντε το καλύτερο που μπορείτε και μη με ενοχλείτε»;",
+                options: [
+                    "Αυταρχικό στυλ",
+                    "Δημοκρατικό στυλ",
+                    "Φιλελεύθερο (Laissez-faire) στυλ",
+                    "Συμμετοχικό στυλ"
+                ],
+                correct: 2,
+                explanation: "Το φιλελεύθερο στυλ χαρακτηρίζεται από ελάχιστη μέριμνα για την εργασία, όπου ο ηγέτης αφήνει την ομάδα να παίρνει αποφάσεις μόνη της."
+            },
+            // Κλασικά Στυλ Ηγεσίας - Ερώτηση 2
+            {
+                theory: "Κλασικά Στυλ Ηγεσίας",
+                theoryContent: {
+                    title: "Κλασικά Στυλ Ηγεσίας",
+                    description: "Στο <strong>Αυταρχικό στυλ</strong> ο ηγέτης δίνει έμφαση στην εργασία, διατηρεί αυστηρό έλεγχο και ενεργεί μονομερώς. Στο <strong>Δημοκρατικό στυλ</strong> υπάρχει δέσμευση τόσο στους ανθρώπους όσο και στην εργασία με ενθάρρυνση της συμμετοχής.",
+                    keywords: ["Αυστηρός έλεγχος", "Μονομερής δράση", "Συμμετοχική λήψη αποφάσεων", "Ανάπτυξη ικανοτήτων"],
+                    example: "Ένας διευθυντής που λαμβάνει όλες τις αποφάσεις μόνος του για τις σχολικές εκδηλώσεις χωρίς να ρωτά τους εκπαιδευτικούς, ασκεί αυταρχικό στυλ."
+                },
+                question: "Ο δημοκρατικός ηγέτης χαρακτηρίζεται από:",
+                options: [
+                    "Μονομερή λήψη αποφάσεων και αυστηρό έλεγχο",
+                    "Ελάχιστη μέριμνα για την εργασία",
+                    "Δέσμευση στους ανθρώπους και στην εργασία, ενθάρρυνση συμμετοχής",
+                    "Αποφυγή ευθυνών και ανάθεση σε άλλους"
+                ],
+                correct: 2,
+                explanation: "Ο δημοκρατικός ηγέτης μοιράζεται πληροφορίες, ενθαρρύνει τη συμμετοχή στη λήψη αποφάσεων και βοηθά τους άλλους να αναπτύξουν τις ικανότητές τους."
+            },
+            // Πλέγμα Blake & Mouton - Ερώτηση 3
+            {
+                theory: "Πλέγμα Blake & Mouton",
+                theoryContent: {
+                    title: "Πλέγμα Ηγεσίας Blake & Mouton",
+                    description: "Το πλέγμα ηγεσίας είναι ένα μοντέλο που αξιολογεί τους ηγέτες σε δύο διαστάσεις: <strong>Μέριμνα για την παραγωγή</strong> (οριζόντιος άξονας) και <strong>Μέριμνα για τους ανθρώπους</strong> (κατακόρυφος άξονας). Προκύπτουν 5 βασικά στυλ: Αποδυναμωμένος μάνατζερ (1,1), Μάνατζερ εξουσίας-υπακοής (9,1), Μάνατζερ κλειστής ομάδας (1,9), Μάνατζερ στη μέση του δρόμου (5,5), Μάνατζερ ανοιχτής ομάδας (9,9).",
+                    keywords: ["Μέριμνα για παραγωγή", "Μέριμνα για ανθρώπους", "9,9", "1,1", "Team Manager"],
+                    example: "Ένας διευθυντής σχολείου που επικεντρώνεται τόσο στην επίτευξη υψηλών μαθησιακών αποτελεσμάτων όσο και στην υποστήριξη και ανάπτυξη των εκπαιδευτικών του (9,9), είναι ο ιδανικός Μάνατζερ ανοιχτής ομάδας."
+                },
+                question: "Στο πλέγμα Blake & Mouton, ο «Μάνατζερ ανοιχτής ομάδας» (Team Manager) βρίσκεται στη θέση:",
+                options: [
+                    "1,1 - Χαμηλή μέριμνα για όλα",
+                    "9,1 - Υψηλή παραγωγή, χαμηλοί άνθρωποι",
+                    "1,9 - Υψηλοί άνθρωποι, χαμηλή παραγωγή",
+                    "9,9 - Υψηλή μέριμνα για παραγωγή και ανθρώπους"
+                ],
+                correct: 3,
+                explanation: "Ο Μάνατζερ ανοιχτής ομάδας (9,9) επικεντρώνεται στο χτίσιμο συμμετοχής και υποστήριξης για έναν κοινό σκοπό, με υψηλή μέριμνα και για τα δύο."
+            },
+            // Πλέγμα Blake & Mouton - Ερώτηση 4
+            {
+                theory: "Πλέγμα Blake & Mouton",
+                theoryContent: {
+                    title: "Πλέγμα Ηγεσίας Blake & Mouton",
+                    description: "Ο <strong>Αποδυναμωμένος μάνατζερ (1,1)</strong> κάνει το ελάχιστο για να γίνει η εργασία. Ο <strong>Μάνατζερ εξουσίας-υπακοής (9,1)</strong> επικεντρώνεται στην αποτελεσματικότητα των εργασιών. Ο <strong>Μάνατζερ κλειστής ομάδας (1,9)</strong> δημιουργεί ευχάριστες προσωπικές σχέσεις αλλά αγνοεί την παραγωγή.",
+                    keywords: ["1,1 Αποδυναμωμένος", "9,1 Εξουσία-υπακοή", "1,9 Λέσχη", "5,5 Μέση οδός"],
+                    example: "Ένας διευθυντής που ενδιαφέρεται μόνο για τα ακαδημαϊκά αποτελέσματα και αγνοεί τις ανάγκες των εκπαιδευτικών (9,1), δημιουργεί κλίμα πίεσης χωρίς υποστήριξη."
+                },
+                question: "Ποιο στυλ στο πλέγμα Blake & Mouton χαρακτηρίζεται από υψηλή μέριμνα για τους ανθρώπους και χαμηλή για την παραγωγή;",
+                options: [
+                    "Μάνατζερ εξουσίας-υπακοής (9,1)",
+                    "Μάνατζερ κλειστής ομάδας (1,9)",
+                    "Αποδυναμωμένος μάνατζερ (1,1)",
+                    "Μάνατζερ στη μέση του δρόμου (5,5)"
+                ],
+                correct: 1,
+                explanation: "Ο Μάνατζερ κλειστής ομάδας (1,9) επικεντρώνεται στις ανάγκες των ανθρώπων και τις προσωπικές σχέσεις, αγνοώντας την παραγωγή."
+            },
+            // Hersey-Blanchard - Ερώτηση 5 (SOS)
+            {
+                theory: "Hersey-Blanchard",
+                isSOS: true,
+                theoryContent: {
+                    title: "Μοντέλο Ηγεσίας Καταστάσεων Hersey-Blanchard ⚠️ SOS",
+                    description: "Το μοντέλο Hersey-Blanchard βασίζεται στην <strong>προσαρμογή του στυλ ηγεσίας</strong> ανάλογα με την <strong>ετοιμότητα</strong> των υφισταμένων (ικανότητα + προθυμία + αυτοπεποίθηση). Τα 4 στυλ είναι: <strong>S1 Καθοδηγητικό</strong> (υψηλή εργασία, χαμηλές σχέσεις), <strong>S2 Πειστικό</strong> (υψηλά και στα δύο), <strong>S3 Συμμετοχικό</strong> (χαμηλή εργασία, υψηλές σχέσεις), <strong>S4 Εξουσιοδοτικό</strong> (χαμηλά και στα δύο).",
+                    keywords: ["Ετοιμότητα", "Καθοδηγητικό S1", "Πειστικό S2", "Συμμετοχικό S3", "Εξουσιοδοτικό S4", "Ωριμότητα"],
+                    example: "Ένας νέος εκπαιδευτικός χωρίς εμπειρία (χαμηλή ετοιμότητα) χρειάζεται καθοδηγητικό στυλ (S1) με σαφείς οδηγίες. Καθώς αποκτά εμπειρία, ο διευθυντής μεταβαίνει σε πειστικό (S2), μετά συμμετοχικό (S3), και τελικά εξουσιοδοτικό (S4) όταν γίνει έμπειρος."
+                },
+                question: "Σύμφωνα με το μοντέλο Hersey-Blanchard, όταν οι υφιστάμενοι είναι ικανοί, πρόθυμοι και με αυτοπεποίθηση, ποιο στυλ πρέπει να χρησιμοποιήσει ο ηγέτης;",
+                options: [
+                    "Καθοδηγητικό (S1) - δίνει οδηγίες",
+                    "Πειστικό (S2) - εξηγεί αποφάσεις",
+                    "Συμμετοχικό (S3) - μοιράζεται ιδέες",
+                    "Εξουσιοδοτικό (S4) - εκχωρεί αρμοδιότητες"
+                ],
+                correct: 3,
+                explanation: "Όταν η ομάδα είναι ικανή, πρόθυμη και με αυτοπεποίθηση (υψηλή ετοιμότητα), το εξουσιοδοτικό στυλ (S4) είναι κατάλληλο - ο ηγέτης εκχωρεί αρμοδιότητες λήψης αποφάσεων."
+            },
+            // Hersey-Blanchard - Ερώτηση 6 (SOS)
+            {
+                theory: "Hersey-Blanchard",
+                isSOS: true,
+                theoryContent: {
+                    title: "Μοντέλο Ηγεσίας Καταστάσεων Hersey-Blanchard ⚠️ SOS",
+                    description: "Η <strong>ετοιμότητα</strong> αξιολογεί πόσο ικανοί, πρόθυμοι και με αυτοπεποίθηση είναι οι υφιστάμενοι. <strong>M1</strong>: Χαμηλή γνώση, ανασφάλεια → S1 Καθοδηγητικό. <strong>M2</strong>: Κάποια εμπειρία αλλά λάθη → S2 Πειστικό. <strong>M3</strong>: Επαρκής γνώση, διστακτικότητα → S3 Συμμετοχικό. <strong>M4</strong>: Υψηλή ικανότητα και αυτοπεποίθηση → S4 Εξουσιοδοτικό.",
+                    keywords: ["M1-M4 Ωριμότητα", "Ικανότητα", "Προθυμία", "Αυτοπεποίθηση", "Προσαρμογή στυλ"],
+                    example: "Όταν ένας εκπαιδευτικός γνωρίζει το αντικείμενο αλλά είναι ανασφαλής να αναλάβει πρωτοβουλίες (M3), ο διευθυντής πρέπει να χρησιμοποιήσει συμμετοχικό στυλ (S3): να ρωτά, να ενθαρρύνει, να προσφέρει υποστήριξη."
+                },
+                question: "Στο μοντέλο Hersey-Blanchard, όταν οι υφιστάμενοι είναι πρόθυμοι αλλά χωρίς ικανότητες, ποιο στυλ ταιριάζει καλύτερα;",
+                options: [
+                    "Εξουσιοδοτικό (S4)",
+                    "Συμμετοχικό (S3)",
+                    "Πειστικό/Πώλησης (S2)",
+                    "Καθοδηγητικό (S1)"
+                ],
+                correct: 2,
+                explanation: "Το Πειστικό στυλ (S2) είναι υψηλά στην εργασία και υψηλά στις σχέσεις - ο ηγέτης εξηγεί τις αποφάσεις, κατάλληλο για πρόθυμους αλλά άπειρους υφισταμένους."
+            },
+            // Hersey-Blanchard - Ερώτηση 7 (SOS)
+            {
+                theory: "Hersey-Blanchard",
+                isSOS: true,
+                theoryContent: {
+                    title: "Εφαρμογή Hersey-Blanchard στην Εκπαίδευση ⚠️ SOS",
+                    description: "Η βασική ιδέα είναι ότι <strong>δεν υπάρχει ένα μόνο σωστό στυλ ηγεσίας</strong> - ο αποτελεσματικός ηγέτης προσαρμόζει το στυλ του ανάλογα με την κατάσταση. Το μοντέλο επικεντρώνεται στη σχέση μεταξύ <strong>συμπεριφοράς εργασίας</strong> (καθοδήγηση) και <strong>συμπεριφοράς σχέσεων</strong> (υποστήριξη).",
+                    keywords: ["Προσαρμοστικότητα", "Συμπεριφορά εργασίας", "Συμπεριφορά σχέσεων", "Καθοδήγηση vs Υποστήριξη"],
+                    example: "Ο ίδιος διευθυντής μπορεί να χρησιμοποιεί καθοδηγητικό στυλ με νέους αναπληρωτές και εξουσιοδοτικό με έμπειρους μόνιμους εκπαιδευτικούς - αυτή η προσαρμοστικότητα είναι η ουσία του μοντέλου."
+                },
+                question: "Ποια είναι η βασική ιδέα του μοντέλου Hersey-Blanchard;",
+                options: [
+                    "Υπάρχει ένα ιδανικό στυλ ηγεσίας για όλες τις καταστάσεις",
+                    "Οι ηγέτες προσαρμόζουν τα στυλ τους ανάλογα με την ετοιμότητα των υφισταμένων",
+                    "Η ηγεσία είναι έμφυτη και δεν μπορεί να μαθευτεί",
+                    "Μόνο το δημοκρατικό στυλ είναι αποτελεσματικό"
+                ],
+                correct: 1,
+                explanation: "Το μοντέλο Hersey-Blanchard βασίζεται στην προσαρμογή του στυλ ηγεσίας στην ετοιμότητα (ικανότητα, προθυμία, αυτοπεποίθηση) των υφισταμένων."
+            },
+            // Fiedler - Ερώτηση 8
+            {
+                theory: "Θεωρία Fiedler",
+                theoryContent: {
+                    title: "Μοντέλο Πιθανοτήτων Ηγεσίας του Fiedler",
+                    description: "Ο Fiedler υποστηρίζει ότι η αποτελεσματικότητα εξαρτάται από το <strong>ταίριασμα</strong> μεταξύ στυλ ηγεσίας και κατάστασης. Χρησιμοποιεί την κλίμακα <strong>LPC (Least Preferred Co-worker)</strong>: Χαμηλό LPC = προσανατολισμός στην εργασία, Υψηλό LPC = προσανατολισμός στις σχέσεις. Το στυλ θεωρείται σταθερό χαρακτηριστικό της προσωπικότητας.",
+                    keywords: ["LPC", "Ταίριασμα στυλ-κατάστασης", "Προσανατολισμός εργασίας", "Προσανατολισμός σχέσεων", "Σταθερό στυλ"],
+                    example: "Σε ένα σχολείο με κακές σχέσεις διευθυντή-εκπαιδευτικών, μη δομημένες εργασίες και περιορισμένη εξουσία, ο Fiedler προτείνει ηγέτη προσανατολισμένο στις σχέσεις για να βελτιώσει το κλίμα."
+                },
+                question: "Τι μετρά η κλίμακα LPC (Least Preferred Co-worker) του Fiedler;",
+                options: [
+                    "Το επίπεδο εκπαίδευσης του ηγέτη",
+                    "Αν ο ηγέτης έχει κίνητρο την εργασία ή τις σχέσεις",
+                    "Την παραγωγικότητα της ομάδας",
+                    "Τον αριθμό των υφισταμένων"
+                ],
+                correct: 1,
+                explanation: "Η κλίμακα LPC μετρά τον προσανατολισμό του ηγέτη: Χαμηλό σκορ = κίνητρο η εργασία, Υψηλό σκορ = κίνητρο οι σχέσεις."
+            },
+            // Fiedler - Ερώτηση 9
+            {
+                theory: "Θεωρία Fiedler",
+                theoryContent: {
+                    title: "Μεταβλητές Κατάστασης του Fiedler",
+                    description: "Ο Fiedler αξιολογεί την κατάσταση με τρεις μεταβλητές: 1) <strong>Σχέση ηγέτη-μελών</strong> (καλή/κακή), 2) <strong>Δομή εργασίας</strong> (υψηλή/χαμηλή), 3) <strong>Εξουσία θέσης</strong> (ισχυρή/περιορισμένη). Οι καταστάσεις 1,2,3 και 8 απαιτούν προσανατολισμό στην εργασία, οι υπόλοιπες στις σχέσεις.",
+                    keywords: ["Σχέση ηγέτη-μελών", "Δομή εργασίας", "Εξουσία θέσης", "8 καταστάσεις"],
+                    example: "Σε μια σχολική μονάδα με θετική σχέση διευθυντή-εκπαιδευτικών, δομημένο πρόγραμμα και ισχυρή εξουσία (κατάσταση 1), αποδίδει καλύτερα ηγέτης προσανατολισμένος στην εργασία."
+                },
+                question: "Σύμφωνα με τον Fiedler, το στυλ ηγεσίας:",
+                options: [
+                    "Μπορεί να αλλάξει εύκολα με εκπαίδευση",
+                    "Είναι μέρος της προσωπικότητας και δύσκολο να αλλάξει",
+                    "Πρέπει να είναι πάντα δημοκρατικό",
+                    "Εξαρτάται μόνο από την ηλικία του ηγέτη"
+                ],
+                correct: 1,
+                explanation: "Ο Fiedler θεωρεί ότι το στυλ ηγεσίας είναι μέρος της προσωπικότητας, σχετικά ανθεκτικό στο χρόνο και δύσκολο να αλλάξει."
+            },
+            // Path-Goal (House) - Ερώτηση 10
+            {
+                theory: "Θεωρία Path-Goal (House)",
+                theoryContent: {
+                    title: "Θεωρία Μονοπατιών-Στόχων του House",
+                    description: "Ο House υποστηρίζει ότι ο αποτελεσματικός ηγέτης <strong>καθορίζει τα μονοπάτια</strong> μέσω των οποίων οι υφιστάμενοι μπορούν να επιτύχουν τους στόχους. Τα 4 στυλ είναι: <strong>Αυταρχική</strong> (για ασαφείς εργασίες), <strong>Υποστηρικτική</strong> (για χαμηλή αυτοπεποίθηση), <strong>Προσανατολισμένη στο αποτέλεσμα</strong> (για ανεπαρκείς προκλήσεις), <strong>Συμμετοχική</strong> (για πτωχά κίνητρα).",
+                    keywords: ["Μονοπάτια-Στόχοι", "Αυταρχική", "Υποστηρικτική", "Προσανατολισμένη στο αποτέλεσμα", "Συμμετοχική"],
+                    example: "Όταν οι εκπαιδευτικοί δεν έχουν σαφή εικόνα για τις απαιτήσεις μιας νέας αξιολόγησης, ο διευθυντής πρέπει να χρησιμοποιήσει αυταρχική ηγεσία με σαφείς οδηγίες και δομή."
+                },
+                question: "Σύμφωνα με τη θεωρία Path-Goal, πότε πρέπει να χρησιμοποιείται η υποστηρικτική ηγεσία;",
+                options: [
+                    "Όταν οι εργασίες δεν είναι ξεκάθαρες",
+                    "Όταν η αυτοπεποίθηση των εργαζομένων είναι χαμηλή",
+                    "Όταν οι προκλήσεις είναι ανεπαρκείς",
+                    "Όταν τα κίνητρα είναι πτωχά"
+                ],
+                correct: 1,
+                explanation: "Η υποστηρικτική ηγεσία χρησιμοποιείται όταν η αυτοπεποίθηση των εργαζομένων είναι χαμηλή - ο ηγέτης δείχνει ενδιαφέρον και υποστήριξη."
+            },
+            // Path-Goal (House) - Ερώτηση 11
+            {
+                theory: "Θεωρία Path-Goal (House)",
+                theoryContent: {
+                    title: "Στυλ Ηγεσίας κατά House",
+                    description: "Η <strong>ηγεσία προσανατολισμένη στο αποτέλεσμα</strong> θέτει ανταγωνιστικούς στόχους, αναμένει υψηλή απόδοση και δίνει έμφαση στη συνεχή βελτίωση. Η <strong>συμμετοχική ηγεσία</strong> εντάσσει τους υφισταμένους στη λήψη αποφάσεων, ζητά προτάσεις και τις χρησιμοποιεί.",
+                    keywords: ["Ανταγωνιστικοί στόχοι", "Υψηλά στάνταρ", "Συμμετοχή στις αποφάσεις", "Ζήτηση προτάσεων"],
+                    example: "Για να ενισχύσει τα κίνητρα των εκπαιδευτικών, ο διευθυντής τους εντάσσει στη διαδικασία λήψης αποφάσεων για το ωρολόγιο πρόγραμμα (συμμετοχική ηγεσία)."
+                },
+                question: "Η ηγεσία προσανατολισμένη στο αποτέλεσμα (κατά House) χαρακτηρίζεται από:",
+                options: [
+                    "Ελάχιστη παρέμβαση στην εργασία",
+                    "Θέτει ανταγωνιστικούς στόχους και αναμένει υψηλή απόδοση",
+                    "Μοιράζεται ιδέες χωρίς να θέτει στόχους",
+                    "Αποφεύγει κάθε είδους αξιολόγηση"
+                ],
+                correct: 1,
+                explanation: "Η ηγεσία προσανατολισμένη στο αποτέλεσμα θέτει ανταγωνιστικούς στόχους, αναμένει υψηλή απόδοση και δίνει έμφαση στη συνεχή βελτίωση."
+            },
+            // Vroom-Jago - Ερώτηση 12
+            {
+                theory: "Μοντέλο Vroom-Jago",
+                theoryContent: {
+                    title: "Θεωρία Ηγέτη-Συμμετοχής Vroom-Jago",
+                    description: "Το μοντέλο βοηθά τους ηγέτες να επιλέγουν τη <strong>μέθοδο λήψης αποφάσεων</strong> που ταιριάζει καλύτερα. Οι επιλογές είναι: <strong>Απόφαση εξουσίας</strong> (μόνος), <strong>Γνωμοδοτική</strong> (ατομική συμβουλή), <strong>Ομαδική</strong> (διάσκεψη ομάδας). Οι παράγοντες είναι: Ποιότητα απόφασης, Αποδοχή απόφασης, Διαθέσιμος χρόνος.",
+                    keywords: ["Μέθοδος λήψης αποφάσεων", "Απόφαση εξουσίας", "Γνωμοδοτική", "Ομαδική", "Εξουσιοδότηση"],
+                    example: "Σε έκτακτη κατάσταση (πυρκαγιά) ο διευθυντής αποφασίζει μόνος για την εκκένωση (απόφαση εξουσίας). Για το σχέδιο του επόμενου έτους συμβουλεύεται τον σύλλογο διδασκόντων (ομαδική απόφαση)."
+                },
+                question: "Σύμφωνα με τη θεωρία Vroom-Jago, πότε πρέπει να χρησιμοποιούνται μέθοδοι προσανατολισμένες στην εξουσία;",
+                options: [
+                    "Όταν ο ηγέτης υστερεί σε γνώση",
+                    "Όταν υπάρχει άφθονος χρόνος για συζήτηση",
+                    "Όταν ο ηγέτης έχει την απαιτούμενη γνώση και υπάρχει λίγος χρόνος",
+                    "Όταν η αποδοχή από τους άλλους είναι κρίσιμη"
+                ],
+                correct: 2,
+                explanation: "Μέθοδοι εξουσίας χρησιμοποιούνται όταν ο ηγέτης έχει την εξειδικευμένη γνώση, έχει αυτοπεποίθηση, οι άλλοι θα δεχτούν την απόφαση και υπάρχει ελάχιστος χρόνος."
+            },
+            // Vroom-Jago - Ερώτηση 13
+            {
+                theory: "Μοντέλο Vroom-Jago",
+                theoryContent: {
+                    title: "Επιλογές Λήψης Αποφάσεων Vroom-Jago",
+                    description: "5 μέθοδοι: 1) <strong>Αποφάσισε μόνος</strong>, 2) <strong>Συμβουλέψου ατομικά</strong>, 3) <strong>Διασκέψου με την ομάδα</strong>, 4) <strong>Διευκόλυνε την ομάδα</strong>, 5) <strong>Εξουσιοδότησε την ομάδα</strong>. Γνωμοδοτικές/ομαδικές αποφάσεις όταν: ο ηγέτης υστερεί σε γνώση, το πρόβλημα δεν είναι ξεκάθαρο, η αποδοχή είναι απαραίτητη, υπάρχει αρκετός χρόνος.",
+                    keywords: ["5 μέθοδοι", "Συμβουλή", "Διάσκεψη", "Διευκόλυνση", "Εξουσιοδότηση"],
+                    example: "Για αλλαγή στο ωράριο λειτουργίας που επηρεάζει όλους, ο διευθυντής διασκέπτεται με την ομάδα γιατί η αποδοχή της απόφασης είναι κρίσιμη για την εφαρμογή της."
+                },
+                question: "Κατά Vroom-Jago, γνωμοδοτικές και ομαδικές αποφάσεις προτείνονται όταν:",
+                options: [
+                    "Ο ηγέτης γνωρίζει τα πάντα για το θέμα",
+                    "Η αποδοχή της απόφασης δεν έχει σημασία",
+                    "Υπάρχει ελάχιστος χρόνος",
+                    "Η αποδοχή και δέσμευση των άλλων είναι απαραίτητη για την εφαρμογή"
+                ],
+                correct: 3,
+                explanation: "Γνωμοδοτικές/ομαδικές αποφάσεις όταν η αποδοχή της απόφασης και η δέσμευση εκ μέρους των άλλων είναι απαραίτητες για την εφαρμογή της."
+            },
+            // Συστήματα Likert - Ερώτηση 14
+            {
+                theory: "Συστήματα Ηγεσίας Likert",
+                theoryContent: {
+                    title: "Τα 4 Συστήματα Ηγεσίας του Likert",
+                    description: "Ο Likert περιέγραψε 4 συστήματα ηγεσίας: 1) <strong>Αυταρχικός</strong>: διαταγές, συγκεντρωτικός έλεγχος. 2) <strong>Καλοπροαίρετος Αυταρχικός</strong>: πείθει ότι ενεργεί για το συμφέρον τους. 3) <strong>Συμβουλευτικός</strong>: αμφίδρομη επικοινωνία, παίρνει τις σημαντικές αποφάσεις. 4) <strong>Συμμετοχικός</strong>: αποφάσεις από κοινού, αρχή πλειοψηφίας.",
+                    keywords: ["Αυταρχικός", "Καλοπροαίρετος αυταρχικός", "Συμβουλευτικός", "Συμμετοχικός", "Αρχή πλειοψηφίας"],
+                    example: "Ο συμμετοχικός διευθυντής σχολείου λαμβάνει αποφάσεις για τις σχολικές εκδηλώσεις μέσα από διαδικασίες όπου συμμετέχουν όλοι οι εκπαιδευτικοί και ισχύει η αρχή της πλειοψηφίας."
+                },
+                question: "Ποιο σύστημα ηγεσίας του Likert χαρακτηρίζεται από αμφίδρομη επικοινωνία αλλά ο ηγέτης παίρνει τις σημαντικές αποφάσεις;",
+                options: [
+                    "Αυταρχικός",
+                    "Καλοπροαίρετος αυταρχικός",
+                    "Συμβουλευτικός",
+                    "Συμμετοχικός"
+                ],
+                correct: 2,
+                explanation: "Ο Συμβουλευτικός ηγέτης έχει αμφίδρομη επικοινωνία, δέχεται ιδέες, αλλά παίρνει τις σημαντικές αποφάσεις και αφήνει τις δευτερεύουσες για χαμηλότερα επίπεδα."
+            },
+            // Συστήματα Likert - Ερώτηση 15
+            {
+                theory: "Συστήματα Ηγεσίας Likert",
+                theoryContent: {
+                    title: "Διαφορές Συστημάτων Likert",
+                    description: "Ο <strong>Αυταρχικός</strong> μεταβιβάζει αποφάσεις ως διαταγές με έντονο συγκεντρωτικό έλεγχο. Ο <strong>Καλοπροαίρετος Αυταρχικός</strong> προσπαθεί να πείσει ότι οι αποφάσεις είναι για το καλό των υφισταμένων. Ο <strong>Συμμετοχικός</strong> λαμβάνει αποφάσεις από κοινού μέσα από δημοκρατικές διαδικασίες.",
+                    keywords: ["Διαταγές", "Πειθώ", "Συμβουλή", "Από κοινού αποφάσεις"],
+                    example: "Ο καλοπροαίρετος αυταρχικός διευθυντής αποφασίζει μόνος για τις εξετάσεις αλλά εξηγεί στους εκπαιδευτικούς ότι το κάνει για το καλό των μαθητών και του σχολείου."
+                },
+                question: "Ο συμμετοχικός ηγέτης κατά Likert:",
+                options: [
+                    "Μεταβιβάζει αποφάσεις ως διαταγές",
+                    "Προσπαθεί να πείσει ότι ενεργεί για το συμφέρον όλων",
+                    "Παίρνει αποφάσεις από κοινού με τους υφισταμένους μέσω πλειοψηφίας",
+                    "Αποφεύγει να παίρνει οποιαδήποτε απόφαση"
+                ],
+                correct: 2,
+                explanation: "Ο συμμετοχικός ηγέτης παίρνει αποφάσεις από κοινού με τους υφισταμένους του μέσα από διαδικασίες όπου συμμετέχουν όλοι και ισχύει η αρχή της πλειοψηφίας."
+            },
+            // Μετασχηματιστική Ηγεσία - Ερώτηση 16
+            {
+                theory: "Μετασχηματιστική vs Συναλλακτική Ηγεσία",
+                theoryContent: {
+                    title: "Μετασχηματιστική vs Συναλλακτική Ηγεσία",
+                    description: "Η <strong>Συναλλακτική ηγεσία</strong> κατευθύνει τις προσπάθειες μέσω εργασιών, ανταμοιβών και δομών. Η <strong>Μετασχηματιστική ηγεσία</strong> εμπνέει πραγματικά, διεγείρει τους άλλους να επιδιώκουν εντυπωσιακά αποτελέσματα και δημιουργεί αλλαγή. Ο μετασχηματιστικός ηγέτης διασφαλίζει κοινό όραμα, ηγείται της αλλαγής και προωθεί την καινοτομία.",
+                    keywords: ["Έμπνευση", "Όραμα", "Αλλαγή", "Καινοτομία", "Ανταμοιβές", "Δομές"],
+                    example: "Ένας μετασχηματιστικός διευθυντής διαμορφώνει κοινό όραμα για το σχολείο, εργάζεται για την υλοποίησή του, ηγείται της αλλαγής και στηρίζει τη δημιουργικότητα των εκπαιδευτικών."
+                },
+                question: "Η μετασχηματιστική ηγεσία χαρακτηρίζεται από:",
+                options: [
+                    "Κατεύθυνση μέσω εργασιών και ανταμοιβών",
+                    "Διατήρηση της υπάρχουσας κατάστασης",
+                    "Έμπνευση και διέγερση για εντυπωσιακά αποτελέσματα",
+                    "Ελάχιστη παρέμβαση στην εργασία των άλλων"
+                ],
+                correct: 2,
+                explanation: "Ο μετασχηματιστικός ηγέτης εμπνέει πραγματικά και διεγείρει τους άλλους να επιδιώκουν εντυπωσιακά αποτελέσματα απόδοσης."
+            },
+            // Μετασχηματιστική Ηγεσία - Ερώτηση 17
+            {
+                theory: "Μετασχηματιστική vs Συναλλακτική Ηγεσία",
+                theoryContent: {
+                    title: "Ο Μετασχηματιστικός Ηγέτης στην Εκπαίδευση",
+                    description: "Ο μετασχηματιστικός εκπαιδευτικός ηγέτης: 1) Διασφαλίζει ξεκάθαρο <strong>όραμα</strong> αποδεκτό από όλους, 2) Εργάζεται για την <strong>υλοποίηση</strong> με σαφείς στόχους, 3) Κινητοποιεί τα μέλη για κοινή <strong>κουλτούρα</strong>, 4) Ηγείται της <strong>αλλαγής</strong> και προωθεί την καινοτομία.",
+                    keywords: ["Όραμα", "Υλοποίηση", "Κοινή κουλτούρα", "Αλλαγή", "Καινοτομία"],
+                    example: "Ο διευθυντής δημιουργεί όραμα για ψηφιακό μετασχηματισμό του σχολείου, θέτει στόχους, εμπλέκει τους εκπαιδευτικούς, ενθαρρύνει νέες μεθόδους διδασκαλίας και γιορτάζει τις επιτυχίες."
+                },
+                question: "Ο συναλλακτικός ηγέτης διαφέρει από τον μετασχηματιστικό γιατί:",
+                options: [
+                    "Εμπνέει και δημιουργεί αλλαγή",
+                    "Κατευθύνει μέσω εργασιών, ανταμοιβών και δομών",
+                    "Αγνοεί τις ανταμοιβές",
+                    "Δεν ενδιαφέρεται για αποτελέσματα"
+                ],
+                correct: 1,
+                explanation: "Η συναλλακτική ηγεσία ασκείται από κάποιον που κατευθύνει τις προσπάθειες μέσω εργασιών, ανταμοιβών και δομών, σε αντίθεση με την έμπνευση της μετασχηματιστικής."
+            },
+            // Χαρισματική Ηγεσία - Ερώτηση 18
+            {
+                theory: "Χαρισματική Ηγεσία",
+                theoryContent: {
+                    title: "Χαρισματική Ηγεσία",
+                    description: "Ο <strong>χαρισματικός ηγέτης</strong> δεν αποδέχεται την υπάρχουσα τάξη και προσπαθεί να την αλλάξει. Θέτει ιδεαλιστικούς στόχους, είναι αρεστός και εξιδανικευμένος από τα μέλη, χρησιμοποιεί μη συμβατικά μέσα, και η πηγή εξουσίας του είναι ο σεβασμός και ο θαυμασμός. Ο <strong>μη χαρισματικός ηγέτης</strong> αποδέχεται την τάξη, χρησιμοποιεί συμβατικά μέσα και βασίζεται στη θέση του.",
+                    keywords: ["Αλλαγή τάξης", "Ιδεαλιστικοί στόχοι", "Εξιδανίκευση", "Μη συμβατικά μέσα", "Σεβασμός-θαυμασμός"],
+                    example: "Ένας χαρισματικός διευθυντής που εμπνέει τους εκπαιδευτικούς με το όραμά του για καινοτόμο παιδαγωγική, τολμά να αμφισβητήσει παραδοσιακές πρακτικές και κερδίζει τον θαυμασμό τους."
+                },
+                question: "Ποια είναι η κύρια πηγή εξουσίας του χαρισματικού ηγέτη;",
+                options: [
+                    "Η επίσημη θέση στην ιεραρχία",
+                    "Η εμπειρία και ο σεβασμός/θαυμασμός από τα μέλη της ομάδας",
+                    "Οι οικονομικές ανταμοιβές που προσφέρει",
+                    "Η ικανότητα τιμωρίας"
+                ],
+                correct: 1,
+                explanation: "Η πηγή εξουσίας του χαρισματικού ηγέτη είναι η εμπειρία και ο σεβασμός/θαυμασμός από τα μέλη της ομάδας, όχι η τυπική θέση."
+            },
+            // Χαρισματική Ηγεσία - Ερώτηση 19
+            {
+                theory: "Χαρισματική Ηγεσία",
+                theoryContent: {
+                    title: "Χαρακτηριστικά Χαρισματικού vs Μη Χαρισματικού Ηγέτη",
+                    description: "Ο χαρισματικός ηγέτης: Δεν αποδέχεται την τάξη → προσπαθεί να την αλλάξει. Ιδεαλιστικοί/εξιδανικευμένοι στόχοι. Αρεστός, εξιδανικευμένος, ταύτιση. Ιδανικός στη χρήση μη συμβατικών μέσων. Αρχηγική στάση. Ο μη χαρισματικός: Αποδέχεται την τάξη. Συμβατοί στόχοι. Αρεστός, αποδεκτός. Συμβατικά μέσα. Ισότιμη ή βασισμένη σε εντολές σχέση.",
+                    keywords: ["Αρχηγική στάση", "Ταύτιση", "Εξιδανίκευση", "Αποδοχή vs Αλλαγή"],
+                    example: "Ο χαρισματικός διευθυντής θέτει το όραμα για «το καλύτερο σχολείο της περιφέρειας» και εμπνέει τους εκπαιδευτικούς να ταυτιστούν με αυτόν τον στόχο, χρησιμοποιώντας καινοτόμες μεθόδους."
+                },
+                question: "Ο χαρισματικός ηγέτης σε σχέση με την υπάρχουσα τάξη πραγμάτων:",
+                options: [
+                    "Την αποδέχεται και επιδιώκει να τη συντηρήσει",
+                    "Δεν την αποδέχεται και προσπαθεί να την αλλάξει",
+                    "Δεν ενδιαφέρεται καθόλου γι' αυτήν",
+                    "Την αγνοεί πλήρως"
+                ],
+                correct: 1,
+                explanation: "Ο χαρισματικός ηγέτης δεν αποδέχεται την υπάρχουσα τάξη πραγμάτων και προσπαθεί να την αλλάξει, σε αντίθεση με τον μη χαρισματικό που την αποδέχεται."
+            },
+            // Γενική Ερώτηση - 20
+            {
+                theory: "Συγκριτική Ανάλυση Θεωριών",
+                theoryContent: {
+                    title: "Σύγκριση Θεωριών Ηγεσίας",
+                    description: "Οι θεωρίες ηγεσίας εξετάζουν διαφορετικές πτυχές: <strong>Γνωρίσματα</strong> (ποιος είναι ο ηγέτης), <strong>Συμπεριφορές</strong> (τι κάνει ο ηγέτης), <strong>Καταστασιακές</strong> (πότε είναι αποτελεσματικός). Τα βασικά στοιχεία είναι: Μέριμνα για εργασία vs σχέσεις, Προσαρμοστικότητα, Συμμετοχή στη λήψη αποφάσεων, Έμπνευση vs συναλλαγή.",
+                    keywords: ["Γνωρίσματα", "Συμπεριφορές", "Καταστασιακές θεωρίες", "Προσαρμοστικότητα", "Αποτελεσματικότητα"],
+                    example: "Ο διευθυντής που συνδυάζει στοιχεία από διάφορες θεωρίες - προσαρμόζει το στυλ του (Hersey-Blanchard), εμπνέει (μετασχηματιστική), συμμετέχει την ομάδα σε αποφάσεις (Vroom-Jago) - είναι πιο αποτελεσματικός."
+                },
+                question: "Ποια θεωρία υποστηρίζει ότι το στυλ ηγεσίας είναι σχετικά σταθερό και πρέπει η κατάσταση να ταιριάξει με τον ηγέτη;",
+                options: [
+                    "Hersey-Blanchard",
+                    "Path-Goal του House",
+                    "Fiedler",
+                    "Vroom-Jago"
+                ],
+                correct: 2,
+                explanation: "Ο Fiedler υποστηρίζει ότι το στυλ είναι μέρος της προσωπικότητας και σταθερό - πρέπει η κατάσταση να ταιριάξει με τον ηγέτη, όχι το αντίστροφο."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = [];
+        let theoryStats = {};
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+            renderQuestions();
+            showQuestion(0);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `question-${index}`;
+                
+                const sosTag = q.isSOS ? '<span class="sos-badge">SOS</span>' : '';
+                
+                card.innerHTML = `
+                    <div class="theory-section">
+                        <button class="theory-toggle" onclick="toggleTheory(${index})">
+                            <span>📖 Διάβασε τη Θεωρία πριν απαντήσεις</span>
+                            <span class="icon">▼</span>
+                        </button>
+                        <div class="theory-content" id="theory-${index}">
+                            <h4>📚 ${q.theoryContent.title}</h4>
+                            <p>${q.theoryContent.description}</p>
+                            <div style="margin-top: 12px;">
+                                <strong>🔑 Λέξεις-κλειδιά:</strong>
+                                <div class="keywords">
+                                    ${q.theoryContent.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                                </div>
+                            </div>
+                            <div class="example-box">
+                                <h5>🎓 Παράδειγμα στην Εκπαίδευση:</h5>
+                                <p>${q.theoryContent.example}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-header">
+                        <div class="question-number">${index + 1}</div>
+                        <span class="theory-tag">${q.theory} ${sosTag}</span>
+                    </div>
+                    
+                    <div class="question-text">${q.question}</div>
+                    
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <div class="option" onclick="selectOption(${index}, ${i})" id="option-${index}-${i}">
+                                <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                                <span>${opt}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="feedback" id="feedback-${index}">
+                        <h4></h4>
+                        <p>${q.explanation}</p>
+                    </div>
+                    
+                    <div class="btn-container">
+                        <button class="btn btn-primary" id="nextBtn-${index}" disabled onclick="nextQuestion()">
+                            ${index === questions.length - 1 ? '📊 Δες τα Αποτελέσματα' : 'Επόμενη Ερώτηση →'}
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function toggleTheory(index) {
+            const content = document.getElementById(`theory-${index}`);
+            const button = content.previousElementSibling;
+            content.classList.toggle('show');
+            button.classList.toggle('open');
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`question-${index}`).classList.add('active');
+            updateProgress();
+        }
+
+        function selectOption(qIndex, optIndex) {
+            if (answered[qIndex] !== undefined) return;
+            
+            answered[qIndex] = optIndex;
+            const q = questions[qIndex];
+            const isCorrect = optIndex === q.correct;
+            
+            // Update theory stats
+            if (!theoryStats[q.theory]) {
+                theoryStats[q.theory] = { correct: 0, total: 0 };
+            }
+            theoryStats[q.theory].total++;
+            if (isCorrect) {
+                score++;
+                theoryStats[q.theory].correct++;
+            }
+            
+            // Style options
+            document.querySelectorAll(`[id^="option-${qIndex}-"]`).forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === optIndex && !isCorrect) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.add('show', isCorrect ? 'correct' : 'wrong');
+            feedback.querySelector('h4').innerHTML = isCorrect 
+                ? '✅ Σωστά! Μπράβο!' 
+                : '❌ Λάθος! Η σωστή απάντηση είναι: ' + q.options[q.correct];
+            
+            // Enable next button
+            document.getElementById(`nextBtn-${qIndex}`).disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Ερώτηση ${currentQuestion + 1} από ${questions.length}`;
+        }
+
+        function showResults() {
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('questionsContainer').innerHTML = '';
+            
+            const resultsCard = document.getElementById('resultsCard');
+            resultsCard.classList.add('active');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('wrongCount').textContent = questions.length - score;
+            
+            let icon, title, message;
+            if (percentage >= 90) {
+                icon = '🏆';
+                title = 'Εξαιρετικά!';
+                message = 'Έχεις άριστη κατανόηση των θεωριών ηγεσίας. Είσαι έτοιμος/η για τις εξετάσεις!';
+            } else if (percentage >= 70) {
+                icon = '🌟';
+                title = 'Πολύ Καλά!';
+                message = 'Έχεις καλή κατανόηση. Επανάλαβε τις θεωρίες που δυσκολεύτηκες.';
+            } else if (percentage >= 50) {
+                icon = '📚';
+                title = 'Καλή Προσπάθεια!';
+                message = 'Χρειάζεται περισσότερη μελέτη. Διάβασε ξανά τις θεωρίες και επανάλαβε το quiz.';
+            } else {
+                icon = '💪';
+                title = 'Συνέχισε την Προσπάθεια!';
+                message = 'Μη σταματάς! Διάβασε προσεκτικά τις θεωρίες και ξαναπροσπάθησε.';
+            }
+            
+            document.getElementById('resultsIcon').textContent = icon;
+            document.getElementById('resultsTitle').textContent = title;
+            document.getElementById('performanceMessage').innerHTML = `<strong>${message}</strong>`;
+            
+            // Theory breakdown
+            const theoryResults = document.getElementById('theoryResults');
+            theoryResults.innerHTML = '';
+            for (const [theory, stats] of Object.entries(theoryStats)) {
+                const pct = Math.round((stats.correct / stats.total) * 100);
+                const isGood = pct >= 50;
+                theoryResults.innerHTML += `
+                    <div class="theory-result ${isGood ? 'good' : 'bad'}">
+                        <span>${theory}</span>
+                        <span><strong>${stats.correct}/${stats.total}</strong> (${pct}%)</span>
+                    </div>
+                `;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = [];
+            theoryStats = {};
+            
+            document.getElementById('resultsCard').classList.remove('active');
+            document.getElementById('startScreen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

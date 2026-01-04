@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Διοίκησης Εκπαίδευσης - Θέματα 2024 & 2025</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        h1 {
+            color: #00d4ff;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0,212,255,0.3);
+        }
+        
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            height: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .question-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .question-card:hover {
+            border-color: rgba(0,212,255,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #1a1a2e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .year-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #ffd700;
+        }
+        
+        .question-text {
+            font-size: 1.15em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        
+        .theory-toggle {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theory-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(99,102,241,0.4);
+        }
+        
+        .theory-toggle.active {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
+        
+        .theory-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+            border-left: 4px solid #8b5cf6;
+            border-radius: 0 15px 15px 0;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .theory-box.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .theory-title {
+            color: #a78bfa;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theory-content {
+            color: #d0d0d0;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        
+        .theory-section {
+            margin-bottom: 15px;
+        }
+        
+        .theory-section h4 {
+            color: #00d4ff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .keyword {
+            background: rgba(0,212,255,0.2);
+            color: #00d4ff;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option:hover:not(.disabled) {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(0,212,255,0.5);
+        }
+        
+        .option.selected {
+            border-color: #00d4ff;
+            background: rgba(0,212,255,0.1);
+        }
+        
+        .option.correct {
+            border-color: #00ff88 !important;
+            background: rgba(0,255,136,0.15) !important;
+        }
+        
+        .option.wrong {
+            border-color: #ff4757 !important;
+            background: rgba(255,71,87,0.15) !important;
+        }
+        
+        .option.disabled {
+            cursor: not-allowed;
+        }
+        
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .option-letter {
+            background: #00d4ff;
+            color: #1a1a2e;
+        }
+        
+        .option.correct .option-letter {
+            background: #00ff88;
+            color: #1a1a2e;
+        }
+        
+        .option.wrong .option-letter {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .feedback.correct {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid rgba(0,255,136,0.3);
+            color: #00ff88;
+        }
+        
+        .feedback.wrong {
+            background: rgba(255,71,87,0.1);
+            border: 1px solid rgba(255,71,87,0.3);
+            color: #ff4757;
+        }
+        
+        .results {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(#00ff88 var(--score), rgba(255,255,255,0.1) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        .score-inner {
+            width: 160px;
+            height: 160px;
+            background: #1a1a2e;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff88;
+        }
+        
+        .score-label {
+            color: #a0a0a0;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+        
+        .icon {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .question-card { padding: 20px; }
+            .stats { gap: 15px; }
+            .stat { padding: 8px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Quiz Διοίκησης Εκπαίδευσης</h1>
+            <p class="subtitle">Θέματα Εξετάσεων 2024 & 2025 - Πανεπιστήμιο Πατρών</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress" style="width: 0%"></div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="current">1</div>
+                    <div>Ερώτηση</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="total">24</div>
+                    <div>Σύνολο</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="score">0</div>
+                    <div>Σωστές</div>
+                </div>
+            </div>
+        </header>
+        
+        <div id="quiz-container"></div>
+        
+        <div class="results" id="results">
+            <h2 style="color: #00d4ff; font-size: 2em; margin-bottom: 10px;">🎉 Τέλος Quiz!</h2>
+            <p style="color: #a0a0a0; font-size: 1.1em;">Η βαθμολογία σου:</p>
+            <div class="score-circle" id="score-circle">
+                <div class="score-inner">
+                    <div class="score-number" id="final-score">0</div>
+                    <div class="score-label">/ 24</div>
+                </div>
+            </div>
+            <p id="result-message" style="font-size: 1.2em; margin-bottom: 20px;"></p>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Ξεκίνα Ξανά</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // ΘΕΜΑΤΑ 2024
+            {
+                year: "2024",
+                question: "Ένας μάνατζερ που λέει «επειδή είμαι το αφεντικό θα πρέπει να κάνεις αυτό που σου ζητώ» βασίζεται στην ισχύ:",
+                options: ["Ανταμοιβής", "Νομιμότητας", "Ειδήμονα", "Αναφοράς (παραπομπής)", "Προσωπική"],
+                correct: 1,
+                theory: {
+                    title: "Μορφές Ισχύος στη Διοίκηση",
+                    description: "Η ισχύς είναι η δυνατότητα να επηρεάζεις τη συμπεριφορά άλλων. Η <strong>νόμιμη ισχύς (ισχύς νομιμότητας)</strong> προέρχεται από την επίσημη θέση στην ιεραρχία του οργανισμού. Όταν κάποιος λέει \"επειδή είμαι το αφεντικό\", επικαλείται το δικαίωμα που του δίνει η θέση του.",
+                    keywords: ["Νόμιμη ισχύς", "Ισχύς θέσης", "Ιεραρχία", "Επίσημη εξουσία"],
+                    example: "Ο Διευθυντής σχολείου που ζητά από εκπαιδευτικό να αναλάβει επιπλέον καθήκοντα επειδή είναι ο προϊστάμενός του."
+                }
+            },
+            {
+                year: "2024",
+                question: "Ποια βάση εξουσίας περιγράφεται ως η «ικανότητα να επηρεάζουν τους ανθρώπους δυνάμει της επίσημης εξουσίας, ή τα δικαιώματα του γραφείου»:",
+                options: ["Δύναμη της ανταμοιβής", "Καταναγκαστική εξουσία", "Νόμιμη εξουσία", "Ισχύς εμπειρογνώμονα", "Ισχύς παραπομπής"],
+                correct: 2,
+                theory: {
+                    title: "Νόμιμη Εξουσία",
+                    description: "Η <strong>νόμιμη εξουσία</strong> είναι το δικαίωμα ελέγχου ατόμων που κατέχουν χαμηλότερες θέσεις, το οποίο απορρέει από τη θέση ή την ιδιότητα στον οργανισμό. Είναι η \"επίσημη\" μορφή εξουσίας που συνοδεύει ένα αξίωμα.",
+                    keywords: ["Νόμιμη εξουσία", "Επίσημη θέση", "Δικαιώματα γραφείου", "Ιεραρχική δομή"],
+                    example: "Ο Προϊστάμενος Εκπαίδευσης έχει νόμιμη εξουσία να εκδίδει εγκυκλίους που πρέπει να τηρούν τα σχολεία της περιφέρειάς του."
+                }
+            },
+            {
+                year: "2024",
+                question: "Ποια βάση εξουσίας περιγράφεται ως η «ικανότητα να επηρεάζουν τους άλλους ανθρώπους λόγω της εξειδικευμένης γνώσης»:",
+                options: ["Δύναμη της ανταμοιβής", "Καταναγκαστική εξουσία", "Νόμιμη εξουσία", "Ισχύς εμπειρογνώμονα", "Ισχύς παραπομπής"],
+                correct: 3,
+                theory: {
+                    title: "Ισχύς Εμπειρογνώμονα (Ειδήμονα)",
+                    description: "Η <strong>ισχύς του ειδήμονα/εμπειρογνώμονα</strong> προέρχεται από τις εξειδικευμένες γνώσεις και ικανότητες. Είναι μορφή <em>προσωπικής ισχύος</em> - δεν εξαρτάται από θέση αλλά από αυτό που ξέρεις.",
+                    keywords: ["Ισχύς ειδήμονα", "Εξειδικευμένη γνώση", "Προσωπική ισχύς", "Τεχνογνωσία"],
+                    example: "Ένας καθηγητής Πληροφορικής που συμβουλεύει τη διεύθυνση για τεχνολογικά θέματα λόγω της εξειδίκευσής του."
+                }
+            },
+            {
+                year: "2024",
+                question: "Πώς ονομάζουμε τη διαδικασία μέσω της οποίας οι διευθυντές επιτρέπουν και βοηθούν τους άλλους να αποκτήσουν εξουσία και να αποκτήσουν επιρροή εντός του οργανισμού;",
+                options: ["Ισχύς", "Όραμα", "Ενδυνάμωση", "Εξαναγκασμός", "Συναισθηματική νοημοσύνη"],
+                correct: 2,
+                theory: {
+                    title: "Ενδυνάμωση (Empowerment)",
+                    description: "Η <strong>ενδυνάμωση</strong> είναι η διαδικασία κατά την οποία οι managers βοηθούν τους υφισταμένους να αποκτήσουν αυτονομία, εξουσία λήψης αποφάσεων και επιρροή. Στοχεύει στην αύξηση της δέσμευσης και της υπευθυνότητας.",
+                    keywords: ["Ενδυνάμωση", "Empowerment", "Αυτονομία", "Συμμετοχή στη λήψη αποφάσεων"],
+                    example: "Διευθυντής που αναθέτει στον υπεύθυνο τμήματος την πλήρη ευθύνη οργάνωσης μιας σχολικής εκδήλωσης."
+                }
+            },
+            {
+                year: "2024",
+                question: "Σύμφωνα με την έρευνα συμπεριφοράς ηγετών, ένας διευθυντής που ενεργεί θερμός και υποστηρικτικός προς τους υφιστάμενους του, διατηρεί καλές κοινωνικές σχέσεις μαζί τους, σέβεται τα συναισθήματά τους, είναι ευαίσθητος στις ανάγκες τους, και δείχνει εμπιστοσύνη σε αυτούς, έχει:",
+                options: ["Υψηλό ενδιαφέρον για το έργο", "Υψηλό ενδιαφέρον για τους ανθρώπους", "Χαμηλό ενδιαφέρον για το έργο", "Χαμηλό ενδιαφέρον για τους ανθρώπους"],
+                correct: 1,
+                theory: {
+                    title: "Διαστάσεις Ηγετικής Συμπεριφοράς",
+                    description: "Η έρευνα διακρίνει δύο διαστάσεις: <strong>Ενδιαφέρον για τους ανθρώπους</strong> (σχέσεις, υποστήριξη, εμπιστοσύνη) και <strong>Ενδιαφέρον για το έργο</strong> (παραγωγή, αποτελέσματα). Ο ηγέτης της ερώτησης δείχνει σαφώς υψηλό ενδιαφέρον για τους ανθρώπους.",
+                    keywords: ["Ενδιαφέρον για ανθρώπους", "Υποστηρικτική συμπεριφορά", "Διαπροσωπικές σχέσεις", "Πλέγμα Blake-Mouton"],
+                    example: "Διευθυντής που ενδιαφέρεται για την ψυχική υγεία των εκπαιδευτικών και οργανώνει ομαδικές δραστηριότητες."
+                }
+            },
+            {
+                year: "2024",
+                question: "Ποιοι είναι παράγοντες στο πλαίσιο της εργασίας που κατευθύνουν τις προσπάθειες εργασίας χωρίς τη συμμετοχή του ηγέτη;",
+                options: ["Παράγοντες συμπεριφοράς", "Συμπεριφορές ηγεσίας", "Μοντέλα έκτακτης ανάγκης", "Υποκατάστατα της ηγεσίας", "Θεωρίες διαδρομής-στόχου"],
+                correct: 3,
+                theory: {
+                    title: "Υποκατάστατα της Ηγεσίας",
+                    description: "Τα <strong>υποκατάστατα της ηγεσίας</strong> είναι χαρακτηριστικά του εργασιακού περιβάλλοντος που μπορούν να αντικαταστήσουν ή να εξουδετερώσουν την ανάγκη για ηγετική παρέμβαση. Περιλαμβάνουν την εμπειρία των υφισταμένων, τη δομημένη εργασία, κ.ά.",
+                    keywords: ["Υποκατάστατα ηγεσίας", "Αυτοκατευθυνόμενες ομάδες", "Δομή εργασίας", "Εμπειρία υφισταμένων"],
+                    example: "Έμπειροι εκπαιδευτικοί που γνωρίζουν άριστα το αντικείμενό τους χρειάζονται λιγότερη καθοδήγηση από τον διευθυντή."
+                }
+            },
+            {
+                year: "2024",
+                question: "Σύμφωνα με τους θεωρητικούς μονοπατιών-στόχων, ποιο ύφος ηγεσίας ακολουθεί ένας διευθυντής που αντιμετωπίζει τα μέλη ομάδας ως ίσους και είναι φιλικός και προσιτός;",
+                options: ["Καθοδηγητική ηγεσία", "Υποστηρικτική ηγεσία", "Ηγεσία προσανατολισμένη στα επιτεύγματα", "Συμμετοχική ηγεσία", "Όλα αυτά είναι σωστά"],
+                correct: 1,
+                theory: {
+                    title: "Θεωρία Μονοπατιών-Στόχων (House)",
+                    description: "Η <strong>υποστηρικτική ηγεσία</strong> στη θεωρία του House χαρακτηρίζεται από φιλική συμπεριφορά, ισότιμη μεταχείριση, προσιτότητα και ενδιαφέρον για την ευημερία των υφισταμένων. Κάνει την εργασία ευχάριστη.",
+                    keywords: ["Υποστηρικτική ηγεσία", "Θεωρία House", "Μονοπάτια-Στόχοι", "Φιλική συμπεριφορά", "Ισότιμη μεταχείριση"],
+                    example: "Διευθυντής που είναι ανοιχτός στην επικοινωνία, ακούει τους εκπαιδευτικούς και νοιάζεται για τα προβλήματά τους."
+                }
+            },
+            {
+                year: "2024",
+                question: "Σύμφωνα με το μοντέλο ηγεσίας των Hersey και Blanchard, η ετοιμότητα των εργαζομένων καθορίζεται από:",
+                options: ["Ικανότητα, προθυμία και την αυτοπεποίθηση των υφισταμένων στην εκτέλεση των απαιτούμενων καθηκόντων", "Δύναμη θέσης, δομή στόχου και τις σχέσεις ηγέτη-μελών", "Εργασία, σχέσεις και την ικανότητα λήψης αποφάσεων των υφιστάμενων", "Κίνητρο, την επιθυμία και τον έλεγχο του ηγέτη", "Νοημοσύνη, την ικανότητα και τα κίνητρα των υφισταμένων"],
+                correct: 0,
+                theory: {
+                    title: "Μοντέλο Hersey-Blanchard",
+                    description: "Στο μοντέλο <strong>Ηγεσίας Καταστάσεων</strong>, η <strong>ετοιμότητα</strong> των υφισταμένων καθορίζεται από τρεις παράγοντες: Ικανότητα (γνώσεις, δεξιότητες), Προθυμία (κίνητρο, διάθεση) και Αυτοπεποίθηση (εμπιστοσύνη στον εαυτό). Ο ηγέτης προσαρμόζει το στυλ του ανάλογα.",
+                    keywords: ["Hersey-Blanchard", "Ετοιμότητα", "Ικανότητα", "Προθυμία", "Αυτοπεποίθηση"],
+                    example: "Νέος εκπαιδευτικός (χαμηλή ικανότητα, υψηλή προθυμία) χρειάζεται καθοδηγητικό στυλ ηγεσίας."
+                }
+            },
+            {
+                year: "2024",
+                question: "Σύμφωνα με το Hersey-Blanchard μοντέλο ηγεσίας καταστάσεων, οι ηγέτες που τονίζουν κοινές ιδέες και όπου οι οπαδοί είναι ικανοί, απρόθυμοι και ανασφαλείς, ακολουθούν το στυλ ηγεσίας:",
+                options: ["Συμμετοχής", "Πώλησης", "Οδηγιών", "Εξουσιοδότησης"],
+                correct: 0,
+                theory: {
+                    title: "Στυλ Συμμετοχής (Hersey-Blanchard)",
+                    description: "Το <strong>στυλ Συμμετοχής</strong> (S3) χαρακτηρίζεται από χαμηλή καθοδήγηση και υψηλή υποστήριξη. Ο ηγέτης μοιράζεται ιδέες, ενθαρρύνει τη συμμετοχή στη λήψη αποφάσεων. Κατάλληλο όταν οι υφιστάμενοι είναι <em>ικανοί αλλά απρόθυμοι/ανασφαλείς</em>.",
+                    keywords: ["Στυλ Συμμετοχής", "S3", "Ικανοί-Απρόθυμοι", "Χαμηλή καθοδήγηση", "Υψηλή υποστήριξη"],
+                    example: "Έμπειρος εκπαιδευτικός που διστάζει να αναλάβει νέο ρόλο - ο διευθυντής τον εμπλέκει στη διαδικασία απόφασης."
+                }
+            },
+            {
+                year: "2024",
+                question: "Στο μοντέλο του Fiedler, τόσο οι ευνοϊκές όσο και οι πολύ δυσμενείς καταστάσεις αντιμετωπίζονται καλύτερα από έναν ηγέτη που:",
+                options: ["Είναι φιλελεύθερος", "Επικεντρώνεται στην εργασία", "Είναι συμμετοχικός", "Επικεντρώνεται στις σχέσεις", "Επικεντρώνεται στους στόχους"],
+                correct: 1,
+                theory: {
+                    title: "Μοντέλο Πιθανοτήτων Fiedler",
+                    description: "Σύμφωνα με τον <strong>Fiedler</strong>, οι ηγέτες <strong>προσανατολισμένοι στην εργασία</strong> (χαμηλό LPC) αποδίδουν καλύτερα σε <em>πολύ ευνοϊκές</em> ή <em>πολύ δυσμενείς</em> καταστάσεις. Οι προσανατολισμένοι στις σχέσεις (υψηλό LPC) αποδίδουν σε μέτριες καταστάσεις.",
+                    keywords: ["Fiedler", "LPC", "Προσανατολισμός εργασίας", "Ευνοϊκές/Δυσμενείς καταστάσεις"],
+                    example: "Σε περίοδο κρίσης (δυσμενής κατάσταση), ο διευθυντής πρέπει να εστιάσει στην εργασία και τα αποτελέσματα."
+                }
+            },
+            // ΘΕΜΑΤΑ 2025
+            {
+                year: "2025",
+                question: "Οι ανάγκες χαμηλότερου βαθμού στην ιεραρχία του Maslow αντιστοιχούν στις ανάγκες .................. της θεωρίας ERG.",
+                options: ["Ανάπτυξης", "Συσχέτισης", "Ύπαρξης", "Επιτεύγματος"],
+                correct: 2,
+                theory: {
+                    title: "Αντιστοιχία Maslow - ERG (Alderfer)",
+                    description: "Η θεωρία <strong>ERG</strong> του Alderfer συμπτύσσει τα 5 επίπεδα του Maslow σε 3: <strong>Ύπαρξη</strong> (Existence) = Φυσιολογικές + Ασφάλειας, <strong>Συσχέτιση</strong> (Relatedness) = Κοινωνικές, <strong>Ανάπτυξη</strong> (Growth) = Εκτίμησης + Αυτοπραγμάτωσης.",
+                    keywords: ["ERG", "Alderfer", "Maslow", "Ανάγκες ύπαρξης", "Φυσιολογικές ανάγκες"],
+                    example: "Οι βασικές ανάγκες εκπαιδευτικού για μισθό και ασφάλεια εργασίας = ανάγκες Ύπαρξης."
+                }
+            },
+            {
+                year: "2025",
+                question: "Ένας εργαζόμενος με υψηλή ανάγκη για .................. σύμφωνα με τη θεωρία του McClelland προσπαθεί να χρησιμοποιήσει την εξουσία για το καλό του οργανισμού.",
+                options: ["Ισχύ θέσεως", "Ισχύ εξειδίκευσης", "Προσωπική ισχύ", "Κοινωνική ισχύ"],
+                correct: 3,
+                theory: {
+                    title: "Θεωρία Επίκτητων Αναγκών (McClelland)",
+                    description: "Ο McClelland διακρίνει την ανάγκη για ισχύ σε δύο τύπους: <strong>Προσωπική ισχύ</strong> (για προσωπικό όφελος) και <strong>Κοινωνική ισχύ</strong> (για το καλό του οργανισμού). Οι αποτελεσματικοί ηγέτες έχουν υψηλή κοινωνική ισχύ.",
+                    keywords: ["McClelland", "Κοινωνική ισχύ", "Προσωπική ισχύ", "Επίκτητες ανάγκες"],
+                    example: "Διευθυντής που χρησιμοποιεί την επιρροή του για να βελτιώσει τη λειτουργία του σχολείου, όχι για προσωπικό όφελος."
+                }
+            },
+            {
+                year: "2025",
+                question: "Σύμφωνα με τη θεωρία παρακίνησης .................. κάποιος ο οποίος αντιλαμβάνεται τον εαυτό του ως υπο-αμειβόμενο σε σχέση με έναν συνάδελφό του αναμένεται να μειώσει τη μελλοντική του απόδοση.",
+                options: ["ERG", "Κεκτημένων αναγκών", "Των δύο παραγόντων", "Της εξίσωσης"],
+                correct: 3,
+                theory: {
+                    title: "Θεωρία της Ισότητας/Εξίσωσης (Adams)",
+                    description: "Η <strong>θεωρία της εξίσωσης</strong> (Adams) υποστηρίζει ότι οι εργαζόμενοι συγκρίνουν τις εισφορές και ανταμοιβές τους με άλλους. Αν νιώθουν <em>υπο-αμειβόμενοι</em>, μειώνουν την απόδοσή τους για να αποκαταστήσουν την ισορροπία.",
+                    keywords: ["Θεωρία εξίσωσης", "Adams", "Ισότητα", "Σύγκριση ανταμοιβών"],
+                    example: "Εκπαιδευτικός που βλέπει ότι συνάδελφος με λιγότερη εργασία παίρνει ίδιες απολαβές, μπορεί να μειώσει την προσπάθειά του."
+                }
+            },
+            {
+                year: "2025",
+                question: "Ποιο από τα επόμενα ζευγάρια είναι σωστό;",
+                options: ["McClelland – θεωρία ERG", "Skinner – θεωρία ενίσχυσης", "Vroom – θεωρία εξίσωσης", "Locke – θεωρία προσδοκιών"],
+                correct: 1,
+                theory: {
+                    title: "Θεωρητικοί Παρακίνησης",
+                    description: "<strong>B.F. Skinner</strong> → Θεωρία Ενίσχυσης (Νόμος του αποτελέσματος). Vroom → Θεωρία Προσδοκιών. McClelland → Θεωρία Επίκτητων Αναγκών. Locke → Θεωρία Θέσης Στόχων. Adams → Θεωρία Εξίσωσης. Alderfer → ERG.",
+                    keywords: ["Skinner", "Θεωρία ενίσχυσης", "Θεωρητικοί παρακίνησης"],
+                    example: "Η θετική ενίσχυση (επιβράβευση) αυξάνει την πιθανότητα επανάληψης μιας συμπεριφοράς - Skinner."
+                }
+            },
+            {
+                year: "2025",
+                question: "Η θεωρία προσδοκιών της παρακίνησης υποστηρίζει ότι: παρακίνηση = προσδοκία x ........ x ........",
+                options: ["Ανταμοιβές, σθένος", "Σπουδαιότητα, σθένος", "Ισότητα, σπουδαιότητα", "Ανταμοιβές, σθένος"],
+                correct: 1,
+                theory: {
+                    title: "Θεωρία Προσδοκιών (Vroom)",
+                    description: "Σύμφωνα με τον <strong>Vroom</strong>: <strong>Παρακίνηση = Προσδοκία × Συνδρομή (Σπουδαιότητα) × Σθένος</strong>. Προσδοκία = πιστεύω ότι μπορώ, Συνδρομή = η απόδοση οδηγεί σε ανταμοιβή, Σθένος = η αξία της ανταμοιβής για μένα.",
+                    keywords: ["Vroom", "Προσδοκία", "Συνδρομή/Σπουδαιότητα", "Σθένος", "Π = ΠΡ × Σ × ΣΘ"],
+                    example: "Εκπαιδευτικός παρακινείται αν πιστεύει ότι: μπορεί να πετύχει (προσδοκία), η επιτυχία θα ανταμειφθεί (συνδρομή), και η ανταμοιβή έχει αξία (σθένος)."
+                }
+            },
+            {
+                year: "2025",
+                question: "Ο νόμος .................. δηλώνει ότι η συμπεριφορά που ακολουθείται από μια θετική συνέπεια είναι πιθανόν να επαναληφθεί, ενώ η συμπεριφορά που ακολουθείται από μια ανεπιθύμητη συνέπεια δεν είναι πιθανόν να επαναληφθεί.",
+                options: ["Της ενίσχυσης", "Του ενδεχομένου", "Της θέσης στόχων", "Του αποτελέσματος"],
+                correct: 3,
+                theory: {
+                    title: "Νόμος του Αποτελέσματος",
+                    description: "Ο <strong>Νόμος του Αποτελέσματος</strong> (Law of Effect) είναι η βάση της θεωρίας ενίσχυσης: Η συμπεριφορά που ακολουθείται από <em>θετική συνέπεια</em> τείνει να επαναληφθεί. Η συμπεριφορά με <em>αρνητική συνέπεια</em> τείνει να αποφευχθεί.",
+                    keywords: ["Νόμος αποτελέσματος", "Θεωρία ενίσχυσης", "Θετική συνέπεια", "Επανάληψη συμπεριφοράς"],
+                    example: "Μαθητής που επαινείται για καλή απάντηση (θετική συνέπεια) είναι πιθανότερο να συμμετέχει ξανά."
+                }
+            },
+            {
+                year: "2025",
+                question: ".................. είναι μια θετική στρατηγική ενίσχυσης η οποία ανταμείβει διαδοχικές προσεγγίσεις σε μια επιθυμητή συμπεριφορά.",
+                options: ["Η εξαφάνιση", "Η αρνητική ενίσχυση", "Η διαμόρφωση", "Η αμοιβή με βάση την απόδοση"],
+                correct: 2,
+                theory: {
+                    title: "Διαμόρφωση (Shaping)",
+                    description: "Η <strong>διαμόρφωση</strong> (shaping) είναι τεχνική θετικής ενίσχυσης που ανταμείβει τα <em>διαδοχικά βήματα</em> προς μια επιθυμητή συμπεριφορά. Χρησιμοποιείται όταν η τελική συμπεριφορά είναι πολύπλοκη.",
+                    keywords: ["Διαμόρφωση", "Shaping", "Διαδοχικές προσεγγίσεις", "Θετική ενίσχυση"],
+                    example: "Επιβράβευση μαθητή πρώτα για την παρουσία στην τάξη, μετά για τη συμμετοχή, μετά για σωστές απαντήσεις."
+                }
+            },
+            {
+                year: "2025",
+                question: "Στη θεωρία των δύο παραγόντων του Herzberg, η βασική αμοιβή θεωρείται ένας παράγοντας ................",
+                options: ["Σθένους", "Ικανοποίησης", "Εξίσωσης", "Υγιεινής"],
+                correct: 3,
+                theory: {
+                    title: "Θεωρία Δύο Παραγόντων (Herzberg)",
+                    description: "Ο <strong>Herzberg</strong> διακρίνει: <strong>Παράγοντες Υγιεινής</strong> (μισθός, συνθήκες, ασφάλεια) - αποτρέπουν τη δυσαρέσκεια αλλά δεν παρακινούν. <strong>Παράγοντες Παρακίνησης</strong> (αναγνώριση, επίτευγμα, ανάπτυξη) - δημιουργούν ικανοποίηση.",
+                    keywords: ["Herzberg", "Παράγοντες υγιεινής", "Παράγοντες παρακίνησης", "Μισθός", "Δύο παράγοντες"],
+                    example: "Αύξηση μισθού (υγιεινής) μειώνει τη δυσαρέσκεια, αλλά αναγνώριση επιτυχίας (παρακίνησης) δημιουργεί κίνητρο."
+                }
+            },
+            {
+                year: "2025",
+                question: "Όταν κάποιος έχει μια υψηλή και θετική «προσδοκία» στη θεωρία προσδοκιών της παρακίνησης, αυτό σημαίνει ότι το άτομο ................",
+                options: ["Πιστεύει ότι αυτός ή αυτή μπορεί να ανταποκριθεί στις απαιτήσεις απόδοσης", "Αποδίδει υψηλή αξία στις ανταμοιβές που προσφέρονται", "Βλέπει έναν σύνδεσμο μεταξύ της υψηλής απόδοσης και των διαθέσιμων ανταμοιβών", "Πιστεύει ότι οι ανταμοιβές είναι δίκαιες"],
+                correct: 0,
+                theory: {
+                    title: "Προσδοκία στη Θεωρία Vroom",
+                    description: "Η <strong>Προσδοκία</strong> είναι η πεποίθηση ότι η προσπάθεια θα οδηγήσει σε επιτυχή απόδοση. Υψηλή προσδοκία = \"πιστεύω ότι μπορώ να τα καταφέρω\". Διαφέρει από τη Συνδρομή (σύνδεση απόδοσης-ανταμοιβής) και το Σθένος (αξία ανταμοιβής).",
+                    keywords: ["Προσδοκία", "Αυτοπεποίθηση", "Vroom", "Effort-Performance"],
+                    example: "Εκπαιδευτικός με υψηλή προσδοκία πιστεύει ότι αν προετοιμαστεί καλά, θα πετύχει τους διδακτικούς στόχους."
+                }
+            },
+            {
+                year: "2025",
+                question: "Σύμφωνα με τη θεωρία θέσης στόχων, ο στόχος να «γίνω περισσότερο παραγωγικός στην εργασία μου» δεν θεωρείται πηγή παρακίνησης διότι δεν πληροί το κριτήριο της .................. του στόχου.",
+                options: ["Αποδοχής", "Συγκεκριμένης φύσης", "Πρόσκλησης", "Δέσμευσης"],
+                correct: 1,
+                theory: {
+                    title: "Θεωρία Θέσης Στόχων (Locke)",
+                    description: "Κατά τον <strong>Locke</strong>, οι στόχοι παρακινούν όταν είναι: <strong>Συγκεκριμένοι</strong> (σαφείς, μετρήσιμοι), <strong>Δύσκολοι αλλά εφικτοί</strong>, <strong>Αποδεκτοί</strong> από τον εργαζόμενο. \"Να γίνω πιο παραγωγικός\" είναι <em>ασαφής</em> στόχος.",
+                    keywords: ["Locke", "Θέση στόχων", "Συγκεκριμένοι στόχοι", "SMART στόχοι"],
+                    example: "Αντί \"να βελτιωθώ\", ο στόχος \"να ολοκληρώσω 3 projects μέχρι τέλος εξαμήνου\" είναι συγκεκριμένος και παρακινητικός."
+                }
+            },
+            {
+                year: "2025",
+                question: "Ο B.F. Skinner θα υποστήριζε ότι «το να πληρώνεσαι την Παρασκευή» ενισχύει ένα άτομο να έρθει στην εργασία, αλλά δεν το ενισχύει να κάνει εξαιρετική δουλειά την Πέμπτη. Αυτό συμβαίνει διότι η πληρωμή της Παρασκευής δεν πληροί τα στοιχεία του νόμου της .................. ενίσχυσης.",
+                options: ["Αρνητικής", "Διαρκούς", "Άμεσης", "Περιοδικής"],
+                correct: 2,
+                theory: {
+                    title: "Νόμος της Άμεσης Ενίσχυσης",
+                    description: "Σύμφωνα με τον <strong>Skinner</strong>, η ενίσχυση είναι αποτελεσματικότερη όταν είναι <strong>άμεση</strong> - όσο πιο κοντά στη συμπεριφορά, τόσο ισχυρότερη η σύνδεση. Η πληρωμή την Παρασκευή δεν συνδέεται άμεσα με την εργασία της Πέμπτης.",
+                    keywords: ["Άμεση ενίσχυση", "Skinner", "Χρονική εγγύτητα", "Νόμος άμεσης ενίσχυσης"],
+                    example: "Άμεσος έπαινος μετά από καλή διδασκαλία είναι αποτελεσματικότερος από βραβείο στο τέλος του έτους."
+                }
+            },
+            {
+                year: "2025",
+                question: "Η προσθήκη περισσότερων ευθυνών προγραμματισμού και ελέγχου σε μια εργασία αποτελεί παράδειγμα της στρατηγικής ................",
+                options: ["Του εμπλουτισμού εργασίας", "Της διεύρυνσης εργασίας", "Της εναλλαγής θέσεων εργασίας", "Της από κοινού εργασίας"],
+                correct: 0,
+                theory: {
+                    title: "Εμπλουτισμός Εργασίας (Job Enrichment)",
+                    description: "Ο <strong>εμπλουτισμός εργασίας</strong> προσθέτει <em>ευθύνες υψηλότερου επιπέδου</em> (προγραμματισμός, έλεγχος, λήψη αποφάσεων) - κάθετη φόρτιση. Η <strong>διεύρυνση</strong> προσθέτει περισσότερα καθήκοντα ίδιου επιπέδου - οριζόντια φόρτιση.",
+                    keywords: ["Εμπλουτισμός εργασίας", "Κάθετη φόρτιση", "Αυτονομία", "Job enrichment"],
+                    example: "Εκπαιδευτικός που αναλαμβάνει τον σχεδιασμό και την αξιολόγηση ενός προγράμματος, όχι μόνο τη διδασκαλία."
+                }
+            },
+            {
+                year: "2025",
+                question: "Οι εργαζόμενοι σε μια συμπιεσμένη εργασιακή εβδομάδα τυπικά εργάζονται 40 ώρες σε .................. ημέρες.",
+                options: ["3", "4", "5", "Έναν ευέλικτο αριθμό από"],
+                correct: 1,
+                theory: {
+                    title: "Συμπιεσμένη Εργασιακή Εβδομάδα",
+                    description: "Η <strong>συμπιεσμένη εργασιακή εβδομάδα</strong> σημαίνει εργασία των ίδιων ωρών (συνήθως 40) σε λιγότερες ημέρες. Τυπικά: <strong>4 ημέρες × 10 ώρες</strong> αντί 5 × 8. Προσφέρει μεγαλύτερο Σαββατοκύριακο.",
+                    keywords: ["Συμπιεσμένη εβδομάδα", "4ήμερη εργασία", "Ευέλικτη εργασία", "Work-life balance"],
+                    example: "Σχολείο που λειτουργεί 4 ημέρες με παρατεταμένο ωράριο, δίνοντας τριήμερο στο προσωπικό."
+                }
+            },
+            {
+                year: "2025",
+                question: "Ένας άλλος όρος που χρησιμοποιείται για να περιγράψει τους εργαζόμενους μερικής απασχόλησης είναι ................",
+                options: ["Εξαρτημένοι εργαζόμενοι", "Εικονικοί εργαζόμενοι", "Ευέλικτοι εργαζόμενοι", "Δευτερεύοντες εργαζόμενοι"],
+                correct: 2,
+                theory: {
+                    title: "Ευέλικτοι Εργαζόμενοι",
+                    description: "Οι <strong>ευέλικτοι εργαζόμενοι</strong> (contingent workers) περιλαμβάνουν εργαζόμενους μερικής απασχόλησης, προσωρινούς, εποχιακούς ή με σύμβαση έργου. Δεν έχουν μόνιμη, πλήρη απασχόληση.",
+                    keywords: ["Ευέλικτοι εργαζόμενοι", "Μερική απασχόληση", "Contingent workers", "Ευελιξία"],
+                    example: "Αναπληρωτές εκπαιδευτικοί ή ωρομίσθιοι που καλύπτουν κενά σε σχολεία."
+                }
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = new Array(questions.length).fill(false);
+        let userAnswers = new Array(questions.length).fill(null);
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `question-${index}`;
+                
+                const optionsHTML = q.options.map((opt, optIndex) => `
+                    <div class="option" data-question="${index}" data-option="${optIndex}" onclick="selectOption(${index}, ${optIndex})">
+                        <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                        <span>${opt}</span>
+                    </div>
+                `).join('');
+                
+                card.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">Ερώτηση ${index + 1}</span>
+                        <span class="year-badge">📅 ${q.year}</span>
+                    </div>
+                    <p class="question-text">${q.question}</p>
+                    <button class="theory-toggle" onclick="toggleTheory(${index})">
+                        <span class="icon">📖</span> Δες τη Θεωρία
+                    </button>
+                    <div class="theory-box" id="theory-${index}">
+                        <div class="theory-title">
+                            <span class="icon">💡</span> ${q.theory.title}
+                        </div>
+                        <div class="theory-content">
+                            <div class="theory-section">
+                                <h4>📝 Περιγραφή</h4>
+                                <p>${q.theory.description}</p>
+                            </div>
+                            <div class="theory-section">
+                                <h4>🔑 Λέξεις-Κλειδιά</h4>
+                                <div class="keywords">
+                                    ${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                                </div>
+                            </div>
+                            <div class="theory-section">
+                                <h4>🏫 Παράδειγμα στην Εκπαίδευση</h4>
+                                <p>${q.theory.example}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        ${optionsHTML}
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            updateProgress();
+        }
+
+        function toggleTheory(index) {
+            const theoryBox = document.getElementById(`theory-${index}`);
+            const button = theoryBox.previousElementSibling;
+            
+            if (theoryBox.classList.contains('show')) {
+                theoryBox.classList.remove('show');
+                button.classList.remove('active');
+                button.innerHTML = '<span class="icon">📖</span> Δες τη Θεωρία';
+            } else {
+                theoryBox.classList.add('show');
+                button.classList.add('active');
+                button.innerHTML = '<span class="icon">📕</span> Κλείσε τη Θεωρία';
+            }
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            if (answered[questionIndex]) return;
+            
+            const options = document.querySelectorAll(`[data-question="${questionIndex}"]`);
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
+            const correct = questions[questionIndex].correct;
+            
+            answered[questionIndex] = true;
+            userAnswers[questionIndex] = optionIndex;
+            
+            options.forEach((opt, idx) => {
+                opt.classList.add('disabled');
+                if (idx === optionIndex) {
+                    opt.classList.add('selected');
+                }
+                if (idx === correct) {
+                    opt.classList.add('correct');
+                } else if (idx === optionIndex && optionIndex !== correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (optionIndex === correct) {
+                score++;
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = '✅ Σωστά! Μπράβο!';
+            } else {
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `❌ Λάθος. Η σωστή απάντηση είναι: <strong>${String.fromCharCode(65 + correct)}) ${questions[questionIndex].options[correct]}</strong>`;
+            }
+            
+            updateProgress();
+            checkCompletion();
+        }
+
+        function updateProgress() {
+            const answeredCount = answered.filter(a => a).length;
+            const progress = (answeredCount / questions.length) * 100;
+            
+            document.getElementById('progress').style.width = `${progress}%`;
+            document.getElementById('current').textContent = Math.min(answeredCount + 1, questions.length);
+            document.getElementById('score').textContent = score;
+        }
+
+        function checkCompletion() {
+            if (answered.every(a => a)) {
+                setTimeout(() => {
+                    showResults();
+                }, 1000);
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            const results = document.getElementById('results');
+            results.classList.add('show');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('score-circle').style.setProperty('--score', `${percentage * 3.6}deg`);
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 Εξαιρετική επίδοση! Είσαι άριστα προετοιμασμένος/η!';
+            } else if (percentage >= 70) {
+                message = '👍 Πολύ καλά! Συνέχισε τη μελέτη για ακόμα καλύτερα αποτελέσματα!';
+            } else if (percentage >= 50) {
+                message = '📚 Καλή προσπάθεια! Διάβασε λίγο ακόμα τη θεωρία.';
+            } else {
+                message = '💪 Χρειάζεται περισσότερη μελέτη. Μην τα παρατάς!';
+            }
+            
+            document.getElementById('result-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = new Array(questions.length).fill(false);
+            userAnswers = new Array(questions.length).fill(null);
+            
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('quiz-container').style.display = 'block';
+            
+            renderQuiz();
+        }
+
+        // Initialize
+        renderQuiz();
+    </script>
+</body>
+</html>

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Διοίκησης Εκπαίδευσης - Θέματα Ανάπτυξης 2024-2025</title>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #2e7d32;
+            --accent: #ff6f00;
+            --light: #f5f5f5;
+            --dark: #212121;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --info: #2196f3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        header h1 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        header .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--secondary), var(--info));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .question-number {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .year-badge {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 1.15em;
+            color: var(--dark);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .theory-toggle {
+            background: linear-gradient(135deg, var(--info), #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .theory-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
+        }
+        
+        .theory-toggle .icon {
+            font-size: 1.3em;
+        }
+        
+        .theory-section {
+            display: none;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid var(--info);
+        }
+        
+        .theory-section.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 2000px; }
+        }
+        
+        .theory-title {
+            color: var(--primary);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theory-content h4 {
+            color: var(--secondary);
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+        }
+        
+        .theory-content p {
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        
+        .keywords-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .keywords-box h5 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            margin: 3px;
+            font-size: 0.9em;
+        }
+        
+        .example-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .example-box h5 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .answer-section {
+            margin-top: 20px;
+        }
+        
+        .answer-section label {
+            display: block;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .answer-section textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        .answer-section textarea:focus {
+            outline: none;
+            border-color: var(--info);
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-prev {
+            background: #757575;
+            color: white;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, var(--secondary), #1b5e20);
+            color: white;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent), #e65100);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .model-answer {
+            display: none;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid var(--secondary);
+        }
+        
+        .model-answer.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .model-answer h4 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .model-answer-content {
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .model-answer-content h5 {
+            color: var(--primary);
+            margin: 15px 0 8px 0;
+        }
+        
+        .btn-show-answer {
+            background: linear-gradient(135deg, var(--success), #388e3c);
+            color: white;
+            margin-top: 15px;
+        }
+        
+        .results-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+        }
+        
+        .results-card.active {
+            display: block;
+        }
+        
+        .results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .results-title {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        .results-summary {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .btn-restart {
+            background: linear-gradient(135deg, var(--primary), #0d47a1);
+            color: white;
+            margin: 0 auto;
+        }
+        
+        .info-box {
+            background: #fff3e0;
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .theory-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .theory-list li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .theory-list li::before {
+            content: "✓";
+            color: var(--secondary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .numbered-list {
+            padding-left: 20px;
+        }
+        
+        .numbered-list li {
+            padding: 5px 0;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+            
+            .question-text {
+                font-size: 1em;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Quiz Διοίκησης Εκπαίδευσης</h1>
+            <p class="subtitle">Θέματα Ανάπτυξης Εξετάσεων 2024-2025</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 25%">1/4</div>
+            </div>
+        </header>
+
+        <!-- ΕΡΩΤΗΣΗ 1: McClelland (2024) -->
+        <div class="question-card active" id="q1">
+            <div class="question-header">
+                <span class="question-number">Ερώτηση 1</span>
+                <span class="year-badge">📅 2023-2024</span>
+            </div>
+            
+            <div class="question-text">
+                <strong>Θέμα 1:</strong> Η υποκίνηση μπορεί να συμβάλλει στη βελτίωση της ποιότητας και αποδοτικότητας των εκπαιδευτικών μονάδων. Από τη θέση του Διευθυντή/Προϊσταμένου, στο πλαίσιο της <strong>θεωρίας των επίκτητων αναγκών</strong> η οποία αναπτύχθηκε από τον <strong>David McClelland</strong>, να παρουσιάσετε συνοπτικά ένα ρεαλιστικό πλαίσιο κινήτρων για την κάλυψη των αναγκών του προσωπικού μιας εκπαιδευτικής μονάδας.
+            </div>
+            
+            <button class="theory-toggle" onclick="toggleTheory(1)">
+                <span class="icon">📖</span>
+                <span id="theoryBtnText1">Εμφάνιση Θεωρίας</span>
+            </button>
+            
+            <div class="theory-section" id="theory1">
+                <h3 class="theory-title">📘 Θεωρία Επίκτητων Αναγκών του McClelland</h3>
+                
+                <div class="theory-content">
+                    <h4>🎯 Κεντρική Ιδέα</h4>
+                    <p>Η θεωρία αναπτύχθηκε από τον <strong>David McClelland</strong> και υποστηρίζει ότι οι άνθρωποι αποκτούν συγκεκριμένες ανάγκες μέσα από τις εμπειρίες της ζωής τους. Αυτές οι ανάγκες διαμορφώνουν την εργασιακή τους συμπεριφορά και τα κίνητρά τους.</p>
+                    
+                    <h4>📌 Οι Τρεις Επίκτητες Ανάγκες</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Ανάγκη για Επιτεύγματα (nAch - Need for Achievement):</strong> Η επιθυμία να επιτύχει κάποιος δύσκολους στόχους, να υπερέχει και να αναγνωρίζεται για τα επιτεύγματά του.</li>
+                        <li><strong>Ανάγκη για Ισχύ (nPower - Need for Power):</strong> Η επιθυμία να επηρεάζει τους άλλους και να ασκεί έλεγχο στο περιβάλλον. Διακρίνεται σε προσωπική ισχύ (για ατομικό όφελος) και κοινωνική ισχύ (για το καλό του οργανισμού).</li>
+                        <li><strong>Ανάγκη για Προσχώρηση (nAff - Need for Affiliation):</strong> Η επιθυμία εδραίωσης και διατήρησης φιλικών και θερμών σχέσεων με τους συναδέλφους.</li>
+                    </ol>
+                    
+                    <div class="keywords-box">
+                        <h5>🔑 Λέξεις-Κλειδιά</h5>
+                        <span class="keyword-tag">Επίκτητες Ανάγκες</span>
+                        <span class="keyword-tag">Επιτεύγματα (nAch)</span>
+                        <span class="keyword-tag">Ισχύς (nPower)</span>
+                        <span class="keyword-tag">Προσχώρηση (nAff)</span>
+                        <span class="keyword-tag">Κοινωνική Ισχύ</span>
+                        <span class="keyword-tag">Παρακίνηση</span>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h5>🏫 Παράδειγμα Εφαρμογής στην Εκπαίδευση</h5>
+                        <p><strong>Για εκπαιδευτικούς με υψηλή ανάγκη επιτευγμάτων:</strong> Ανάθεση καινοτόμων προγραμμάτων, ευρωπαϊκών έργων (Erasmus+), δυνατότητα συμμετοχής σε συνέδρια.</p>
+                        <p><strong>Για εκπαιδευτικούς με υψηλή ανάγκη ισχύος:</strong> Ανάθεση ρόλων συντονιστή ομάδας, υπεύθυνου τομέα, μέλους του Συλλόγου Διδασκόντων με συμμετοχή στη λήψη αποφάσεων.</p>
+                        <p><strong>Για εκπαιδευτικούς με υψηλή ανάγκη προσχώρησης:</strong> Προώθηση ομαδικής εργασίας, διοργάνωση κοινών δραστηριοτήτων, δημιουργία κλίματος συνεργασίας.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="answer-section">
+                <label>✍️ Γράψτε την απάντησή σας:</label>
+                <textarea id="answer1" placeholder="Αναπτύξτε τη θεωρία του McClelland και προτείνετε συγκεκριμένα κίνητρα για κάθε κατηγορία αναγκών..."></textarea>
+            </div>
+            
+            <button class="btn btn-show-answer" onclick="showAnswer(1)">
+                <span>📝</span> Δείτε Πρότυπη Απάντηση
+            </button>
+            
+            <div class="model-answer" id="modelAnswer1">
+                <h4>✅ Πρότυπη Απάντηση</h4>
+                <div class="model-answer-content">
+                    <p>Σύμφωνα με τη <strong>θεωρία επίκτητων αναγκών του McClelland</strong>, οι άνθρωποι αποκτούν τρεις βασικές ανάγκες μέσα από τις εμπειρίες ζωής τους: την ανάγκη για επιτεύγματα, για ισχύ και για προσχώρηση.</p>
+                    
+                    <h5>1. Ανάγκη για Επιτεύγματα (nAch)</h5>
+                    <p>Για εκπαιδευτικούς με υψηλή ανάγκη επιτευγμάτων, ο Διευθυντής μπορεί να προσφέρει: ανάθεση καινοτόμων προγραμμάτων και ευρωπαϊκών έργων, δυνατότητα επαγγελματικής εξέλιξης, αναγνώριση επιτευγμάτων στο Σύλλογο Διδασκόντων, συμμετοχή σε επιμορφώσεις και συνέδρια.</p>
+                    
+                    <h5>2. Ανάγκη για Ισχύ (nPower)</h5>
+                    <p>Για εκπαιδευτικούς με ανάγκη ισχύος: ανάθεση ρόλων ευθύνης (υπεύθυνος τομέα, συντονιστής), συμμετοχή στη λήψη αποφάσεων, δυνατότητα καθοδήγησης νεότερων συναδέλφων (mentoring), εκπροσώπηση του σχολείου σε εξωτερικούς φορείς.</p>
+                    
+                    <h5>3. Ανάγκη για Προσχώρηση (nAff)</h5>
+                    <p>Για εκπαιδευτικούς με ανάγκη προσχώρησης: προώθηση ομαδικών δραστηριοτήτων, κοινές εκδηλώσεις, δημιουργία θετικού σχολικού κλίματος, ενίσχυση της συνεργασίας μεταξύ συναδέλφων.</p>
+                    
+                    <p><strong>Συμπέρασμα:</strong> Ο αποτελεσματικός Διευθυντής πρέπει να αναγνωρίζει τις διαφορετικές ανάγκες του προσωπικού και να προσαρμόζει τα κίνητρα ανάλογα.</p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-prev" disabled>
+                    <span>⬅️</span> Προηγούμενο
+                </button>
+                <button class="btn btn-next" onclick="nextQuestion(2)">
+                    Επόμενο <span>➡️</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ΕΡΩΤΗΣΗ 2: House Path-Goal (2024) -->
+        <div class="question-card" id="q2">
+            <div class="question-header">
+                <span class="question-number">Ερώτηση 2</span>
+                <span class="year-badge">📅 2023-2024</span>
+            </div>
+            
+            <div class="question-text">
+                <strong>Θέμα 2:</strong> Η εκπαιδευτική ηγεσία αποτελεί ξεχωριστή περίπτωση ενός ιδιαίτερου τύπου ηγεσίας που εμφανίζεται στο χώρο της εκπαίδευσης, όπου ο ρόλος της διοίκησης και της ηγεσίας θεωρείται ότι είναι να στηρίζει, να υποβοηθά και να διευκολύνει το βασικό έργο των εκπαιδευτικών οργανισμών. Σύμφωνα με τη <strong>θεωρία ηγεσίας "μονοπατιών-στόχων"</strong> του <strong>R. House</strong>, ποιο στυλ ηγεσίας θεωρείται καταλληλότερο για τον Διευθυντή της Εκπαιδευτικής Μονάδας; Τεκμηριώστε με συγκεκριμένα παραδείγματα την επιλογή σας.
+            </div>
+            
+            <button class="theory-toggle" onclick="toggleTheory(2)">
+                <span class="icon">📖</span>
+                <span id="theoryBtnText2">Εμφάνιση Θεωρίας</span>
+            </button>
+            
+            <div class="theory-section" id="theory2">
+                <h3 class="theory-title">📘 Θεωρία Ηγεσίας Μονοπατιών-Στόχων του House</h3>
+                
+                <div class="theory-content">
+                    <h4>🎯 Κεντρική Ιδέα</h4>
+                    <p>Η θεωρία αναπτύχθηκε από τον <strong>Robert House</strong> και υποστηρίζει ότι ο αποτελεσματικός ηγέτης καθορίζει τα "μονοπάτια" μέσα από τα οποία οι υφιστάμενοι μπορούν να επιτύχουν τους στόχους τους. Το κατάλληλο στυλ ηγεσίας εξαρτάται από τις καταστάσεις των υφισταμένων και του περιβάλλοντος.</p>
+                    
+                    <h4>📌 Τα Τέσσερα Στυλ Ηγεσίας</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Αυταρχική/Καθοδηγητική Ηγεσία:</strong> Ο ηγέτης δίνει σαφείς οδηγίες, προγραμματίζει τη δουλειά, διατηρεί πρότυπα απόδοσης. <em>Χρήση:</em> Όταν οι εργασίες δεν είναι ξεκάθαρες.</li>
+                        <li><strong>Υποστηρικτική Ηγεσία:</strong> Ο ηγέτης είναι φιλικός, προσιτός, μεταχειρίζεται τα μέλη ως ίσα, δείχνει ενδιαφέρον για την ευημερία τους. <em>Χρήση:</em> Όταν η αυτοπεποίθηση των εργαζομένων είναι χαμηλή.</li>
+                        <li><strong>Συμμετοχική Ηγεσία:</strong> Ο ηγέτης εντάσσει τους υφισταμένους στη λήψη αποφάσεων, συσκέπτεται μαζί τους, ζητά τις προτάσεις τους. <em>Χρήση:</em> Όταν τα κίνητρα απόδοσης είναι χαμηλά.</li>
+                        <li><strong>Ηγεσία Προσανατολισμένη στο Αποτέλεσμα:</strong> Ο ηγέτης θέτει υψηλούς στόχους, αναμένει υψηλή απόδοση, δείχνει εμπιστοσύνη στην ομάδα. <em>Χρήση:</em> Όταν οι προκλήσεις είναι ανεπαρκείς.</li>
+                    </ol>
+                    
+                    <div class="keywords-box">
+                        <h5>🔑 Λέξεις-Κλειδιά</h5>
+                        <span class="keyword-tag">Path-Goal Theory</span>
+                        <span class="keyword-tag">House</span>
+                        <span class="keyword-tag">Καθοδηγητική</span>
+                        <span class="keyword-tag">Υποστηρικτική</span>
+                        <span class="keyword-tag">Συμμετοχική</span>
+                        <span class="keyword-tag">Προσανατολισμένη στο αποτέλεσμα</span>
+                        <span class="keyword-tag">Καταστασιακή Ηγεσία</span>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h5>🏫 Παράδειγμα Εφαρμογής στην Εκπαίδευση</h5>
+                        <p><strong>Υποστηρικτική Ηγεσία (πιο κατάλληλη):</strong> Ο Διευθυντής δημιουργεί κλίμα εμπιστοσύνης, σέβεται τους εκπαιδευτικούς, ακούει τα προβλήματά τους, είναι προσιτός.</p>
+                        <p><strong>Συμμετοχική Ηγεσία:</strong> Εμπλοκή των εκπαιδευτικών στη λήψη αποφάσεων μέσω του Συλλόγου Διδασκόντων, διαβούλευση για σχολικές δράσεις.</p>
+                        <p><strong>Συνδυασμός:</strong> Στην εκπαίδευση συχνά απαιτείται συνδυασμός υποστηρικτικής και συμμετοχικής ηγεσίας λόγω της φύσης του εκπαιδευτικού έργου.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="answer-section">
+                <label>✍️ Γράψτε την απάντησή σας:</label>
+                <textarea id="answer2" placeholder="Περιγράψτε τα στυλ ηγεσίας του House και τεκμηριώστε ποιο είναι καταλληλότερο για διευθυντή σχολείου..."></textarea>
+            </div>
+            
+            <button class="btn btn-show-answer" onclick="showAnswer(2)">
+                <span>📝</span> Δείτε Πρότυπη Απάντηση
+            </button>
+            
+            <div class="model-answer" id="modelAnswer2">
+                <h4>✅ Πρότυπη Απάντηση</h4>
+                <div class="model-answer-content">
+                    <p>Η <strong>θεωρία μονοπατιών-στόχων του House</strong> προτείνει τέσσερα στυλ ηγεσίας: καθοδηγητική, υποστηρικτική, συμμετοχική και προσανατολισμένη στο αποτέλεσμα.</p>
+                    
+                    <h5>Καταλληλότερο Στυλ: Υποστηρικτική & Συμμετοχική Ηγεσία</h5>
+                    <p>Για τον χώρο της εκπαίδευσης, το <strong>υποστηρικτικό</strong> και το <strong>συμμετοχικό</strong> στυλ θεωρούνται καταλληλότερα διότι:</p>
+                    
+                    <h5>Υποστηρικτική Ηγεσία - Παραδείγματα:</h5>
+                    <p>• Ο Διευθυντής είναι φιλικός και προσιτός σε όλους τους εκπαιδευτικούς<br>
+                    • Δείχνει κατανόηση σε προσωπικά προβλήματα<br>
+                    • Υποστηρίζει τους νέους εκπαιδευτικούς στην προσαρμογή τους<br>
+                    • Δημιουργεί θετικό σχολικό κλίμα</p>
+                    
+                    <h5>Συμμετοχική Ηγεσία - Παραδείγματα:</h5>
+                    <p>• Διαβούλευση με τους εκπαιδευτικούς για αποφάσεις που τους αφορούν<br>
+                    • Ενεργός λειτουργία του Συλλόγου Διδασκόντων<br>
+                    • Αξιοποίηση προτάσεων για καινοτόμες δράσεις<br>
+                    • Κοινός σχεδιασμός σχολικών εκδηλώσεων</p>
+                    
+                    <p><strong>Συμπέρασμα:</strong> Ο εκπαιδευτικός χώρος απαιτεί ηγέτες που στηρίζουν και διευκολύνουν το έργο των εκπαιδευτικών, αναγνωρίζοντας την επαγγελματική τους αυτονομία.</p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-prev" onclick="prevQuestion(1)">
+                    <span>⬅️</span> Προηγούμενο
+                </button>
+                <button class="btn btn-next" onclick="nextQuestion(3)">
+                    Επόμενο <span>➡️</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ΕΡΩΤΗΣΗ 3: Σχεδιασμός-Προγραμματισμός (2025) -->
+        <div class="question-card" id="q3">
+            <div class="question-header">
+                <span class="question-number">Ερώτηση 3</span>
+                <span class="year-badge">📅 2024-2025</span>
+            </div>
+            
+            <div class="question-text">
+                <strong>ΘΕΜΑ 1° (3,5 μονάδες):</strong> Ο σχεδιασμός-προγραμματισμός είναι μια από τις σημαντικότερες λειτουργίες της διοίκησης, η οποία αποτελεί την αφετηρία της και λειτουργεί σαν πυξίδα για κάθε Οργανισμό.<br><br>
+                <strong>Α.</strong> Να αναπτύξετε τη σημασία - πλεονεκτήματα που καθιστούν τον σχεδιασμό-προγραμματισμό ιδιαίτερα σημαντικό για τον χώρο της εκπαίδευσης και να αναφέρετε τους διαφορετικούς τύπους – επίπεδα που τον διακρίνουν δίνοντας ένα ενδεικτικό παράδειγμα. Κατά τη γνώμη σας ποιος τύπος – επίπεδο έχει εφαρμογή στην Εκπαιδευτική Μονάδα (ΕΜ) που υπηρετείτε; Τεκμηριώστε αναφέροντας ενδεικτικά παραδείγματα.<br><br>
+                <strong>Β.</strong> Ακολουθώντας τα βήματα του προγραμματισμού να σχεδιάσετε κατανομή του προσωπικού σε μια ΕΜ.
+            </div>
+            
+            <button class="theory-toggle" onclick="toggleTheory(3)">
+                <span class="icon">📖</span>
+                <span id="theoryBtnText3">Εμφάνιση Θεωρίας</span>
+            </button>
+            
+            <div class="theory-section" id="theory3">
+                <h3 class="theory-title">📘 Σχεδιασμός και Προγραμματισμός</h3>
+                
+                <div class="theory-content">
+                    <h4>🎯 Ορισμός</h4>
+                    <p>Ο <strong>προγραμματισμός</strong> είναι η διαδικασία καθορισμού των στόχων του οργανισμού και η επιλογή των μέσων για την επίτευξή τους σε συγκεκριμένο χρόνο, με αντίστοιχα προβλεπόμενο όφελος και κόστος. Προσδιορίζει πόσο αποδοτική και αποτελεσματική είναι η επιχείρηση/οργανισμός.</p>
+                    
+                    <h4>📌 Τι Αποφασίζει ο Προγραμματισμός</h4>
+                    <ul class="theory-list">
+                        <li><strong>ΤΙ</strong> θα γίνει (ΣΤΟΧΟΙ)</li>
+                        <li><strong>ΠΩΣ</strong> θα γίνει (ΣΤΡΑΤΗΓΙΚΕΣ - ΠΟΛΙΤΙΚΕΣ)</li>
+                        <li><strong>ΜΕ ΤΙ</strong> θα γίνει (ΠΟΡΟΙ - ΠΡΟΫΠΟΛΟΓΙΣΜΟΙ)</li>
+                        <li><strong>ΠΟΤΕ</strong> θα γίνει (ΧΡΟΝΟΔΙΑΓΡΑΜΜΑ)</li>
+                        <li><strong>ΠΟΙΟΣ</strong> θα το κάνει (ΚΑΤΑΝΟΜΗ ΑΡΜΟΔΙΟΤΗΤΩΝ)</li>
+                    </ul>
+                    
+                    <h4>📌 Τύποι/Επίπεδα Προγραμματισμού</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Στρατηγικός Προγραμματισμός:</strong> Μακροχρόνιος, αφορά ολόκληρο τον οργανισμό (π.χ. πενταετές πρόγραμμα βελτίωσης σχολείου, εισαγωγή καινοτόμων δράσεων STEM)</li>
+                        <li><strong>Λειτουργικός/Τακτικός/Επιχειρησιακός:</strong> Βραχυχρόνιος, εστιάζει στις τρέχουσες λειτουργίες (π.χ. ωρολόγιο πρόγραμμα, οργάνωση σχολικών εκδηλώσεων)</li>
+                    </ol>
+                    
+                    <h4>📌 Βήματα Διαδικασίας Προγραμματισμού</h4>
+                    <ol class="numbered-list">
+                        <li>Καθορισμός αποστολής</li>
+                        <li>Καθορισμός σκοπών</li>
+                        <li>Ανάλυση περιβάλλοντος (SWOT, PEST)</li>
+                        <li>Διαμόρφωση πολιτικών</li>
+                        <li>Καθορισμός στόχων</li>
+                        <li>Σχεδιασμός δράσεων</li>
+                    </ol>
+                    
+                    <div class="keywords-box">
+                        <h5>🔑 Λέξεις-Κλειδιά</h5>
+                        <span class="keyword-tag">Προγραμματισμός</span>
+                        <span class="keyword-tag">Στρατηγικός</span>
+                        <span class="keyword-tag">Λειτουργικός</span>
+                        <span class="keyword-tag">Τακτικός</span>
+                        <span class="keyword-tag">SWOT</span>
+                        <span class="keyword-tag">PEST</span>
+                        <span class="keyword-tag">Στόχοι</span>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h5>🏫 Παράδειγμα Εφαρμογής - Κατανομή Προσωπικού</h5>
+                        <p><strong>Βήμα 1 - Αποστολή:</strong> Διασφάλιση ποιοτικής εκπαίδευσης με ορθή κατανομή διδακτικού προσωπικού</p>
+                        <p><strong>Βήμα 2 - Ανάλυση:</strong> Καταγραφή αριθμού τμημάτων, μαθημάτων, ειδικοτήτων εκπαιδευτικών</p>
+                        <p><strong>Βήμα 3 - Στόχος:</strong> Κάλυψη όλων των ωρών διδασκαλίας με τους διαθέσιμους πόρους</p>
+                        <p><strong>Βήμα 4 - Δράσεις:</strong> Κατάρτιση ωρολογίου προγράμματος, ανάθεση τμημάτων, συντονισμός</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="answer-section">
+                <label>✍️ Γράψτε την απάντησή σας:</label>
+                <textarea id="answer3" placeholder="Αναπτύξτε τη σημασία του προγραμματισμού, τα είδη του και εφαρμόστε τα βήματα για την κατανομή προσωπικού..."></textarea>
+            </div>
+            
+            <button class="btn btn-show-answer" onclick="showAnswer(3)">
+                <span>📝</span> Δείτε Πρότυπη Απάντηση
+            </button>
+            
+            <div class="model-answer" id="modelAnswer3">
+                <h4>✅ Πρότυπη Απάντηση</h4>
+                <div class="model-answer-content">
+                    <h5>Α. Σημασία και Τύποι Προγραμματισμού</h5>
+                    <p><strong>Σημασία/Πλεονεκτήματα:</strong></p>
+                    <p>• Θέτει σαφείς στόχους και κατεύθυνση<br>
+                    • Βελτιώνει την αποδοτικότητα και αποτελεσματικότητα<br>
+                    • Επιτρέπει την ορθολογική κατανομή πόρων<br>
+                    • Διευκολύνει τον έλεγχο και την αξιολόγηση<br>
+                    • Μειώνει την αβεβαιότητα</p>
+                    
+                    <p><strong>Τύποι:</strong><br>
+                    1. <strong>Στρατηγικός:</strong> Μακροπρόθεσμος (π.χ. τριετές σχέδιο βελτίωσης σχολείου)<br>
+                    2. <strong>Λειτουργικός/Τακτικός:</strong> Βραχυπρόθεσμος (π.χ. μηνιαίος προγραμματισμός)</p>
+                    
+                    <p>Στη σχολική μονάδα εφαρμόζεται κυρίως ο <strong>λειτουργικός προγραμματισμός</strong> (ωρολόγιο πρόγραμμα, εκδηλώσεις).</p>
+                    
+                    <h5>Β. Βήματα για Κατανομή Προσωπικού</h5>
+                    <p><strong>1. Καθορισμός αποστολής:</strong> Ποιοτική κάλυψη διδακτικών αναγκών</p>
+                    <p><strong>2. Ανάλυση κατάστασης:</strong> 20 τμήματα, 30 εκπαιδευτικοί, 600 ώρες εβδομαδιαίως</p>
+                    <p><strong>3. Καθορισμός στόχων:</strong> Πλήρης κάλυψη ωρών, δίκαιη κατανομή, αξιοποίηση ειδικοτήτων</p>
+                    <p><strong>4. Πολιτική:</strong> Προτεραιότητα σε μαθήματα εξετάσεων, εναλλαγή πρωινών-απογευματινών</p>
+                    <p><strong>5. Δράσεις:</strong> Κατάρτιση ωρολογίου, ανάθεση τμημάτων, ορισμός υπευθύνων</p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-prev" onclick="prevQuestion(2)">
+                    <span>⬅️</span> Προηγούμενο
+                </button>
+                <button class="btn btn-next" onclick="nextQuestion(4)">
+                    Επόμενο <span>➡️</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ΕΡΩΤΗΣΗ 4: Έλεγχος (2025) -->
+        <div class="question-card" id="q4">
+            <div class="question-header">
+                <span class="question-number">Ερώτηση 4</span>
+                <span class="year-badge">📅 2024-2025</span>
+            </div>
+            
+            <div class="question-text">
+                <strong>ΘΕΜΑ 2° (2,5 μονάδες):</strong> Η άσκηση ελέγχου είναι βασική αρμοδιότητα της Διοίκησης μιας ΕΜ.<br><br>
+                <strong>Α.</strong> Δώστε έναν ορισμό για την έννοια του «ελέγχου» και να αναφέρατε τα είδη του ανάλογα με τη χρονική διεξαγωγή του. Για κάθε είδος παρουσιάστε ένα σχετικό παράδειγμα.<br><br>
+                <strong>Β.</strong> Ακολουθήστε τα βήματα της διαδικασίας ελέγχου για τη δράση υλοποίησης της εσωτερικής αξιολόγησης της ΕΜ που υπηρετείτε.
+            </div>
+            
+            <button class="theory-toggle" onclick="toggleTheory(4)">
+                <span class="icon">📖</span>
+                <span id="theoryBtnText4">Εμφάνιση Θεωρίας</span>
+            </button>
+            
+            <div class="theory-section" id="theory4">
+                <h3 class="theory-title">📘 Διαδικασία και Είδη Ελέγχου</h3>
+                
+                <div class="theory-content">
+                    <h4>🎯 Ορισμός Ελέγχου</h4>
+                    <p>Ο <strong>έλεγχος</strong> είναι η διοικητική λειτουργία που παρακολουθεί την απόδοση, συγκρίνει τα αποτελέσματα με τους στόχους και αναλαμβάνει διορθωτική δράση όπου απαιτείται. Στοχεύει στη διασφάλιση ότι οι δραστηριότητες του οργανισμού ευθυγραμμίζονται με τους καθορισμένους στόχους.</p>
+                    
+                    <h4>📌 Τα 3 Είδη Ελέγχου (με βάση τον χρόνο)</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Έλεγχος Πρόδρασης (Feedforward):</strong>
+                            <p>Λαμβάνει χώρα <em>πριν</em> ξεκινήσει η δραστηριότητα. Διασφαλίζει ότι οι στόχοι είναι σαφείς, οι κατευθύνσεις σωστές και οι πόροι διαθέσιμοι. <strong>Λύνει προβλήματα πριν εμφανιστούν.</strong></p>
+                        </li>
+                        <li><strong>Έλεγχος Παράλληλης Δράσης (Concurrent):</strong>
+                            <p>Λαμβάνει χώρα <em>κατά τη διάρκεια</em> της εργασίας. Επιβεβαιώνει ότι γίνονται τα σωστά πράγματα ως μέρος της ροής εργασίας. <strong>Λύνει προβλήματα καθώς εμφανίζονται.</strong></p>
+                        </li>
+                        <li><strong>Έλεγχος Ανάδρασης (Feedback):</strong>
+                            <p>Λαμβάνει χώρα <em>μετά</em> την ολοκλήρωση της εργασίας. Διαβεβαιώνει ότι τα τελικά αποτελέσματα είναι συμβατά με τα πρότυπα. <strong>Λύνει προβλήματα μετά την εμφάνισή τους και παρέχει πληροφορίες για μελλοντική βελτίωση.</strong></p>
+                        </li>
+                    </ol>
+                    
+                    <h4>📌 Τα 4 Βήματα της Διαδικασίας Ελέγχου</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Βήμα 1:</strong> Καθορισμός στόχων και προτύπων</li>
+                        <li><strong>Βήμα 2:</strong> Μέτρηση των αποτελεσμάτων απόδοσης</li>
+                        <li><strong>Βήμα 3:</strong> Σύγκριση αποτελεσμάτων με τους στόχους και τα πρότυπα</li>
+                        <li><strong>Βήμα 4:</strong> Ανάληψη διορθωτικής δράσης</li>
+                    </ol>
+                    
+                    <div class="keywords-box">
+                        <h5>🔑 Λέξεις-Κλειδιά</h5>
+                        <span class="keyword-tag">Έλεγχος</span>
+                        <span class="keyword-tag">Πρόδραση (Feedforward)</span>
+                        <span class="keyword-tag">Παράλληλη Δράση (Concurrent)</span>
+                        <span class="keyword-tag">Ανάδραση (Feedback)</span>
+                        <span class="keyword-tag">Πρότυπα</span>
+                        <span class="keyword-tag">Διορθωτική Δράση</span>
+                        <span class="keyword-tag">PDCA</span>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h5>🏫 Παραδείγματα στην Εκπαίδευση</h5>
+                        <p><strong>Πρόδρασης:</strong> Έλεγχος προετοιμασίας πριν από σχολική εκδήλωση (πόροι, χώροι, ωράριο)</p>
+                        <p><strong>Παράλληλης Δράσης:</strong> Παρακολούθηση διδασκαλίας (επισκέψεις σε τάξεις, peer observation)</p>
+                        <p><strong>Ανάδρασης:</strong> Αξιολόγηση αποτελεσμάτων στο τέλος τριμήνου, ανάλυση βαθμολογιών</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="answer-section">
+                <label>✍️ Γράψτε την απάντησή σας:</label>
+                <textarea id="answer4" placeholder="Δώστε τον ορισμό του ελέγχου, τα τρία είδη με παραδείγματα και εφαρμόστε τα βήματα στην εσωτερική αξιολόγηση..."></textarea>
+            </div>
+            
+            <button class="btn btn-show-answer" onclick="showAnswer(4)">
+                <span>📝</span> Δείτε Πρότυπη Απάντηση
+            </button>
+            
+            <div class="model-answer" id="modelAnswer4">
+                <h4>✅ Πρότυπη Απάντηση</h4>
+                <div class="model-answer-content">
+                    <h5>Α. Ορισμός και Είδη Ελέγχου</h5>
+                    <p><strong>Ορισμός:</strong> Ο έλεγχος είναι η διοικητική λειτουργία που παρακολουθεί την απόδοση, συγκρίνει τα αποτελέσματα με τους στόχους και αναλαμβάνει διορθωτική δράση.</p>
+                    
+                    <p><strong>Είδη:</strong><br>
+                    1. <strong>Πρόδρασης:</strong> Πριν τη δράση (π.χ. έλεγχος ετοιμότητας πριν εκδήλωση)<br>
+                    2. <strong>Παράλληλης Δράσης:</strong> Κατά τη διάρκεια (π.χ. παρακολούθηση διδασκαλίας)<br>
+                    3. <strong>Ανάδρασης:</strong> Μετά τη δράση (π.χ. αξιολόγηση τριμήνου)</p>
+                    
+                    <h5>Β. Βήματα Ελέγχου για Εσωτερική Αξιολόγηση</h5>
+                    <p><strong>Βήμα 1 - Πρότυπα:</strong><br>
+                    • 90% συμμετοχή εκπαιδευτικών<br>
+                    • Ολοκλήρωση έως τέλος Μαΐου<br>
+                    • Κάλυψη όλων των τομέων αξιολόγησης</p>
+                    
+                    <p><strong>Βήμα 2 - Μέτρηση:</strong><br>
+                    • Καταγραφή αριθμού συμμετεχόντων<br>
+                    • Παρακολούθηση χρονοδιαγράμματος<br>
+                    • Έλεγχος ολοκλήρωσης δεικτών</p>
+                    
+                    <p><strong>Βήμα 3 - Σύγκριση:</strong><br>
+                    • Συμμετοχή 85% (απόκλιση -5%)<br>
+                    • Χρονοδιάγραμμα: τηρείται<br>
+                    • Δείκτες: 3/5 ολοκληρωμένοι</p>
+                    
+                    <p><strong>Βήμα 4 - Διορθωτική δράση:</strong><br>
+                    • Ενθάρρυνση απουσιαζόντων<br>
+                    • Ανακατανομή εργασιών<br>
+                    • Υποστήριξη σε καθυστερημένους τομείς</p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-prev" onclick="prevQuestion(3)">
+                    <span>⬅️</span> Προηγούμενο
+                </button>
+                <button class="btn btn-submit" onclick="showResults()">
+                    Ολοκλήρωση Quiz <span>🏆</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ΑΠΟΤΕΛΕΣΜΑΤΑ -->
+        <div class="results-card" id="results">
+            <div class="results-icon">🎓</div>
+            <h2 class="results-title">Ολοκληρώσατε το Quiz!</h2>
+            <div class="results-summary">
+                <p>Έχετε διαβάσει τη θεωρία και απαντήσει σε όλες τις ερωτήσεις ανάπτυξης.</p>
+                <p style="margin-top: 15px;">💡 <strong>Συμβουλή:</strong> Συγκρίνετε τις απαντήσεις σας με τις πρότυπες και σημειώστε τα σημεία που χρειάζονται βελτίωση.</p>
+            </div>
+            
+            <div class="info-box" style="text-align: left; margin: 20px 0;">
+                <h4>📚 Θέματα που καλύφθηκαν:</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Θεωρία Επίκτητων Αναγκών (McClelland)</li>
+                    <li>Θεωρία Μονοπατιών-Στόχων (House)</li>
+                    <li>Σχεδιασμός και Προγραμματισμός</li>
+                    <li>Διαδικασία και Είδη Ελέγχου</li>
+                </ul>
+            </div>
+            
+            <button class="btn btn-restart" onclick="restartQuiz()">
+                <span>🔄</span> Επανάληψη Quiz
+            </button>
+        </div>
+        
+        <footer>
+            <p>📚 Quiz Διοίκησης Εκπαίδευσης - Μεταπτυχιακό Πρόγραμμα</p>
+            <p>Πανεπιστήμιο Πατρών - Τμήμα Διοικητικής Επιστήμης & Τεχνολογίας</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 4;
+        
+        function toggleTheory(num) {
+            const theory = document.getElementById('theory' + num);
+            const btn = document.getElementById('theoryBtnText' + num);
+            
+            if (theory.classList.contains('show')) {
+                theory.classList.remove('show');
+                btn.textContent = 'Εμφάνιση Θεωρίας';
+            } else {
+                theory.classList.add('show');
+                btn.textContent = 'Απόκρυψη Θεωρίας';
+            }
+        }
+        
+        function showAnswer(num) {
+            const answer = document.getElementById('modelAnswer' + num);
+            answer.classList.toggle('show');
+        }
+        
+        function nextQuestion(num) {
+            document.getElementById('q' + currentQuestion).classList.remove('active');
+            document.getElementById('q' + num).classList.add('active');
+            currentQuestion = num;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+        
+        function prevQuestion(num) {
+            document.getElementById('q' + currentQuestion).classList.remove('active');
+            document.getElementById('q' + num).classList.add('active');
+            currentQuestion = num;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+        
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = currentQuestion + '/' + totalQuestions;
+        }
+        
+        function showResults() {
+            document.getElementById('q' + currentQuestion).classList.remove('active');
+            document.getElementById('results').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function restartQuiz() {
+            document.getElementById('results').classList.remove('active');
+            currentQuestion = 1;
+            document.getElementById('q1').classList.add('active');
+            updateProgress();
+            
+            // Reset answers
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById('answer' + i).value = '';
+                document.getElementById('theory' + i).classList.remove('show');
+                document.getElementById('modelAnswer' + i).classList.remove('show');
+                document.getElementById('theoryBtnText' + i).textContent = 'Εμφάνιση Θεωρίας';
+            }
+            
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

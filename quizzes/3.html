@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Έλεγχος στη Διοίκηση Εκπαίδευσης</title>
+    <style>
+        :root {
+            --primary: #1a5276;
+            --secondary: #2980b9;
+            --accent: #16a085;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --theory-bg: #e8f6f3;
+            --theory-border: #1abc9c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .question-card.answered-correct {
+            border: 3px solid var(--success);
+        }
+
+        .question-card.answered-wrong {
+            border: 3px solid var(--danger);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .concept-tag {
+            background: var(--light);
+            color: var(--dark);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .theory-toggle {
+            background: linear-gradient(135deg, var(--theory-border), #1abc9c);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .theory-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
+        }
+
+        .theory-toggle .icon {
+            transition: transform 0.3s ease;
+        }
+
+        .theory-toggle.open .icon {
+            transform: rotate(180deg);
+        }
+
+        .theory-box {
+            background: var(--theory-bg);
+            border-left: 5px solid var(--theory-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .theory-box.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .theory-title {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theory-description {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .theory-keywords {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .theory-keywords strong {
+            color: var(--primary);
+        }
+
+        .keyword-tag {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin: 3px;
+        }
+
+        .theory-example {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .theory-example strong {
+            color: var(--warning);
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: var(--secondary);
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: var(--secondary);
+            background: #e3f2fd;
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: #d4edda;
+        }
+
+        .option.wrong {
+            border-color: var(--danger);
+            background: #f8d7da;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--dark);
+            flex-shrink: 0;
+        }
+
+        .option.correct .option-letter {
+            background: var(--success);
+            color: white;
+        }
+
+        .option.wrong .option-letter {
+            background: var(--danger);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .section-divider {
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, white, transparent);
+        }
+
+        .section-divider span {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .results-card.show {
+            display: block;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .grade-badge {
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .grade-excellent {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .grade-good {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .grade-average {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .grade-poor {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .concept-summary {
+            text-align: left;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 15px;
+        }
+
+        .concept-summary h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .concept-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .concept-name {
+            font-weight: 500;
+        }
+
+        .concept-score {
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .concept-score.perfect {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .concept-score.partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .concept-score.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .reference {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .stats-bar {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .option {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Έλεγχος στη Διοίκηση Εκπαίδευσης</h1>
+            <p>Διαδικασίες & Συστήματα Ελέγχου - Κουίζ Μελέτης</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="current-question">1</div>
+                <div class="stat-label">Τρέχουσα Ερώτηση</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total-questions">20</div>
+                <div class="stat-label">Σύνολο Ερωτήσεων</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="correct-count">0</div>
+                <div class="stat-label">Σωστές</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="wrong-count">0</div>
+                <div class="stat-label">Λάθος</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+        </div>
+
+        <div id="quiz-container"></div>
+
+        <div class="results-card" id="results-card">
+            <div class="score-circle">
+                <div class="score-value" id="final-score">0%</div>
+                <div class="score-label">Βαθμολογία</div>
+            </div>
+            <div class="grade-badge" id="grade-badge">Αξιολόγηση</div>
+            <h2 id="results-message"></h2>
+            <div class="concept-summary" id="concept-summary">
+                <h3>📈 Ανάλυση ανά Έννοια</h3>
+                <div id="concept-results"></div>
+            </div>
+            <button class="btn-restart" onclick="restartQuiz()">🔄 Επανάληψη Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            // ===== ΕΝΝΟΙΑ 1: Ορισμός & Ρόλος Ελέγχου =====
+            {
+                concept: "Ορισμός & Ρόλος Ελέγχου",
+                theory: {
+                    title: "📖 Τι είναι ο Έλεγχος (Control)",
+                    description: "Ο Έλεγχος είναι η διαδικασία μέτρησης της απόδοσης και της ανάληψης δράσης για διασφάλιση των επιθυμητών στόχων, οι οποίοι έχουν τεθεί από το στάδιο του προγραμματισμού. Έχει θετικό και αναγκαίο ρόλο στη διαδικασία του μάνατζμεντ, διασφαλίζοντας ότι γίνονται τα σωστά πράγματα, με τον σωστό τρόπο και τη σωστή στιγμή. Συνδέεται άμεσα με την οργανωσιακή μάθηση και την επιθεώρηση μετά την πράξη.",
+                    keywords: ["Μέτρηση απόδοσης", "Διασφάλιση στόχων", "Οργανωσιακή μάθηση", "Διορθωτική δράση"],
+                    example: "Σε μια σχολική μονάδα, ο διευθυντής παρακολουθεί τις επιδόσεις των μαθητών στα μαθηματικά (μέτρηση), τις συγκρίνει με τον στόχο βελτίωσης 10% (σύγκριση), και αν υπάρχει απόκλιση, οργανώνει ενισχυτική διδασκαλία (διορθωτική δράση).",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 3-4"
+                },
+                question: "Ποια είναι η βασική αποστολή της λειτουργίας του Ελέγχου στο Μάνατζμεντ;",
+                options: [
+                    "Η δημιουργία νέων στόχων για τον οργανισμό",
+                    "Η μέτρηση της απόδοσης και η ανάληψη δράσης για επίτευξη στόχων",
+                    "Η πρόσληψη και εκπαίδευση νέου προσωπικού",
+                    "Η ανάπτυξη νέων προϊόντων και υπηρεσιών"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Ορισμός & Ρόλος Ελέγχου",
+                theory: {
+                    title: "📖 Ο Ρόλος του Ελέγχου στη Διαδικασία Μάνατζμεντ",
+                    description: "Ο έλεγχος αποτελεί την τέταρτη λειτουργία του μάνατζμεντ (μετά τον Προγραμματισμό, την Οργάνωση και την Ηγεσία) και διασφαλίζει ότι τα σχέδια υλοποιούνται σύμφωνα με τους αρχικούς στόχους. Διασφαλίζει τη συνέχεια μεταξύ προγραμματισμού και αποτελέσματος. Χωρίς αποτελεσματικό έλεγχο, οι οργανισμοί δεν μπορούν να ξέρουν αν πετυχαίνουν τους στόχους τους.",
+                    keywords: ["4η λειτουργία", "Κλείσιμο κύκλου", "Ανατροφοδότηση", "Συνέχεια"],
+                    example: "Στο τέλος της σχολικής χρονιάς, η σχολική μονάδα αξιολογεί αν επετεύχθη ο στόχος αύξησης της συμμετοχής σε πολιτιστικά προγράμματα και τι πρέπει να αλλάξει για την επόμενη χρονιά.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 4"
+                },
+                question: "Ο έλεγχος διασφαλίζει ότι:",
+                options: [
+                    "Οι εργαζόμενοι λαμβάνουν αυξήσεις",
+                    "Γίνονται τα σωστά πράγματα, με τον σωστό τρόπο και τη σωστή στιγμή",
+                    "Υπάρχει πάντα περίσσευμα πόρων",
+                    "Οι αποφάσεις λαμβάνονται μόνο από τη διοίκηση"
+                ],
+                correct: 1
+            },
+            // ===== ΕΝΝΟΙΑ 2: Τα 3 Είδη Ελέγχου =====
+            {
+                concept: "Τα 3 Είδη Ελέγχου",
+                theory: {
+                    title: "📖 Έλεγχος Πρόδρασης (Feedforward Control)",
+                    description: "Ο Έλεγχος Πρόδρασης λαμβάνει χώρα ΠΡΙΝ ξεκινήσει η εργασιακή δραστηριότητα. Στόχος του είναι να διασφαλίσει ότι οι στόχοι είναι σαφείς, έχουν τεθεί οι σωστές κατευθύνσεις και είναι διαθέσιμοι οι κατάλληλοι πόροι για την επίτευξη των στόχων. Επικεντρώνεται στην ΠΟΙΟΤΗΤΑ ΤΩΝ ΠΟΡΩΝ και έχει προληπτικό χαρακτήρα.",
+                    keywords: ["Πριν την ενέργεια", "Πρόληψη", "Ποιότητα πόρων", "Προετοιμασία", "Feedforward"],
+                    example: "Πριν την έναρξη της σχολικής χρονιάς, ο διευθυντής ελέγχει αν υπάρχουν αρκετοί εκπαιδευτικοί, αν τα εργαστήρια είναι εξοπλισμένα και αν το αναλυτικό πρόγραμμα είναι έτοιμο.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 5"
+                },
+                question: "Ο έλεγχος πρόδρασης (feedforward control) εφαρμόζεται:",
+                options: [
+                    "Μετά την ολοκλήρωση της εργασίας",
+                    "Κατά τη διάρκεια της εργασιακής διαδικασίας",
+                    "Πριν ξεκινήσει η εργασιακή δραστηριότητα",
+                    "Μόνο σε περιπτώσεις κρίσης"
+                ],
+                correct: 2
+            },
+            {
+                concept: "Τα 3 Είδη Ελέγχου",
+                theory: {
+                    title: "📖 Έλεγχος Παράλληλης Δράσης (Concurrent Control)",
+                    description: "Ο Έλεγχος Παράλληλης Δράσης επικεντρώνεται στο τι συμβαίνει ΚΑΤΑ ΤΗ ΔΙΑΡΚΕΙΑ της εργασιακής διαδικασίας. Παρακολουθεί τις συνεχιζόμενες δράσεις για να διασφαλίσει ότι όλα γίνονται σύμφωνα με το σχέδιο. Το μεγάλο πλεονέκτημα είναι ότι μπορεί να μειώσει τις απώλειες λόγω μη αποδεκτών τελικών προϊόντων ή υπηρεσιών, καθώς επιτρέπει άμεση διόρθωση.",
+                    keywords: ["Κατά τη διάρκεια", "Real-time", "Παρακολούθηση", "Άμεση διόρθωση", "Concurrent"],
+                    example: "Κατά τη διάρκεια του μαθήματος, ο εκπαιδευτικός παρατηρεί τις αντιδράσεις των μαθητών και προσαρμόζει τον τρόπο διδασκαλίας του αν διαπιστώσει ότι δεν κατανοούν.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 6"
+                },
+                question: "Ποιο είδος ελέγχου παρακολουθεί τις δραστηριότητες σε πραγματικό χρόνο για να διασφαλίσει ότι γίνονται σύμφωνα με το σχέδιο;",
+                options: [
+                    "Έλεγχος πρόδρασης (feedforward)",
+                    "Έλεγχος ανάδρασης (feedback)",
+                    "Έλεγχος παράλληλης δράσης (concurrent)",
+                    "Στρατηγικός έλεγχος"
+                ],
+                correct: 2
+            },
+            {
+                concept: "Τα 3 Είδη Ελέγχου",
+                theory: {
+                    title: "📖 Έλεγχος Ανάδρασης (Feedback Control)",
+                    description: "Ο Έλεγχος Ανάδρασης λαμβάνει χώρα ΜΕΤΑ την ολοκλήρωση της εργασίας. Επικεντρώνεται στην ποιότητα των ΤΕΛΙΚΩΝ ΑΠΟΤΕΛΕΣΜΑΤΩΝ και παρέχει χρήσιμες πληροφορίες για τη βελτίωση των μελλοντικών δράσεων. Σύμφωνα με τον καθηγητή, είναι το πιο σημαντικό είδος ελέγχου για τη μελλοντική βελτίωση.",
+                    keywords: ["Μετά την πράξη", "Ανατροφοδότηση", "Τελικά αποτελέσματα", "Μελλοντική βελτίωση", "Feedback"],
+                    example: "Μετά τις εξετάσεις, ο σύλλογος διδασκόντων αναλύει τα αποτελέσματα για να εντοπίσει αδυναμίες στη διδασκαλία και να βελτιώσει τις μεθόδους για την επόμενη χρονιά.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 7"
+                },
+                question: "Ο έλεγχος ανάδρασης (feedback control) είναι ιδιαίτερα σημαντικός επειδή:",
+                options: [
+                    "Αποτρέπει τα λάθη πριν συμβούν",
+                    "Παρέχει πληροφορίες για βελτίωση μελλοντικών δράσεων",
+                    "Είναι ο πιο οικονομικός τύπος ελέγχου",
+                    "Δεν απαιτεί ανθρώπινους πόρους"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Τα 3 Είδη Ελέγχου",
+                theory: {
+                    title: "📖 Σύγκριση των 3 Ειδών Ελέγχου",
+                    description: "Τα τρία είδη ελέγχου (Πρόδρασης, Παράλληλης Δράσης, Ανάδρασης) λειτουργούν συμπληρωματικά σε διαφορετικές φάσεις: ΠΡΙΝ → ΚΑΤΑ ΤΗ ΔΙΑΡΚΕΙΑ → ΜΕΤΑ. Ο αποτελεσματικός manager χρησιμοποιεί και τα τρία είδη για να εξασφαλίσει τη μέγιστη δυνατή επίτευξη στόχων.",
+                    keywords: ["Πριν-Κατά-Μετά", "Συμπληρωματικότητα", "Ολοκληρωμένος έλεγχος"],
+                    example: "Για ένα εκπαιδευτικό πρόγραμμα: (1) Πρόδρασης: Έλεγχος ετοιμότητας πόρων πριν την έναρξη, (2) Παράλληλος: Παρακολούθηση προόδου κατά την υλοποίηση, (3) Ανάδρασης: Αξιολόγηση αποτελεσμάτων μετά την ολοκλήρωση.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 8"
+                },
+                question: "Ποια είναι η σωστή χρονική σειρά εφαρμογής των ειδών ελέγχου;",
+                options: [
+                    "Ανάδρασης → Παράλληλης → Πρόδρασης",
+                    "Παράλληλης → Πρόδρασης → Ανάδρασης",
+                    "Πρόδρασης → Παράλληλης → Ανάδρασης",
+                    "Ανάδρασης → Πρόδρασης → Παράλληλης"
+                ],
+                correct: 2
+            },
+            // ===== ΕΝΝΟΙΑ 3: Τα 4 Βήματα Διαδικασίας Ελέγχου =====
+            {
+                concept: "4 Βήματα Διαδικασίας Ελέγχου",
+                theory: {
+                    title: "📖 Βήμα 1: Καθορισμός Στόχων & Προτύπων",
+                    description: "Το πρώτο βήμα περιλαμβάνει τον καθορισμό σαφών στόχων και προτύπων απόδοσης. Υπάρχουν δύο είδη προτύπων: (1) Πρότυπα Εκροών: μετρούν αποτελέσματα βάσει ποσότητας, ποιότητας, κόστους ή χρόνου, (2) Πρότυπα Εισροών: μετρούν τις προσπάθειες και τους πόρους που δαπανώνται. Τα πρότυπα πρέπει να είναι SMART (Συγκεκριμένα, Μετρήσιμα, Επιτεύξιμα, Σχετικά, Χρονικά προσδιορισμένα).",
+                    keywords: ["Στόχοι", "Πρότυπα", "Εκροές", "Εισροές", "SMART"],
+                    example: "Ένα σχολείο θέτει ως πρότυπο εκροής: «Βελτίωση μέσου όρου βαθμολογίας στα μαθηματικά κατά 10% σε ένα εξάμηνο» και ως πρότυπο εισροής: «Υλοποίηση 20 ωρών ενισχυτικής διδασκαλίας ανά μήνα».",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 11, 13"
+                },
+                question: "Στο πρώτο βήμα της διαδικασίας ελέγχου, τα πρότυπα εκροών μετρούν:",
+                options: [
+                    "Τις προσπάθειες που δαπανώνται για ένα έργο",
+                    "Τα αποτελέσματα βάσει ποσότητας, ποιότητας, κόστους ή χρόνου",
+                    "Τη διάθεση των εργαζομένων",
+                    "Τον αριθμό των συσκέψεων που πραγματοποιούνται"
+                ],
+                correct: 1
+            },
+            {
+                concept: "4 Βήματα Διαδικασίας Ελέγχου",
+                theory: {
+                    title: "📖 Βήμα 2: Μέτρηση Αποτελεσμάτων Απόδοσης",
+                    description: "Το δεύτερο βήμα αφορά την ακριβή μέτρηση των αποτελεσμάτων της πραγματικής απόδοσης ή/και των προσπαθειών για απόδοση. Πρέπει να εντοπίζει τυχόν σημαντικές διαφορές μεταξύ των πραγματικών αποτελεσμάτων και του αρχικού σχεδίου. ΚΡΙΤΙΚΟ ΣΗΜΕΙΟ: Ο αποτελεσματικός έλεγχος απαιτεί αξιόπιστες και έγκυρες μετρήσεις.",
+                    keywords: ["Μέτρηση", "Πραγματική απόδοση", "Διαφορές", "Αξιοπιστία"],
+                    example: "Στην εκπαίδευση, η μέτρηση μπορεί να περιλαμβάνει: βαθμολογίες μαθητών, ποσοστά επιτυχίας, αριθμός απουσιών, αξιολογήσεις διδασκαλίας, ερωτηματολόγια ικανοποίησης γονέων.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 14"
+                },
+                question: "Ποιος είναι ο κύριος στόχος του δεύτερου βήματος (μέτρηση αποτελεσμάτων);",
+                options: [
+                    "Η τιμωρία των εργαζομένων με χαμηλή απόδοση",
+                    "Η ακριβής μέτρηση της πραγματικής απόδοσης και εντοπισμός διαφορών",
+                    "Η αύξηση του προϋπολογισμού",
+                    "Η μείωση του αριθμού των εργαζομένων"
+                ],
+                correct: 1
+            },
+            {
+                concept: "4 Βήματα Διαδικασίας Ελέγχου",
+                theory: {
+                    title: "📖 Βήμα 3: Σύγκριση Αποτελεσμάτων με Πρότυπα",
+                    description: "Το τρίτο βήμα αφορά τη σύγκριση των μετρηθέντων αποτελεσμάτων με τους στόχους και τα πρότυπα. Η ανάγκη για δράση αντικατοπτρίζει τη διαφορά μεταξύ επιθυμητής και πραγματικής απόδοσης. Υπάρχουν τρεις μέθοδοι σύγκρισης: (1) Ιστορική σύγκριση: με προηγούμενα αποτελέσματα, (2) Σχετική σύγκριση (Benchmarking): με τους καλύτερους του κλάδου, (3) Σύγκριση μηχανικής: με μαθηματικά πρότυπα.",
+                    keywords: ["Σύγκριση", "Απόκλιση", "Benchmarking", "Ιστορική σύγκριση"],
+                    example: "Το σχολείο συγκρίνει τα αποτελέσματα: (1) Ιστορικά: με την προηγούμενη χρονιά, (2) Benchmarking: με τα καλύτερα σχολεία της περιφέρειας, (3) Με τον στόχο: βελτίωση 10%.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 15"
+                },
+                question: "Η τεχνική 'benchmarking' στο βήμα της σύγκρισης σημαίνει:",
+                options: [
+                    "Σύγκριση με τα αποτελέσματα του προηγούμενου έτους",
+                    "Σύγκριση με μαθηματικά πρότυπα",
+                    "Σύγκριση με τους καλύτερους του κλάδου",
+                    "Σύγκριση με τις προσδοκίες των γονέων"
+                ],
+                correct: 2
+            },
+            {
+                concept: "4 Βήματα Διαδικασίας Ελέγχου",
+                theory: {
+                    title: "📖 Βήμα 4: Ανάληψη Διορθωτικής Δράσης",
+                    description: "Το τέταρτο βήμα αφορά την ανάληψη δράσης όταν υπάρχει ασυμφωνία μεταξύ επιθυμητής και πραγματικής απόδοσης. Σημαντική έννοια: «Μάνατζμεντ κατ' εξαίρεση» - επικεντρώνει την προσοχή στις καταστάσεις όπου υπάρχει η μεγαλύτερη ανάγκη για διορθωτικές ενέργειες. Υπάρχουν δύο είδη εξαιρέσεων: Προβληματικές καταστάσεις και Καταστάσεις ευκαιριών.",
+                    keywords: ["Διορθωτική δράση", "Μάνατζμεντ κατ' εξαίρεση", "Προβληματικές καταστάσεις", "Ευκαιρίες"],
+                    example: "Αν η απόδοση των μαθητών είναι κάτω από το στόχο, ο διευθυντής μπορεί να αποφασίσει: επιπλέον ώρες ενισχυτικής διδασκαλίας, αλλαγή διδακτικών μεθόδων, επιμόρφωση εκπαιδευτικών, ή αναθεώρηση των στόχων αν ήταν μη ρεαλιστικοί.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 16"
+                },
+                question: "Τι σημαίνει 'Μάνατζμεντ κατ' εξαίρεση';",
+                options: [
+                    "Διοίκηση μόνο σε καταστάσεις κρίσης",
+                    "Επικέντρωση προσοχής στις περιπτώσεις με τη μεγαλύτερη ανάγκη διορθωτικών ενεργειών",
+                    "Αποφυγή λήψης αποφάσεων",
+                    "Ανάθεση όλων των ευθυνών στους υφισταμένους"
+                ],
+                correct: 1
+            },
+            // ===== ΕΝΝΟΙΑ 4: Εσωτερικός vs Εξωτερικός Έλεγχος =====
+            {
+                concept: "Εσωτερικός vs Εξωτερικός Έλεγχος",
+                theory: {
+                    title: "📖 Εσωτερικός Έλεγχος",
+                    description: "Ο Εσωτερικός Έλεγχος επιτρέπει στα άτομα και τις ομάδες με κίνητρα να ασκούν ΑΥΤΟΠΕΙΘΑΡΧΙΑ στην εκπλήρωση των εργασιακών προσδοκιών τους. Βασίζεται στην εσωτερική παρακίνηση, την αυτονομία και την υπευθυνότητα των εργαζομένων. Είναι πιο αποτελεσματικός σε περιβάλλοντα με υψηλή εμπιστοσύνη και επαγγελματισμό.",
+                    keywords: ["Αυτοπειθαρχία", "Αυτονομία", "Εσωτερικά κίνητρα", "Εμπιστοσύνη"],
+                    example: "Ένας έμπειρος εκπαιδευτικός θέτει τους δικούς του στόχους βελτίωσης, παρακολουθεί την πρόοδό του και προσαρμόζει τις μεθόδους του χωρίς να χρειάζεται συνεχή επίβλεψη από τον διευθυντή.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 9"
+                },
+                question: "Ο εσωτερικός έλεγχος βασίζεται κυρίως στην:",
+                options: [
+                    "Αυστηρή επίβλεψη από τους προϊσταμένους",
+                    "Αυτοπειθαρχία και εσωτερικά κίνητρα των εργαζομένων",
+                    "Χρήση τεχνολογικών συστημάτων παρακολούθησης",
+                    "Εξωτερικούς ελεγκτές και επιθεωρητές"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Εσωτερικός vs Εξωτερικός Έλεγχος",
+                theory: {
+                    title: "📖 Εξωτερικός Έλεγχος",
+                    description: "Ο Εξωτερικός Έλεγχος λαμβάνει χώρα μέσω προσωπικής επίβλεψης και της χρήσης πρότυπων διοικητικών συστημάτων. Περιλαμβάνει: άμεση παρακολούθηση, κανονισμούς, αναφορές, αξιολογήσεις και επιθεωρήσεις. Είναι απαραίτητος σε περιπτώσεις χαμηλής εμπιστοσύνης ή έλλειψης εμπειρίας.",
+                    keywords: ["Επίβλεψη", "Διοικητικά συστήματα", "Κανονισμοί", "Εποπτεία"],
+                    example: "Στην εκπαίδευση, ο εξωτερικός έλεγχος περιλαμβάνει: επισκέψεις σχολικών συμβούλων, εξωτερικές αξιολογήσεις, επιθεωρήσεις από την εκπαιδευτική πολιτική, τυποποιημένες εξετάσεις.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 9"
+                },
+                question: "Ο εξωτερικός έλεγχος υλοποιείται μέσω:",
+                options: [
+                    "Αυτοαξιολόγησης και προσωπικών στόχων",
+                    "Προσωπικής επίβλεψης και πρότυπων διοικητικών συστημάτων",
+                    "Αποκλειστικά ψηφιακών εργαλείων",
+                    "Ομαδικών συζητήσεων χωρίς τυπικότητες"
+                ],
+                correct: 1
+            },
+            // ===== ΕΝΝΟΙΑ 5: Γραφειοκρατικός vs Έλεγχος Κουλτούρας =====
+            {
+                concept: "Γραφειοκρατικός vs Έλεγχος Κουλτούρας",
+                theory: {
+                    title: "📖 Γραφειοκρατικός Έλεγχος",
+                    description: "Ο Γραφειοκρατικός Έλεγχος επηρεάζει τη συμπεριφορά μέσα από: εξουσία, πολιτικές, πρότυπες διαδικασίες, περιγραφές εργασίας, προϋπολογισμούς και καθημερινή επίβλεψη. Βασίζεται σε τυπικούς κανόνες και ιεραρχία. Είναι χαρακτηριστικό των παραδοσιακών γραφειοκρατικών οργανισμών.",
+                    keywords: ["Εξουσία", "Πολιτικές", "Διαδικασίες", "Ιεραρχία", "Τυπικοί κανόνες"],
+                    example: "Σε μια σχολική μονάδα: ο κανονισμός λειτουργίας, το ωρολόγιο πρόγραμμα, οι διαδικασίες αδειών, τα υποχρεωτικά έντυπα αξιολόγησης, η τήρηση του προϋπολογισμού.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 10"
+                },
+                question: "Ο γραφειοκρατικός έλεγχος επηρεάζει τη συμπεριφορά μέσω:",
+                options: [
+                    "Κοινών αξιών και άτυπων προσδοκιών",
+                    "Εξουσίας, πολιτικών, διαδικασιών και προϋπολογισμών",
+                    "Αυτόνομης λήψης αποφάσεων",
+                    "Καλλιτεχνικών προγραμμάτων"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Γραφειοκρατικός vs Έλεγχος Κουλτούρας",
+                theory: {
+                    title: "📖 Έλεγχος Κουλτούρας",
+                    description: "Ο Έλεγχος Κουλτούρας επηρεάζει τη συμπεριφορά μέσα από νόρμες και προσδοκίες που θέτει η οργανωσιακή κουλτούρα. Βασίζεται σε κοινές αξίες, πεποιθήσεις, παραδόσεις και άτυπους κανόνες. Είναι πιο ευέλικτος και προσαρμοστικός από τον γραφειοκρατικό έλεγχο.",
+                    keywords: ["Νόρμες", "Κουλτούρα", "Κοινές αξίες", "Παραδόσεις", "Άτυποι κανόνες"],
+                    example: "Σε ένα σχολείο με ισχυρή κουλτούρα συνεργασίας, οι εκπαιδευτικοί μοιράζονται υλικό και ιδέες χωρίς να τους υποχρεώνει κάποιος κανονισμός - το κάνουν επειδή «έτσι κάνουμε τα πράγματα εδώ».",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 10"
+                },
+                question: "Σε ποιον τύπο ελέγχου η συμπεριφορά επηρεάζεται κυρίως από κοινές αξίες και άτυπους κανόνες;",
+                options: [
+                    "Γραφειοκρατικός έλεγχος",
+                    "Έλεγχος κουλτούρας",
+                    "Εξωτερικός έλεγχος",
+                    "Οικονομικός έλεγχος"
+                ],
+                correct: 1
+            },
+            // ===== ΕΝΝΟΙΑ 6: Κύκλος PDCA/Deming =====
+            {
+                concept: "Κύκλος PDCA (Deming)",
+                theory: {
+                    title: "📖 Ο Κύκλος PDCA (Plan-Do-Check-Act)",
+                    description: "Ο Κύκλος PDCA (ή Κύκλος Deming) είναι ένα εργαλείο συνεχούς βελτίωσης με τέσσερα στάδια: (1) PLAN (Σχεδιασμός): Σχεδιασμός της υπηρεσίας/διαδικασίας, (2) DO (Δράση): Εφαρμογή του σχεδιασμού σε μικρή κλίμακα, (3) CHECK (Έλεγχος): Δοκιμές και έλεγχοι για διαπίστωση αποκλίσεων, (4) ACT (Βελτίωση): Διορθωτικές ενέργειες και ευρεία εφαρμογή. Ο κύκλος επαναλαμβάνεται συνεχώς.",
+                    keywords: ["PDCA", "Deming", "Συνεχής βελτίωση", "Plan-Do-Check-Act"],
+                    example: "Σχολείο που θέλει να βελτιώσει την ψηφιακή εκπαίδευση: (1) PLAN: Σχεδιάζει πρόγραμμα εκπαίδευσης εκπαιδευτικών, (2) DO: Πιλοτική εφαρμογή σε ένα τμήμα, (3) CHECK: Αξιολόγηση αποτελεσμάτων, (4) ACT: Βελτιώσεις και επέκταση σε όλο το σχολείο.",
+                    reference: "«ΔΕ 9 ΔΟΠ στην Εκπαίδευση.pdf», Διαφ. 31"
+                },
+                question: "Ποια είναι η σωστή σειρά των σταδίων στον Κύκλο PDCA;",
+                options: [
+                    "Do → Plan → Act → Check",
+                    "Plan → Do → Check → Act",
+                    "Check → Plan → Do → Act",
+                    "Act → Plan → Do → Check"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Κύκλος PDCA (Deming)",
+                theory: {
+                    title: "📖 Εφαρμογή του PDCA στην Εκπαίδευση",
+                    description: "Ο Κύκλος PDCA είναι ιδανικός για την εκπαίδευση επειδή προωθεί τη συστηματική βελτίωση. Το στάδιο CHECK (Έλεγχος) είναι κρίσιμο: περιλαμβάνει δοκιμές και ελέγχους για διαπίστωση αποκλίσεων και προβλημάτων. Το στάδιο ACT δεν σημαίνει απλά «δράση», αλλά «βελτίωση βασισμένη στα αποτελέσματα του ελέγχου».",
+                    keywords: ["Συστηματική βελτίωση", "Αποκλίσεις", "Διορθωτικές ενέργειες"],
+                    example: "Ένα τμήμα πανεπιστημίου αντιμετωπίζει καθυστερήσεις στις αποφοιτήσεις. Εφαρμόζει τον κύκλο PDCA: (1) Σχεδιάζει παρεμβάσεις, (2) Εφαρμόζει πιλοτικά, (3) Ελέγχει αν μειώθηκαν οι καθυστερήσεις, (4) Βελτιώνει και επεκτείνει.",
+                    reference: "«3β Εφαρμογή Διαδικασίας Ελέγχου στην Εκπαίδευση.pdf»"
+                },
+                question: "Στον Κύκλο PDCA, το στάδιο 'Check' περιλαμβάνει:",
+                options: [
+                    "Την εφαρμογή του σχεδίου σε μεγάλη κλίμακα",
+                    "Τον αρχικό σχεδιασμό της διαδικασίας",
+                    "Δοκιμές και ελέγχους για διαπίστωση αποκλίσεων",
+                    "Τη διάλυση της ομάδας εργασίας"
+                ],
+                correct: 2
+            },
+            // ===== ΕΝΝΟΙΑ 7: Balanced Scorecard =====
+            {
+                concept: "Balanced Scorecard (BSC)",
+                theory: {
+                    title: "📖 Τι είναι το Balanced Scorecard",
+                    description: "Το Balanced Scorecard (BSC) ή Ισορροπημένη Κάρτα είναι ένα εργαλείο διοίκησης που μετρά την επιτυχία από τέσσερις σημαντικές πλευρές: (1) Οικονομική απόδοση, (2) Ικανοποίηση πελατών/χρηστών, (3) Εσωτερικές διαδικασίες, (4) Μάθηση και ανάπτυξη. Βασίζεται στην ιδέα ότι η επιτυχία δεν μετριέται μόνο με οικονομικούς δείκτες. Στηρίζεται σε σχέσεις αιτίας-αποτελέσματος.",
+                    keywords: ["BSC", "4 προοπτικές", "Ισορροπημένη μέτρηση", "Στρατηγικοί στόχοι"],
+                    example: "Σε σχολείο: (1) Οικονομικά: αποτελεσματική διαχείριση προϋπολογισμού, (2) Πελάτες: ικανοποίηση μαθητών/γονέων, (3) Εσωτερικές διαδικασίες: ποιότητα διδασκαλίας, (4) Μάθηση: επιμόρφωση εκπαιδευτικών.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 24 & «MANEDU_6.pdf», Διαφ. 27-30"
+                },
+                question: "Το Balanced Scorecard (BSC) μετρά την απόδοση μέσω:",
+                options: [
+                    "Αποκλειστικά οικονομικών δεικτών",
+                    "Τεσσάρων προοπτικών: οικονομική, πελατών, εσωτερικών διαδικασιών, μάθησης",
+                    "Μόνο της ικανοποίησης των εργαζομένων",
+                    "Συγκρίσεων με ανταγωνιστές"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Balanced Scorecard (BSC)",
+                theory: {
+                    title: "📖 Οι 4 Προοπτικές του BSC στην Εκπαίδευση",
+                    description: "Στο εκπαιδευτικό πλαίσιο: (1) Οικονομική: αποτελεσματική διαχείριση πόρων και υποδομών, (2) Πελάτες: μαθητές, γονείς - ικανοποίηση και μαθησιακά αποτελέσματα, (3) Εσωτερικές διαδικασίες: ποιότητα διδασκαλίας, διοικητική αποτελεσματικότητα, (4) Μάθηση και ανάπτυξη: επαγγελματική ανάπτυξη εκπαιδευτικών, καινοτομία. Κάθε προοπτική έχει στόχους, δείκτες και δράσεις.",
+                    keywords: ["Εκπαιδευτική εφαρμογή", "Μαθητές/Γονείς", "Ποιότητα διδασκαλίας", "Επαγγελματική ανάπτυξη"],
+                    example: "Δείκτης για την προοπτική 'Πελάτες': Ποσοστό γονέων που δηλώνουν ικανοποιημένοι από τη σχολική μονάδα. Δείκτης για 'Μάθηση': Ώρες επιμόρφωσης ανά εκπαιδευτικό ετησίως.",
+                    reference: "«MANEDU_6.pdf», Διαφ. 29-30"
+                },
+                question: "Στο BSC, η προοπτική 'Μάθηση και Ανάπτυξη' στην εκπαίδευση αφορά κυρίως:",
+                options: [
+                    "Τη βελτίωση της βαθμολογίας των μαθητών",
+                    "Την επαγγελματική ανάπτυξη και επιμόρφωση των εκπαιδευτικών",
+                    "Τη μείωση του κόστους λειτουργίας",
+                    "Την αύξηση του αριθμού των μαθητών"
+                ],
+                correct: 1
+            },
+            // ===== ΕΝΝΟΙΑ 8: MBO =====
+            {
+                concept: "Διοίκηση με Στόχους (MBO)",
+                theory: {
+                    title: "📖 Τι είναι το MBO (Management By Objectives)",
+                    description: "Το MBO (Διοίκηση με Στόχους) αναπτύχθηκε από τον Peter Drucker (1970). Είναι μια διαδικασία κατά την οποία τα στελέχη αναγνωρίζουν ΑΠΟ ΚΟΙΝΟΥ με τους υφισταμένους τους κοινούς στόχους και καθορίζουν τις περιοχές ευθύνης καθενός. Περιλαμβάνει: στόχους απόδοσης, σχέδια επίτευξης, πρότυπα μέτρησης, διαδικασίες ανάλυσης αποτελεσμάτων.",
+                    keywords: ["MBO", "Drucker", "Κοινοί στόχοι", "Συμμετοχική διοίκηση", "Πρότυπα απόδοσης"],
+                    example: "Ο διευθυντής συζητά με τον εκπαιδευτικό και συμφωνούν: «Στόχος: Βελτίωση επιδόσεων μαθητών κατά 15%. Μέσα: Ενισχυτική διδασκαλία, νέο υλικό. Μέτρηση: Τριμηνιαίες αξιολογήσεις. Αξιολόγηση: Στο τέλος του έτους».",
+                    reference: "«MANEDU_2.pdf», Διαφ. 80-84"
+                },
+                question: "Ποιο είναι το βασικό χαρακτηριστικό του MBO;",
+                options: [
+                    "Οι στόχοι τίθενται αποκλειστικά από τη διοίκηση",
+                    "Στελέχη και υφιστάμενοι καθορίζουν από κοινού τους στόχους",
+                    "Δεν υπάρχει μέτρηση της απόδοσης",
+                    "Οι εργαζόμενοι δεν έχουν καμία ευθύνη"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Διοίκηση με Στόχους (MBO)",
+                theory: {
+                    title: "📖 Πλεονεκτήματα και Μειονεκτήματα του MBO",
+                    description: "Πλεονεκτήματα: Βελτιώνει όλες τις λειτουργίες του μάνατζμεντ, ενθαρρύνει συμμετοχή, δημιουργεί σύστημα υποκίνησης, βοηθά στον αυτοέλεγχο, ενδυναμώνει την επικοινωνία. Μειονεκτήματα: Υπερβολική έμφαση σε ποσοτικούς στόχους, δύσκολος συντονισμός στόχων, αύξηση γραφειοκρατίας, κίνδυνος κατάχρησης από προϊσταμένους.",
+                    keywords: ["Υποκίνηση", "Αυτοέλεγχος", "Συμμετοχή", "Ποσοτικοποίηση"],
+                    example: "Στην εκπαίδευση, το MBO μπορεί να οδηγήσει σε υπερβολική έμφαση σε μετρήσιμους δείκτες (βαθμολογίες) αγνοώντας ποιοτικές πτυχές (κριτική σκέψη, δημιουργικότητα) που είναι δύσκολο να ποσοτικοποιηθούν.",
+                    reference: "«MANEDU_2.pdf», Διαφ. 85-88"
+                },
+                question: "Ποιο είναι ένα σημαντικό μειονέκτημα του MBO;",
+                options: [
+                    "Αποθαρρύνει τη συμμετοχή των εργαζομένων",
+                    "Υπερβολική έμφαση σε ποσοτικούς στόχους, παραμελώντας ποιοτικές πτυχές",
+                    "Δεν περιλαμβάνει μέτρηση απόδοσης",
+                    "Είναι πολύ απλό για να εφαρμοστεί"
+                ],
+                correct: 1
+            },
+            // ===== ΕΝΝΟΙΑ 9: Εργαλεία Διαχείρισης Έργων =====
+            {
+                concept: "Εργαλεία Διαχείρισης Έργων",
+                theory: {
+                    title: "📖 Διάγραμμα Gantt",
+                    description: "Το Διάγραμμα Gantt είναι μια γραφική απεικόνιση των προγραμματισμένων εργασιών που απαιτούνται για την ολοκλήρωση ενός project. Χρησιμοποιείται για τη διαχείριση έργων (Project Management), δηλαδή τον συνολικό προγραμματισμό, επίβλεψη και έλεγχο. Δείχνει ποιες εργασίες γίνονται, πότε αρχίζουν και τελειώνουν, και αν υπάρχει αλληλοεπικάλυψη.",
+                    keywords: ["Gantt", "Χρονοδιάγραμμα", "Εργασίες", "Project Management"],
+                    example: "Για την οργάνωση μιας σχολικής γιορτής: Το διάγραμμα Gantt δείχνει πότε πρέπει να ξεκινήσουν οι πρόβες, πότε η διακόσμηση, πότε οι προσκλήσεις, και πώς αυτές οι εργασίες αλληλοσυνδέονται χρονικά.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 21"
+                },
+                question: "Το Διάγραμμα Gantt χρησιμοποιείται για:",
+                options: [
+                    "Τον υπολογισμό μισθών",
+                    "Τη γραφική απεικόνιση προγραμματισμένων εργασιών ενός project",
+                    "Την αξιολόγηση της ικανοποίησης πελατών",
+                    "Τη δημιουργία προϋπολογισμού"
+                ],
+                correct: 1
+            },
+            {
+                concept: "Εργαλεία Διαχείρισης Έργων",
+                theory: {
+                    title: "📖 CPM/PERT",
+                    description: "Το CPM/PERT είναι ο συνδυασμός δύο τεχνικών: (1) CPM (Critical Path Method - Μέθοδος Κρίσιμου Μονοπατιού): εντοπίζει τη μακρύτερη αλυσίδα εργασιών που καθορίζει τη διάρκεια του έργου, (2) PERT (Program Evaluation and Review Technique): αξιολόγηση προγράμματος και τεχνική ανασκόπησης. Το 'κρίσιμο μονοπάτι' είναι η σειρά εργασιών που αν καθυστερήσει, καθυστερεί όλο το έργο.",
+                    keywords: ["CPM", "PERT", "Κρίσιμο μονοπάτι", "Δίκτυο εργασιών", "Χρονική ανάλυση"],
+                    example: "Για την ανακαίνιση σχολικού εργαστηρίου: Το CPM/PERT δείχνει ότι η αγορά εξοπλισμού πρέπει να γίνει πριν την εγκατάσταση, και εντοπίζει ότι η καθυστέρηση στην ηλεκτρολογική εγκατάσταση (κρίσιμο μονοπάτι) θα καθυστερήσει όλο το έργο.",
+                    reference: "«3α Διαδικασίες και Συστήματα Ελέγχου.pdf», Διαφ. 21, 23"
+                },
+                question: "Στην τεχνική CPM/PERT, το 'κρίσιμο μονοπάτι' αναφέρεται:",
+                options: [
+                    "Στην πιο οικονομική διαδρομή υλοποίησης",
+                    "Στη μακρύτερη αλυσίδα εργασιών που καθορίζει τη διάρκεια του έργου",
+                    "Στις εργασίες που μπορούν να παραλειφθούν",
+                    "Στις εργασίες με τον μεγαλύτερο αριθμό εργαζομένων"
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let answeredQuestions = new Set();
+        let conceptScores = {};
+
+        // Initialize concept scores
+        quizData.forEach(q => {
+            if (!conceptScores[q.concept]) {
+                conceptScores[q.concept] = { correct: 0, total: 0 };
+            }
+            conceptScores[q.concept].total++;
+        });
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            let currentConcept = '';
+
+            quizData.forEach((q, index) => {
+                if (q.concept !== currentConcept) {
+                    currentConcept = q.concept;
+                    container.innerHTML += `
+                        <div class="section-divider">
+                            <span>📚 ${currentConcept}</span>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="question-card" id="question-${index}">
+                        <div class="question-header">
+                            <span class="question-number">Ερώτηση ${index + 1}</span>
+                            <span class="concept-tag">${q.concept}</span>
+                        </div>
+                        
+                        <button class="theory-toggle" onclick="toggleTheory(${index})" id="theory-toggle-${index}">
+                            <span class="icon">▼</span>
+                            Διάβασε τη Θεωρία πριν απαντήσεις
+                        </button>
+                        
+                        <div class="theory-box" id="theory-${index}">
+                            <div class="theory-title">
+                                ${q.theory.title}
+                            </div>
+                            <div class="theory-description">
+                                ${q.theory.description}
+                            </div>
+                            <div class="theory-keywords">
+                                <strong>🔑 Λέξεις-Κλειδιά:</strong><br>
+                                ${q.theory.keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('')}
+                            </div>
+                            <div class="theory-example">
+                                <strong>🎓 Παράδειγμα στην Εκπαίδευση:</strong><br>
+                                ${q.theory.example}
+                            </div>
+                            <div class="reference">
+                                📖 <em>Πηγή: ${q.theory.reference}</em>
+                            </div>
+                        </div>
+                        
+                        <div class="question-text">${q.question}</div>
+                        
+                        <div class="options">
+                            ${q.options.map((opt, i) => `
+                                <div class="option" id="option-${index}-${i}" onclick="selectOption(${index}, ${i})">
+                                    <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                                    <span class="option-text">${opt}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <button class="btn-submit" id="submit-${index}" onclick="checkAnswer(${index})" disabled>
+                            Έλεγξε την Απάντηση
+                        </button>
+                        
+                        <div class="feedback" id="feedback-${index}"></div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('total-questions').textContent = quizData.length;
+        }
+
+        function toggleTheory(index) {
+            const theoryBox = document.getElementById(`theory-${index}`);
+            const toggleBtn = document.getElementById(`theory-toggle-${index}`);
+            
+            theoryBox.classList.toggle('show');
+            toggleBtn.classList.toggle('open');
+            
+            if (theoryBox.classList.contains('show')) {
+                toggleBtn.innerHTML = '<span class="icon">▲</span> Κλείσε τη Θεωρία';
+            } else {
+                toggleBtn.innerHTML = '<span class="icon">▼</span> Διάβασε τη Θεωρία πριν απαντήσεις';
+            }
+        }
+
+        let selectedOptions = {};
+
+        function selectOption(questionIndex, optionIndex) {
+            if (answeredQuestions.has(questionIndex)) return;
+            
+            const options = document.querySelectorAll(`#question-${questionIndex} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            document.getElementById(`option-${questionIndex}-${optionIndex}`).classList.add('selected');
+            selectedOptions[questionIndex] = optionIndex;
+            
+            document.getElementById(`submit-${questionIndex}`).disabled = false;
+        }
+
+        function checkAnswer(index) {
+            if (answeredQuestions.has(index)) return;
+            answeredQuestions.add(index);
+
+            const q = quizData[index];
+            const selectedOption = selectedOptions[index];
+            const options = document.querySelectorAll(`#question-${index} .option`);
+            const feedback = document.getElementById(`feedback-${index}`);
+            const card = document.getElementById(`question-${index}`);
+            const submitBtn = document.getElementById(`submit-${index}`);
+
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === selectedOption && selectedOption !== q.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (selectedOption === q.correct) {
+                correctCount++;
+                card.classList.add('answered-correct');
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = '✅ <strong>Σωστά!</strong> Μπράβο, γνωρίζεις καλά αυτή την έννοια!';
+                conceptScores[q.concept].correct++;
+            } else {
+                wrongCount++;
+                card.classList.add('answered-wrong');
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `❌ <strong>Λάθος!</strong> Η σωστή απάντηση είναι: <strong>${String.fromCharCode(65 + q.correct)}) ${q.options[q.correct]}</strong>`;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Απαντήθηκε';
+
+            updateStats();
+            checkCompletion();
+        }
+
+        function updateStats() {
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('wrong-count').textContent = wrongCount;
+            document.getElementById('current-question').textContent = answeredQuestions.size;
+            
+            const progress = (answeredQuestions.size / quizData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function checkCompletion() {
+            if (answeredQuestions.size === quizData.length) {
+                setTimeout(showResults, 1000);
+            }
+        }
+
+        function showResults() {
+            const percentage = Math.round((correctCount / quizData.length) * 100);
+            
+            document.getElementById('final-score').textContent = `${percentage}%`;
+            
+            const gradeBadge = document.getElementById('grade-badge');
+            const resultsMessage = document.getElementById('results-message');
+            
+            if (percentage >= 90) {
+                gradeBadge.className = 'grade-badge grade-excellent';
+                gradeBadge.textContent = '🏆 ΑΡΙΣΤΑ';
+                resultsMessage.textContent = 'Εξαιρετική επίδοση! Είσαι έτοιμος/η για τις εξετάσεις!';
+            } else if (percentage >= 75) {
+                gradeBadge.className = 'grade-badge grade-good';
+                gradeBadge.textContent = '👍 ΠΟΛΥ ΚΑΛΑ';
+                resultsMessage.textContent = 'Πολύ καλή δουλειά! Λίγη ακόμα μελέτη και είσαι έτοιμος/η!';
+            } else if (percentage >= 50) {
+                gradeBadge.className = 'grade-badge grade-average';
+                gradeBadge.textContent = '📚 ΚΑΛΑ';
+                resultsMessage.textContent = 'Καλή προσπάθεια! Χρειάζεται περισσότερη μελέτη σε κάποιες έννοιες.';
+            } else {
+                gradeBadge.className = 'grade-badge grade-poor';
+                gradeBadge.textContent = '📖 ΧΡΕΙΑΖΕΤΑΙ ΜΕΛΕΤΗ';
+                resultsMessage.textContent = 'Μην απογοητεύεσαι! Διάβασε ξανά τη θεωρία και προσπάθησε!';
+            }
+
+            // Show concept breakdown
+            const conceptResultsContainer = document.getElementById('concept-results');
+            conceptResultsContainer.innerHTML = '';
+            
+            for (const [concept, scores] of Object.entries(conceptScores)) {
+                const conceptPercentage = Math.round((scores.correct / scores.total) * 100);
+                let scoreClass = 'fail';
+                if (conceptPercentage === 100) scoreClass = 'perfect';
+                else if (conceptPercentage >= 50) scoreClass = 'partial';
+
+                conceptResultsContainer.innerHTML += `
+                    <div class="concept-result">
+                        <span class="concept-name">${concept}</span>
+                        <span class="concept-score ${scoreClass}">${scores.correct}/${scores.total}</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('results-card').classList.add('show');
+            document.getElementById('results-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            answeredQuestions.clear();
+            selectedOptions = {};
+
+            // Reset concept scores
+            for (const concept in conceptScores) {
+                conceptScores[concept].correct = 0;
+            }
+
+            document.getElementById('results-card').classList.remove('show');
+            renderQuiz();
+            updateStats();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize quiz
+        renderQuiz();
+        updateStats();
+    </script>
+</body>
+</html>

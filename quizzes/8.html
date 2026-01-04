@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Πιθανά Θέματα Εξετάσεων - Διοίκηση Εκπαίδευσης 2025</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #e53e3e;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --light: #f7fafc;
+            --dark: #1a202c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #feb2b2 0%, #fc8181 100%);
+            border-left: 5px solid var(--accent);
+            padding: 15px 20px;
+            margin: 0;
+            color: var(--dark);
+        }
+
+        .warning-box strong {
+            color: var(--accent);
+        }
+
+        .progress-container {
+            background: var(--light);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, #48bb78 100%);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .question-card {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .difficulty {
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .difficulty.sos {
+            background: linear-gradient(135deg, #feb2b2 0%, #fc8181 100%);
+            color: #c53030;
+        }
+
+        .difficulty.high {
+            background: linear-gradient(135deg, #feebc8 0%, #f6ad55 100%);
+            color: #c05621;
+        }
+
+        .difficulty.medium {
+            background: linear-gradient(135deg, #c6f6d5 0%, #68d391 100%);
+            color: #276749;
+        }
+
+        .question-text {
+            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--secondary);
+            font-size: 1.05em;
+            line-height: 1.7;
+        }
+
+        .theory-toggle {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .theory-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(66, 153, 225, 0.4);
+        }
+
+        .theory-section {
+            display: none;
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #9ae6b4;
+            animation: slideDown 0.4s ease;
+        }
+
+        .theory-section.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 2000px; }
+        }
+
+        .theory-section h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theory-content {
+            line-height: 1.8;
+        }
+
+        .theory-content h5 {
+            color: var(--secondary);
+            margin: 15px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #9ae6b4;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .keyword {
+            background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        .example-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .example-box strong {
+            color: var(--warning);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .answer-toggle {
+            background: linear-gradient(135deg, var(--success) 0%, #48bb78 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .answer-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(56, 161, 105, 0.4);
+        }
+
+        .model-answer {
+            display: none;
+            background: linear-gradient(135deg, #fffaf0 0%, #feebc8 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 15px;
+            border: 2px solid #f6ad55;
+            animation: slideDown 0.4s ease;
+        }
+
+        .model-answer.show {
+            display: block;
+        }
+
+        .model-answer h4 {
+            color: #c05621;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .prev-btn {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-card {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .results-card.active {
+            display: block;
+        }
+
+        .results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .results-card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .reference {
+            font-size: 0.85em;
+            color: #718096;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .tips-box {
+            background: linear-gradient(135deg, #e9d8fd 0%, #d6bcfa 100%);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #805ad5;
+        }
+
+        .tips-box strong {
+            color: #553c9a;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4em;
+            }
+            
+            .question-card {
+                padding: 20px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Πιθανά Θέματα Εξετάσεων 2025</h1>
+            <p class="subtitle">Μάνατζμεντ / Διοίκηση Εκπαίδευσης - 10 Θέματα Ανάπτυξης</p>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ ΣΗΜΑΝΤΙΚΟ:</strong> Αυτά τα θέματα βασίζονται στις οδηγίες του καθηγητή και τα θέματα 2024-2025. Δεν έχουν επαναληφθεί πρόσφατα και χαρακτηρίζονται ως SOS!
+        </div>
+
+        <div class="progress-container">
+            <span id="progress-text">Θέμα 1/10</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 10%"></div>
+            </div>
+            <span id="progress-percent">10%</span>
+        </div>
+
+        <!-- ΘΕΜΑ 1: Hersey-Blanchard -->
+        <div class="question-card active" id="q1">
+            <div class="question-header">
+                <span class="question-number">Θέμα 1</span>
+                <span class="difficulty sos">🔥 SOS - Πολύ Πιθανό</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Μοντέλο Ηγεσίας Καταστάσεων Hersey-Blanchard</strong><br><br>
+                Στο πλαίσιο της θεωρίας ηγεσίας καταστάσεων των Hersey και Blanchard, να παρουσιάσετε τα 4 στυλ ηγεσίας και να εξηγήσετε πώς ένας Διευθυντής σχολικής μονάδας μπορεί να προσαρμόζει το στυλ του ανάλογα με την «ετοιμότητα» του εκπαιδευτικού προσωπικού. Δώστε ένα πρακτικό παράδειγμα για κάθε στυλ.
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(1)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory1">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Βασική Ιδέα</h5>
+                    <p>Οι ηγέτες προσαρμόζουν το στυλ τους ανάλογα με την <strong>ετοιμότητα</strong> των υφισταμένων (ικανότητα + προθυμία + αυτοπεποίθηση).</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Ετοιμότητα</span>
+                        <span class="keyword">Ικανότητα</span>
+                        <span class="keyword">Προθυμία</span>
+                        <span class="keyword">Αυτοπεποίθηση</span>
+                        <span class="keyword">Προσαρμογή στυλ</span>
+                    </div>
+
+                    <h5>📊 Τα 4 Στυλ Ηγεσίας</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Στυλ</th>
+                                <th>Χαρακτηριστικά</th>
+                                <th>Ετοιμότητα Υφισταμένων</th>
+                            </tr>
+                            <tr>
+                                <td><strong>S1 - Καθοδηγητικό</strong></td>
+                                <td>Υψηλή εργασία, Χαμηλή σχέση - Δίνει οδηγίες</td>
+                                <td>Χαμηλή (Μ1): Ανίκανοι, απρόθυμοι, ανασφαλείς</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S2 - Πειστικό/Πώλησης</strong></td>
+                                <td>Υψηλή εργασία, Υψηλή σχέση - Εξηγεί αποφάσεις</td>
+                                <td>Μεσαία-Χαμηλή (Μ2): Πρόθυμοι αλλά ανίκανοι</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S3 - Συμμετοχικό</strong></td>
+                                <td>Χαμηλή εργασία, Υψηλή σχέση - Μοιράζεται ιδέες</td>
+                                <td>Μεσαία-Υψηλή (Μ3): Ικανοί αλλά απρόθυμοι</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S4 - Εξουσιοδοτικό</strong></td>
+                                <td>Χαμηλή εργασία, Χαμηλή σχέση - Εκχωρεί αρμοδιότητες</td>
+                                <td>Υψηλή (Μ4): Ικανοί, πρόθυμοι, με αυτοπεποίθηση</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Παράδειγμα στην Εκπαίδευση:</strong><br>
+                        Νεοδιόριστος εκπαιδευτικός (Μ1) → Καθοδηγητικό στυλ (σαφείς οδηγίες)<br>
+                        Έμπειρος αλλά αδιάφορος (Μ3) → Συμμετοχικό στυλ (εμπλοκή σε αποφάσεις)
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf», Διαφάνειες 30-34</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer1"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(1)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model1">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Το μοντέλο Hersey-Blanchard υποστηρίζει ότι δεν υπάρχει ένα «καλύτερο» στυλ ηγεσίας - ο αποτελεσματικός ηγέτης προσαρμόζει τη συμπεριφορά του στην ετοιμότητα των υφισταμένων.</p>
+
+                    <p><strong>Τα 4 Στυλ με παραδείγματα:</strong></p>
+
+                    <p><strong>1. Καθοδηγητικό (S1):</strong> Ο Διευθυντής δίνει σαφείς οδηγίες και επιβλέπει στενά. <em>Παράδειγμα:</em> Νεοδιόριστος εκπαιδευτικός που δεν γνωρίζει τις διαδικασίες - ο Διευθυντής εξηγεί βήμα-βήμα τον τρόπο συμπλήρωσης του ωρολογίου προγράμματος.</p>
+
+                    <p><strong>2. Πειστικό/Πώλησης (S2):</strong> Συνδυάζει οδηγίες με επεξηγήσεις και υποστήριξη. <em>Παράδειγμα:</em> Εκπαιδευτικός με 2 χρόνια υπηρεσίας, πρόθυμος αλλά χωρίς εμπειρία σε καινοτόμα προγράμματα - ο Διευθυντής εξηγεί γιατί είναι σημαντική η συμμετοχή σε eTwinning.</p>
+
+                    <p><strong>3. Συμμετοχικό (S3):</strong> Μοιράζεται ιδέες και ζητά γνώμες. <em>Παράδειγμα:</em> Έμπειρος εκπαιδευτικός με 15 χρόνια υπηρεσίας αλλά αδιάφορος για αλλαγές - ο Διευθυντής τον εμπλέκει στη λήψη αποφάσεων για το πρόγραμμα επιμορφώσεων.</p>
+
+                    <p><strong>4. Εξουσιοδοτικό (S4):</strong> Αναθέτει αρμοδιότητες χωρίς στενή επίβλεψη. <em>Παράδειγμα:</em> Υποδιευθυντής με υψηλές ικανότητες και κίνητρα - αναλαμβάνει πλήρως τον συντονισμό των εκπαιδευτικών προγραμμάτων.</p>
+
+                    <p><strong>Συμπέρασμα:</strong> Ο αποτελεσματικός Διευθυντής αξιολογεί συνεχώς την ετοιμότητα κάθε εκπαιδευτικού και προσαρμόζει το στυλ του για να μεγιστοποιήσει την απόδοση και την ικανοποίηση.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(1)" disabled>
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(1)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 2: Maslow -->
+        <div class="question-card" id="q2">
+            <div class="question-header">
+                <span class="question-number">Θέμα 2</span>
+                <span class="difficulty sos">🔥 SOS - Πολύ Πιθανό</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Θεωρία Ιεράρχησης Αναγκών του Maslow</strong><br><br>
+                Η παρακίνηση αποτελεί κρίσιμη λειτουργία της διοίκησης. Από τη θέση του Διευθυντή σχολικής μονάδας, παρουσιάστε τη θεωρία του Maslow και προτείνετε συγκεκριμένα μέτρα/κίνητρα για την κάλυψη κάθε επιπέδου αναγκών του εκπαιδευτικού προσωπικού.
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(2)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory2">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Βασική Ιδέα</h5>
+                    <p>Ο άνθρωπος υποκινείται από ανάγκες που ιεραρχούνται σε <strong>πυραμίδα</strong>. Πρώτα πρέπει να ικανοποιηθούν οι χαμηλότερες για να ενεργοποιηθούν οι υψηλότερες.</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Πυραμίδα αναγκών</span>
+                        <span class="keyword">Ιεράρχηση</span>
+                        <span class="keyword">Αυτοπραγμάτωση</span>
+                        <span class="keyword">Κίνητρα</span>
+                    </div>
+
+                    <h5>📊 Τα 5 Επίπεδα Αναγκών</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Επίπεδο</th>
+                                <th>Ανάγκες</th>
+                                <th>Κίνητρα στην Εκπαίδευση</th>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Αυτοπραγμάτωση</strong></td>
+                                <td>Ανάπτυξη, δημιουργικότητα</td>
+                                <td>Επιμόρφωση, Erasmus+, mentoring</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Εκτίμηση</strong></td>
+                                <td>Αναγνώριση, σεβασμός</td>
+                                <td>Δημόσια αναγνώριση, «Εκπαιδευτικός του Μήνα»</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Κοινωνικές</strong></td>
+                                <td>Ανήκειν, φιλία</td>
+                                <td>Ομάδες έργου, κοινές δράσεις</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Ασφάλειας</strong></td>
+                                <td>Σταθερότητα, προστασία</td>
+                                <td>Σαφείς αρμοδιότητες, δίκαιη αξιολόγηση</td>
+                            </tr>
+                            <tr>
+                                <td><strong>1. Φυσιολογικές</strong></td>
+                                <td>Τροφή, στέγη, μισθός</td>
+                                <td>Επαρκής μισθός, υγιεινό περιβάλλον</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="tips-box">
+                        <strong>💡 Συμβουλή:</strong> Ο καθηγητής ζητάει εφαρμογή σε σχολική μονάδα. Δώστε συγκεκριμένα παραδείγματα για κάθε επίπεδο!
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «2α Παρακίνηση.pdf», Διαφάνειες 4-7</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer2"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(2)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model2">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Η θεωρία του Maslow υποστηρίζει ότι οι ανάγκες του ανθρώπου οργανώνονται ιεραρχικά. Ο Διευθυντής πρέπει να αναγνωρίζει σε ποιο επίπεδο βρίσκεται κάθε εκπαιδευτικός.</p>
+
+                    <p><strong>Εφαρμογή στη Σχολική Μονάδα:</strong></p>
+
+                    <p><strong>1. Φυσιολογικές Ανάγκες:</strong> Διασφάλιση επαρκούς μισθού (δεν ελέγχεται από τον Διευθυντή), αλλά μπορεί να βελτιώσει τις συνθήκες εργασίας: καθαρές αίθουσες, κλιματισμός, ανετοι χώροι ξεκούρασης.</p>
+
+                    <p><strong>2. Ανάγκες Ασφάλειας:</strong> Σαφής κατανομή αρμοδιοτήτων, διαφανείς διαδικασίες αξιολόγησης, υποστήριξη σε δύσκολες καταστάσεις με γονείς, πρόληψη του burnout.</p>
+
+                    <p><strong>3. Κοινωνικές Ανάγκες:</strong> Δημιουργία ομάδων εργασίας για σχολικά προγράμματα, τακτικές άτυπες συναντήσεις του προσωπικού, οργάνωση κοινών δράσεων (εκδρομές, γιορτές).</p>
+
+                    <p><strong>4. Ανάγκες Εκτίμησης:</strong> Δημόσια αναγνώριση επιτυχιών (π.χ. ανακοίνωση στον σύλλογο διδασκόντων), ανάθεση υπευθυνοτήτων, εμπιστοσύνη στις αποφάσεις τους.</p>
+
+                    <p><strong>5. Αυτοπραγμάτωση:</strong> Ενθάρρυνση συμμετοχής σε επιμορφώσεις, ευρωπαϊκά προγράμματα (Erasmus+, eTwinning), mentoring νέων εκπαιδευτικών, ευκαιρίες καινοτομίας στη διδασκαλία.</p>
+
+                    <p><strong>Συμπέρασμα:</strong> Ο Διευθυντής που κατανοεί τις ανάγκες του προσωπικού μπορεί να δημιουργήσει κατάλληλα κίνητρα για κάθε εκπαιδευτικό, αυξάνοντας την αποδοτικότητα και την ικανοποίηση.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(2)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(2)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 3: Herzberg -->
+        <div class="question-card" id="q3">
+            <div class="question-header">
+                <span class="question-number">Θέμα 3</span>
+                <span class="difficulty high">⚡ Υψηλή Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Θεωρία Δύο Παραγόντων του Herzberg</strong><br><br>
+                Σύμφωνα με τη θεωρία του Herzberg, να διακρίνετε τους παράγοντες υγιεινής από τους παράγοντες κινήτρων. Πώς μπορεί ένας Διευθυντής σχολείου να χρησιμοποιήσει αυτή τη θεωρία για να βελτιώσει την ικανοποίηση και την παραγωγικότητα του εκπαιδευτικού προσωπικού;
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(3)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory3">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Βασική Ιδέα</h5>
+                    <p>Η ικανοποίηση και η δυσαρέσκεια <strong>δεν είναι αντίθετα</strong> - επηρεάζονται από διαφορετικούς παράγοντες!</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Παράγοντες Υγιεινής</span>
+                        <span class="keyword">Παράγοντες Κινήτρων</span>
+                        <span class="keyword">Δυσαρέσκεια</span>
+                        <span class="keyword">Ικανοποίηση</span>
+                    </div>
+
+                    <h5>📊 Διάκριση Παραγόντων</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Παράγοντες Υγιεινής (Αντικίνητρα)</th>
+                                <th>Παράγοντες Κινήτρων</th>
+                            </tr>
+                            <tr>
+                                <td>Μισθός/Αμοιβή</td>
+                                <td>Επίτευξη στόχων</td>
+                            </tr>
+                            <tr>
+                                <td>Συνθήκες εργασίας</td>
+                                <td>Αναγνώριση</td>
+                            </tr>
+                            <tr>
+                                <td>Σχέσεις με συναδέλφους</td>
+                                <td>Το ίδιο το έργο</td>
+                            </tr>
+                            <tr>
+                                <td>Πολιτική οργανισμού</td>
+                                <td>Υπευθυνότητα</td>
+                            </tr>
+                            <tr>
+                                <td>Επίβλεψη</td>
+                                <td>Ανάπτυξη/Εξέλιξη</td>
+                            </tr>
+                            <tr>
+                                <td>Ασφάλεια εργασίας</td>
+                                <td>Προαγωγή</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Κρίσιμη Διάκριση:</strong><br>
+                        • Παράγοντες Υγιεινής: Αν απουσιάζουν → Δυσαρέσκεια. Αν υπάρχουν → Μη δυσαρέσκεια (όχι ικανοποίηση!)<br>
+                        • Παράγοντες Κινήτρων: Αν υπάρχουν → Ικανοποίηση. Αν απουσιάζουν → Μη ικανοποίηση
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «2α Παρακίνηση.pdf», Διαφάνειες 10-14</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer3"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(3)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model3">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Ο Herzberg διέκρινε δύο κατηγορίες παραγόντων: αυτούς που προκαλούν δυσαρέσκεια (Παράγοντες Υγιεινής) και αυτούς που δημιουργούν ικανοποίηση (Παράγοντες Κινήτρων).</p>
+
+                    <p><strong>Παράγοντες Υγιεινής στην Εκπαίδευση:</strong></p>
+                    <p>Αφορούν το εργασιακό περιβάλλον: μισθός, συνθήκες εργασίας, σχέσεις με Διεύθυνση/συναδέλφους, πολιτική σχολείου, ασφάλεια, φόρτος εργασίας. Η ικανοποίησή τους δεν παρακινεί, αλλά η απουσία τους προκαλεί δυσαρέσκεια.</p>
+
+                    <p><strong>Παράγοντες Κινήτρων στην Εκπαίδευση:</strong></p>
+                    <p>Αφορούν το περιεχόμενο της εργασίας: αναγνώριση, ευκαιρίες καινοτομίας, συμμετοχή σε αποφάσεις, αυτονομία στη διδασκαλία, επαγγελματική ανάπτυξη. Η παρουσία τους δημιουργεί πραγματική ικανοποίηση.</p>
+
+                    <p><strong>Εφαρμογή από τον Διευθυντή:</strong></p>
+                    <p><em>Για τους Παράγοντες Υγιεινής:</em> Βελτίωση υποδομών, δίκαιη κατανομή ωραρίου, διαφανής επικοινωνία, μείωση γραφειοκρατίας.</p>
+                    <p><em>Για τους Παράγοντες Κινήτρων:</em> Δημόσια αναγνώριση επιτυχιών, ανάθεση υπευθυνοτήτων, ενθάρρυνση καινοτομίας, υποστήριξη επιμορφώσεων.</p>
+
+                    <p><strong>Συμπέρασμα:</strong> Ο Διευθυντής πρέπει πρώτα να εξασφαλίσει τους παράγοντες υγιεινής για να αποφύγει τη δυσαρέσκεια και έπειτα να ενισχύσει τους παράγοντες κινήτρων για να δημιουργήσει πραγματική παρακίνηση.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(3)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(3)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 4: Vroom -->
+        <div class="question-card" id="q4">
+            <div class="question-header">
+                <span class="question-number">Θέμα 4</span>
+                <span class="difficulty sos">🔥 SOS - Πολύ Πιθανό</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Θεωρία Προσδοκιών του Vroom</strong><br><br>
+                Σύμφωνα με τη θεωρία προσδοκιών του Vroom, η παρακίνηση εξαρτάται από τρεις παράγοντες. Παρουσιάστε τον τύπο της παρακίνησης και εξηγήστε κάθε παράγοντα. Πώς μπορεί ένας Διευθυντής να ενισχύσει κάθε παράγοντα για να παρακινήσει το εκπαιδευτικό προσωπικό;
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(4)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory4">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Ο Τύπος της Παρακίνησης</h5>
+                    <div class="example-box">
+                        <strong style="font-size: 1.3em;">Παρακίνηση = Προσδοκία × Συνδρομή × Σθένος</strong><br><br>
+                        ⚠️ Αν οποιοσδήποτε παράγοντας είναι <strong>ΜΗΔΕΝ</strong>, η παρακίνηση είναι μηδέν!
+                    </div>
+
+                    <div class="keywords">
+                        <span class="keyword">Προσδοκία (E)</span>
+                        <span class="keyword">Συνδρομή (I)</span>
+                        <span class="keyword">Σθένος (V)</span>
+                        <span class="keyword">Πολλαπλασιαστικός τύπος</span>
+                    </div>
+
+                    <h5>📊 Οι 3 Παράγοντες</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Παράγοντας</th>
+                                <th>Ερώτηση</th>
+                                <th>Πεδίο τιμών</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Προσδοκία (Expectancy)</strong></td>
+                                <td>«Αν προσπαθήσω, θα τα καταφέρω;»</td>
+                                <td>0 έως 1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Συνδρομή (Instrumentality)</strong></td>
+                                <td>«Αν τα καταφέρω, θα ανταμειφθώ;»</td>
+                                <td>0 έως 1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Σθένος (Valence)</strong></td>
+                                <td>«Πόσο σημαντική είναι για μένα η ανταμοιβή;»</td>
+                                <td>-1 έως +1</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="tips-box">
+                        <strong>💡 Κρίσιμο:</strong> Ακόμα και αν ο εκπαιδευτικός πιστεύει ότι θα πετύχει (υψηλή Προσδοκία) και ότι θα ανταμειφθεί (υψηλή Συνδρομή), αν η ανταμοιβή δεν τον ενδιαφέρει (χαμηλό Σθένος), η παρακίνηση θα είναι χαμηλή!
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «2α Παρακίνηση.pdf», Διαφάνειες 23-26</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer4"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(4)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model4">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Η θεωρία προσδοκιών του Vroom εξηγεί ότι η παρακίνηση εξαρτάται από το πολλαπλασιαστικό αποτέλεσμα τριών παραγόντων: Παρακίνηση = Προσδοκία × Συνδρομή × Σθένος.</p>
+
+                    <p><strong>1. Προσδοκία (Expectancy):</strong> Η πεποίθηση ότι η προσπάθεια θα οδηγήσει σε επιθυμητή απόδοση.</p>
+                    <p><em>Ενίσχυση από Διευθυντή:</em> Παροχή κατάρτισης και πόρων, σαφείς στόχοι, υποστήριξη σε δύσκολες καταστάσεις, ανατροφοδότηση για βελτίωση.</p>
+
+                    <p><strong>2. Συνδρομή (Instrumentality):</strong> Η πεποίθηση ότι η καλή απόδοση θα ακολουθηθεί από ανταμοιβές.</p>
+                    <p><em>Ενίσχυση από Διευθυντή:</em> Σύνδεση απόδοσης με αναγνώριση, διαφάνεια στα κριτήρια επιλογής για θέσεις ευθύνης, τήρηση υποσχέσεων.</p>
+
+                    <p><strong>3. Σθένος (Valence):</strong> Η αξία που αποδίδει το άτομο στην ανταμοιβή.</p>
+                    <p><em>Ενίσχυση από Διευθυντή:</em> Κατανόηση των ατομικών αναγκών κάθε εκπαιδευτικού, προσφορά ποικιλίας ανταμοιβών (αναγνώριση, αυτονομία, επιμόρφωση).</p>
+
+                    <p><strong>Παράδειγμα:</strong> Ένας εκπαιδευτικός δεν θα παρακινηθεί να συμμετάσχει σε πρόγραμμα Erasmus+ αν: (α) δεν πιστεύει ότι έχει τις ικανότητες (χαμηλή Προσδοκία), (β) δεν πιστεύει ότι θα αναγνωριστεί η προσπάθεια (χαμηλή Συνδρομή), ή (γ) δεν τον ενδιαφέρει η διεθνής εμπειρία (χαμηλό Σθένος).</p>
+
+                    <p><strong>Συμπέρασμα:</strong> Ο Διευθυντής πρέπει να ενισχύει και τους τρεις παράγοντες για να επιτύχει πραγματική παρακίνηση.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(4)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(4)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 5: Blake & Mouton -->
+        <div class="question-card" id="q5">
+            <div class="question-header">
+                <span class="question-number">Θέμα 5</span>
+                <span class="difficulty high">⚡ Υψηλή Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Πλέγμα Ηγεσίας Blake & Mouton</strong><br><br>
+                Παρουσιάστε το Πλέγμα Ηγεσίας των Blake και Mouton, περιγράφοντας τους δύο άξονες και τα 5 βασικά στυλ ηγεσίας. Ποιο στυλ θεωρείτε καταλληλότερο για έναν Διευθυντή σχολείου και γιατί; Τεκμηριώστε με παράδειγμα.
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(5)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory5">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Οι 2 Άξονες του Πλέγματος</h5>
+                    <p>• <strong>Οριζόντιος άξονας:</strong> Μέριμνα για την παραγωγή/εργασία (1-9)<br>
+                    • <strong>Κάθετος άξονας:</strong> Μέριμνα για τους ανθρώπους (1-9)</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Μέριμνα για εργασία</span>
+                        <span class="keyword">Μέριμνα για ανθρώπους</span>
+                        <span class="keyword">9,9 Ομαδικός</span>
+                        <span class="keyword">Πλέγμα 81 θέσεων</span>
+                    </div>
+
+                    <h5>📊 Τα 5 Βασικά Στυλ</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Στυλ</th>
+                                <th>Θέση</th>
+                                <th>Περιγραφή</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Αποδυναμωμένος Manager</strong></td>
+                                <td>(1,1)</td>
+                                <td>Χαμηλή μέριμνα και για εργασία και για ανθρώπους</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Manager Εξουσίας-Υπακοής</strong></td>
+                                <td>(9,1)</td>
+                                <td>Υψηλή μέριμνα για εργασία, χαμηλή για ανθρώπους</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Manager Κλειστής Ομάδας</strong></td>
+                                <td>(1,9)</td>
+                                <td>Χαμηλή μέριμνα για εργασία, υψηλή για ανθρώπους</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Manager στη Μέση</strong></td>
+                                <td>(5,5)</td>
+                                <td>Μεσαία μέριμνα και για τα δύο</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ομαδικός Manager (Ανοικτής Ομάδας)</strong></td>
+                                <td>(9,9)</td>
+                                <td>Υψηλή μέριμνα και για εργασία και για ανθρώπους - ΙΔΑΝΙΚΟ</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Ιδανικό Στυλ:</strong> Ο Ομαδικός Manager (9,9) θεωρείται ιδανικός γιατί επιτυγχάνει υψηλή απόδοση μέσω δεσμευμένων ανθρώπων με κοινό σκοπό.
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf», Διαφάνειες 21-23</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer5"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(5)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model5">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Το Πλέγμα Ηγεσίας των Blake και Mouton αξιολογεί τους ηγέτες με βάση δύο διαστάσεις: τη μέριμνα για την εργασία και τη μέριμνα για τους ανθρώπους.</p>
+
+                    <p><strong>Τα 5 Στυλ:</strong></p>
+                    <p><strong>1. Αποδυναμωμένος Manager (1,1):</strong> Ελάχιστη προσπάθεια και για την εργασία και για τις σχέσεις. Δεν είναι κατάλληλο για σχολείο.</p>
+
+                    <p><strong>2. Manager Εξουσίας-Υπακοής (9,1):</strong> Εστιάζει αποκλειστικά στα αποτελέσματα, αγνοώντας τις ανθρώπινες ανάγκες. Μπορεί να οδηγήσει σε burnout εκπαιδευτικών.</p>
+
+                    <p><strong>3. Manager Κλειστής Ομάδας (1,9):</strong> Δημιουργεί καλό κλίμα αλλά αμελεί τους στόχους. Μπορεί να χαλαρώσει υπερβολικά η λειτουργία του σχολείου.</p>
+
+                    <p><strong>4. Manager στη Μέση (5,5):</strong> Συμβιβαστική προσέγγιση. Ικανοποιητική αλλά όχι άριστη απόδοση.</p>
+
+                    <p><strong>5. Ομαδικός Manager (9,9):</strong> Συνδυάζει υψηλή μέριμνα για εργασία και ανθρώπους. ΙΔΑΝΙΚΟ για σχολείο.</p>
+
+                    <p><strong>Γιατί το (9,9) είναι ιδανικό για Διευθυντή σχολείου:</strong></p>
+                    <p>Ο Διευθυντής που υιοθετεί το ομαδικό στυλ δημιουργεί συνθήκες όπου οι εκπαιδευτικοί αισθάνονται αξιοποιημένοι και δεσμευμένοι στους κοινούς στόχους του σχολείου.</p>
+
+                    <p><strong>Παράδειγμα:</strong> Ο Διευθυντής οργανώνει ομάδες εργασίας για τον σχεδιασμό καινοτόμων προγραμμάτων (εστίαση στην εργασία), ενώ παράλληλα φροντίζει για δίκαιη κατανομή καθηκόντων και αναγνωρίζει τις προσπάθειες (εστίαση στους ανθρώπους).</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(5)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(5)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 6: SWOT -->
+        <div class="question-card" id="q6">
+            <div class="question-header">
+                <span class="question-number">Θέμα 6</span>
+                <span class="difficulty high">⚡ Υψηλή Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Ανάλυση SWOT στην Εκπαίδευση</strong><br><br>
+                Παρουσιάστε την ανάλυση SWOT ως εργαλείο στρατηγικού σχεδιασμού. Ακολούθως, εφαρμόστε τη σε μια σχολική μονάδα που επιθυμεί να αναπτύξει τις ψηφιακές δεξιότητες μαθητών και εκπαιδευτικών.
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(6)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory6">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Τι είναι η SWOT</h5>
+                    <p>Εργαλείο <strong>ανάλυσης εσωτερικού και εξωτερικού περιβάλλοντος</strong> για τη διαμόρφωση στρατηγικής.</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Strengths (Δυνατά)</span>
+                        <span class="keyword">Weaknesses (Αδυναμίες)</span>
+                        <span class="keyword">Opportunities (Ευκαιρίες)</span>
+                        <span class="keyword">Threats (Απειλές)</span>
+                    </div>
+
+                    <h5>📊 Δομή SWOT</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Θετικά</th>
+                                <th>Αρνητικά</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Εσωτερικό Περιβάλλον</strong></td>
+                                <td>Δυνατά σημεία (S)</td>
+                                <td>Αδυναμίες (W)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Εξωτερικό Περιβάλλον</strong></td>
+                                <td>Ευκαιρίες (O)</td>
+                                <td>Απειλές (T)</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Εσωτερικό vs Εξωτερικό:</strong><br>
+                        • Εσωτερικό: Αυτά που ελέγχει ο οργανισμός (προσωπικό, υποδομές, διαδικασίες)<br>
+                        • Εξωτερικό: Παράγοντες του περιβάλλοντος (νομοθεσία, τεχνολογία, κοινωνία)
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «MANEDU_2.pdf», Διαφάνειες 68-76</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer6"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(6)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model6">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Η ανάλυση SWOT εξετάζει τα Δυνατά σημεία (Strengths), τις Αδυναμίες (Weaknesses), τις Ευκαιρίες (Opportunities) και τις Απειλές (Threats) ενός οργανισμού.</p>
+
+                    <p><strong>Εφαρμογή για Ανάπτυξη Ψηφιακών Δεξιοτήτων:</strong></p>
+
+                    <p><strong>ΔΥΝΑΤΑ ΣΗΜΕΙΑ (S):</strong></p>
+                    <p>• Ύπαρξη εργαστηρίου Πληροφορικής με 20 Η/Υ<br>
+                    • Εκπαιδευτικοί με πιστοποίηση Β' επιπέδου ΤΠΕ<br>
+                    • Θετικό κλίμα και διάθεση για καινοτομία</p>
+
+                    <p><strong>ΑΔΥΝΑΜΙΕΣ (W):</strong></p>
+                    <p>• Έλλειψη επιμόρφωσης σε νέα εργαλεία (AI, εκπαιδευτικά apps)<br>
+                    • Παλαιός εξοπλισμός σε ορισμένες αίθουσες<br>
+                    • Περιορισμένος χρόνος λόγω αναλυτικού προγράμματος</p>
+
+                    <p><strong>ΕΥΚΑΙΡΙΕΣ (O):</strong></p>
+                    <p>• Ευρωπαϊκά προγράμματα (Erasmus+, eTwinning)<br>
+                    • Δωρεάν πλατφόρμες (Google Classroom, Canva Education)<br>
+                    • Εθνικό σχέδιο για ψηφιακό μετασχηματισμό σχολείων</p>
+
+                    <p><strong>ΑΠΕΙΛΕΣ (T):</strong></p>
+                    <p>• Άνιση πρόσβαση μαθητών σε τεχνολογία στο σπίτι<br>
+                    • Κίνδυνοι ασφάλειας στο διαδίκτυο<br>
+                    • Ταχεία εξέλιξη τεχνολογίας - κίνδυνος απαξίωσης γνώσεων</p>
+
+                    <p><strong>Στρατηγική:</strong> Αξιοποίηση των δυνατών σημείων και ευκαιριών (εργαστήριο + Erasmus+), αντιμετώπιση αδυναμιών (επιμόρφωση εκπαιδευτικών), προστασία από απειλές (πολιτική ψηφιακής ασφάλειας).</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(6)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(6)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 7: Deming PDCA -->
+        <div class="question-card" id="q7">
+            <div class="question-header">
+                <span class="question-number">Θέμα 7</span>
+                <span class="difficulty high">⚡ Υψηλή Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Κύκλος Deming (PDCA) - Διοίκηση Ολικής Ποιότητας</strong><br><br>
+                Παρουσιάστε τον Κύκλο Deming (PDCA) ως εργαλείο συνεχούς βελτίωσης. Στη συνέχεια, εφαρμόστε τον για τη βελτίωση της ποιότητας διδασκαλίας σε μια σχολική μονάδα.
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(7)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory7">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Βασική Ιδέα</h5>
+                    <p>Ο Κύκλος PDCA είναι μια <strong>επαναλαμβανόμενη διαδικασία</strong> τεσσάρων βημάτων για συνεχή βελτίωση.</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Plan (Σχεδιασμός)</span>
+                        <span class="keyword">Do (Δράση)</span>
+                        <span class="keyword">Check (Έλεγχος)</span>
+                        <span class="keyword">Act (Βελτίωση)</span>
+                    </div>
+
+                    <h5>📊 Τα 4 Στάδια του PDCA</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Στάδιο</th>
+                                <th>Περιγραφή</th>
+                                <th>Ερώτηση-Κλειδί</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Plan (Σχεδιασμός)</strong></td>
+                                <td>Αναγνώριση προβλήματος, ανάλυση, σχεδιασμός λύσης</td>
+                                <td>Τι θέλουμε να πετύχουμε;</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Do (Δράση)</strong></td>
+                                <td>Εφαρμογή σε μικρή κλίμακα (πιλοτικά)</td>
+                                <td>Πώς θα το δοκιμάσουμε;</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Check (Έλεγχος)</strong></td>
+                                <td>Μέτρηση, αξιολόγηση αποτελεσμάτων</td>
+                                <td>Λειτούργησε;</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Act (Βελτίωση)</strong></td>
+                                <td>Τυποποίηση επιτυχίας ή διόρθωση και επανάληψη</td>
+                                <td>Τι μάθαμε; Τι αλλάζουμε;</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Η δύναμη του κύκλου:</strong> Μετά το Act, ο κύκλος επαναλαμβάνεται για συνεχή βελτίωση. Ποτέ δεν τελειώνει!
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «ΔΕ 9 ΔΟΠ στην Εκπαίδευση.pdf», Διαφάνεια 30-32</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer7"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(7)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model7">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Ο Κύκλος Deming (PDCA) αποτελεί θεμελιώδες εργαλείο της Διοίκησης Ολικής Ποιότητας για συνεχή βελτίωση μέσω τεσσάρων επαναλαμβανόμενων σταδίων.</p>
+
+                    <p><strong>Εφαρμογή για Βελτίωση Ποιότητας Διδασκαλίας:</strong></p>
+
+                    <p><strong>1. PLAN (Σχεδιασμός):</strong></p>
+                    <p>• Αναγνώριση προβλήματος: Χαμηλή επίδοση μαθητών στα Μαθηματικά (βάσει αποτελεσμάτων)<br>
+                    • Ανάλυση αιτιών: Ανεπαρκής χρόνος εξάσκησης, παραδοσιακές μέθοδοι<br>
+                    • Στόχος: Αύξηση μέσου όρου βαθμολογίας κατά 15%<br>
+                    • Σχεδιασμός: Εισαγωγή διαφοροποιημένης διδασκαλίας, χρήση εκπαιδευτικού λογισμικού</p>
+
+                    <p><strong>2. DO (Δράση):</strong></p>
+                    <p>• Πιλοτική εφαρμογή σε 2 τμήματα για ένα τρίμηνο<br>
+                    • Επιμόρφωση των εκπαιδευτικών Μαθηματικών<br>
+                    • Χρήση πλατφόρμας GeoGebra για οπτικοποίηση εννοιών<br>
+                    • Ομαδοσυνεργατικές δραστηριότητες</p>
+
+                    <p><strong>3. CHECK (Έλεγχος):</strong></p>
+                    <p>• Διαγνωστικά τεστ πριν και μετά την παρέμβαση<br>
+                    • Ερωτηματολόγια ικανοποίησης μαθητών<br>
+                    • Παρατηρήσεις διδασκαλίας<br>
+                    • Σύγκριση με ομάδα ελέγχου (τμήματα χωρίς παρέμβαση)</p>
+
+                    <p><strong>4. ACT (Βελτίωση):</strong></p>
+                    <p>• Αν επιτυχής: Επέκταση σε όλα τα τμήματα, τυποποίηση διαδικασίας<br>
+                    • Αν μη επιτυχής: Τροποποίηση προσέγγισης και επανάληψη του κύκλου<br>
+                    • Τεκμηρίωση καλών πρακτικών για μελλοντική χρήση</p>
+
+                    <p><strong>Συμπέρασμα:</strong> Ο κύκλος επαναλαμβάνεται συνεχώς, οδηγώντας σε διαρκή βελτίωση της ποιότητας διδασκαλίας.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(7)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(7)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 8: Balanced Scorecard -->
+        <div class="question-card" id="q8">
+            <div class="question-header">
+                <span class="question-number">Θέμα 8</span>
+                <span class="difficulty medium">📗 Μέτρια Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Ισορροπημένη Κάρτα Επιδόσεων (Balanced Scorecard)</strong><br><br>
+                Παρουσιάστε το εργαλείο Balanced Scorecard και τις 4 διαστάσεις του. Πώς μπορεί να εφαρμοστεί σε μια σχολική μονάδα για τη μέτρηση και βελτίωση της απόδοσής της;
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(8)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory8">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Βασική Ιδέα</h5>
+                    <p>Η επιτυχία <strong>δεν μετριέται μόνο με οικονομικούς δείκτες</strong>. Το BSC εξετάζει 4 διαστάσεις που συνδέονται αιτιακά.</p>
+
+                    <div class="keywords">
+                        <span class="keyword">Οικονομική διάσταση</span>
+                        <span class="keyword">Πελάτες</span>
+                        <span class="keyword">Εσωτερικές διαδικασίες</span>
+                        <span class="keyword">Μάθηση & Ανάπτυξη</span>
+                    </div>
+
+                    <h5>📊 Οι 4 Διαστάσεις</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Διάσταση</th>
+                                <th>Ερώτηση</th>
+                                <th>Εφαρμογή στο Σχολείο</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Χρηματοοικονομική</strong></td>
+                                <td>Πώς βλέπουν οι χρηματοδότες;</td>
+                                <td>Αξιοποίηση πόρων, κόστος/μαθητή</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Πελάτες</strong></td>
+                                <td>Πώς βλέπουν οι πελάτες;</td>
+                                <td>Ικανοποίηση μαθητών/γονέων</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Εσωτερικές Διαδικασίες</strong></td>
+                                <td>Σε τι πρέπει να διαπρέψουμε;</td>
+                                <td>Ποιότητα διδασκαλίας, καινοτομία</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Μάθηση & Ανάπτυξη</strong></td>
+                                <td>Πώς θα βελτιωνόμαστε;</td>
+                                <td>Επιμόρφωση εκπαιδευτικών</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Αιτιακή αλυσίδα:</strong> Μάθηση → Καλύτερες Διαδικασίες → Ικανοποιημένοι «Πελάτες» → Καλύτερα Οικονομικά αποτελέσματα
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «MANEDU_6.pdf», Διαφάνειες 27-34</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer8"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(8)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model8">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Το Balanced Scorecard είναι ένα εργαλείο στρατηγικής διοίκησης που εξετάζει την απόδοση ενός οργανισμού από 4 διαστάσεις, ξεπερνώντας τους παραδοσιακούς οικονομικούς δείκτες.</p>
+
+                    <p><strong>Εφαρμογή στη Σχολική Μονάδα:</strong></p>
+
+                    <p><strong>1. Οικονομική/Χρηματοοικονομική Διάσταση:</strong></p>
+                    <p>Δείκτες: Ύψος χρηματοδότησης, % εγγραφών (ιδιωτικά), αξιοποίηση ευρωπαϊκών πόρων, κόστος ανά μαθητή.<br>
+                    <em>Στόχος:</em> Αύξηση χρηματοδότησης από Erasmus+ κατά 20%.</p>
+
+                    <p><strong>2. Διάσταση Πελατών (Μαθητές/Γονείς):</strong></p>
+                    <p>Δείκτες: % ικανοποίησης γονέων, % μαθητών που συστήνουν το σχολείο, παράπονα/χρόνο.<br>
+                    <em>Στόχος:</em> Αύξηση ικανοποίησης γονέων στο 85%.</p>
+
+                    <p><strong>3. Διάσταση Εσωτερικών Διαδικασιών:</strong></p>
+                    <p>Δείκτες: Αριθμός καινοτόμων προγραμμάτων, % μαθημάτων με χρήση ΤΠΕ, παιδαγωγός/μαθητές.<br>
+                    <em>Στόχος:</em> Υλοποίηση 5 νέων εκπαιδευτικών προγραμμάτων.</p>
+
+                    <p><strong>4. Διάσταση Μάθησης & Ανάπτυξης:</strong></p>
+                    <p>Δείκτες: Ώρες επιμόρφωσης/εκπαιδευτικό, % εκπαιδευτικών με πιστοποιήσεις, ικανοποίηση προσωπικού.<br>
+                    <em>Στόχος:</em> 100% εκπαιδευτικών με πιστοποίηση ΤΠΕ.</p>
+
+                    <p><strong>Σύνδεση Διαστάσεων:</strong> Η επένδυση στην επιμόρφωση (Μάθηση) οδηγεί σε καλύτερη διδασκαλία (Διαδικασίες), που αυξάνει την ικανοποίηση (Πελάτες), που με τη σειρά της προσελκύει περισσότερους μαθητές/χρηματοδότηση (Οικονομικά).</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(8)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(8)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 9: Λήψη Αποφάσεων -->
+        <div class="question-card" id="q9">
+            <div class="question-header">
+                <span class="question-number">Θέμα 9</span>
+                <span class="difficulty medium">📗 Μέτρια Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Διαδικασία Λήψης Αποφάσεων</strong><br><br>
+                Παρουσιάστε τα βήματα της ορθολογικής διαδικασίας λήψης αποφάσεων. Ακολούθως, εφαρμόστε τα για την επιλογή νέου αναπληρωματικού εκπαιδευτικού σε μια σχολική μονάδα που αντιμετωπίζει έλλειψη προσωπικού.
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(9)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory9">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Τα 5 Βήματα Λήψης Αποφάσεων</h5>
+                    <div class="keywords">
+                        <span class="keyword">Αναγνώριση</span>
+                        <span class="keyword">Κριτήρια</span>
+                        <span class="keyword">Εναλλακτικές</span>
+                        <span class="keyword">Αξιολόγηση</span>
+                        <span class="keyword">Υλοποίηση</span>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Βήμα</th>
+                                <th>Περιγραφή</th>
+                                <th>Παράδειγμα</th>
+                            </tr>
+                            <tr>
+                                <td><strong>1. Αναγνώριση Προβλήματος</strong></td>
+                                <td>Εντοπισμός διαφοράς επιθυμητής-υφιστάμενης κατάστασης</td>
+                                <td>Έλλειψη καθηγητή Μαθηματικών</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Καθορισμός Κριτηρίων</strong></td>
+                                <td>Τι χαρακτηριστικά πρέπει να έχει η λύση;</td>
+                                <td>Τυπικά προσόντα, εμπειρία, διαθεσιμότητα</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Παραγωγή Εναλλακτικών</strong></td>
+                                <td>Δημιουργία πιθανών λύσεων</td>
+                                <td>Υποψήφιος Α, Β, Γ...</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Αξιολόγηση & Επιλογή</strong></td>
+                                <td>Σύγκριση εναλλακτικών με κριτήρια</td>
+                                <td>Βαθμολόγηση κάθε υποψηφίου</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Υλοποίηση</strong></td>
+                                <td>Εφαρμογή και παρακολούθηση</td>
+                                <td>Πρόσληψη και αξιολόγηση απόδοσης</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="tips-box">
+                        <strong>💡 Τύποι Αποφάσεων:</strong><br>
+                        • Προγραμματισμένες: Ρουτίνα, με σαφείς κανόνες<br>
+                        • Μη προγραμματισμένες: Νέες καταστάσεις, απαιτούν κρίση
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «4 Λήψη αποφάσεων στην εκπαίδευση.pdf», Διαφάνειες 2-9</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer9"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(9)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model9">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Η λήψη αποφάσεων είναι η διαδικασία ορισμού του προβλήματος, ανάπτυξης εναλλακτικών λύσεων, επιλογής της καλύτερης και υλοποίησής της.</p>
+
+                    <p><strong>Εφαρμογή για Επιλογή Αναπληρωτή Εκπαιδευτικού:</strong></p>
+
+                    <p><strong>Βήμα 1 - Αναγνώριση Προβλήματος:</strong></p>
+                    <p>Το σχολείο έχει έλλειψη καθηγητή Φυσικής εξαιτίας αιφνίδιας αναρρωτικής άδειας. Πρέπει να καλυφθεί άμεσα για να μην χαθούν ώρες διδασκαλίας.</p>
+
+                    <p><strong>Βήμα 2 - Καθορισμός Κριτηρίων:</strong></p>
+                    <p>• Τυπικά προσόντα (πτυχίο Φυσικής, παιδαγωγική επάρκεια)<br>
+                    • Εμπειρία διδασκαλίας<br>
+                    • Άμεση διαθεσιμότητα<br>
+                    • Κόστος (ημερήσια αποζημίωση)<br>
+                    • Συστάσεις/Αξιολογήσεις</p>
+
+                    <p><strong>Βήμα 3 - Παραγωγή Εναλλακτικών:</strong></p>
+                    <p>• Υποψήφιος Α: 5 χρόνια εμπειρία, διαθέσιμος αμέσως<br>
+                    • Υποψήφιος Β: 10 χρόνια εμπειρία, διαθέσιμος σε 1 εβδομάδα<br>
+                    • Υποψήφιος Γ: Νεοδιόριστος, διαθέσιμος αμέσως</p>
+
+                    <p><strong>Βήμα 4 - Αξιολόγηση & Επιλογή:</strong></p>
+                    <p>Βαθμολόγηση κάθε υποψηφίου (1-5) σε κάθε κριτήριο. Ο Α συγκεντρώνει το υψηλότερο σύνολο λόγω συνδυασμού εμπειρίας και διαθεσιμότητας.</p>
+
+                    <p><strong>Βήμα 5 - Υλοποίηση:</strong></p>
+                    <p>Πρόσληψη του Υποψηφίου Α, ενημέρωση, παράδοση αναλυτικού προγράμματος, παρακολούθηση απόδοσης μετά από 2 εβδομάδες.</p>
+
+                    <p><strong>Συμπέρασμα:</strong> Η συστηματική διαδικασία διασφαλίζει ορθολογική απόφαση με βάση αντικειμενικά κριτήρια.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(9)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="nextQuestion(9)">
+                    Επόμενο →
+                </button>
+            </div>
+        </div>
+
+        <!-- ΘΕΜΑ 10: Fiedler -->
+        <div class="question-card" id="q10">
+            <div class="question-header">
+                <span class="question-number">Θέμα 10</span>
+                <span class="difficulty medium">📗 Μέτρια Πιθανότητα</span>
+            </div>
+
+            <div class="question-text">
+                <strong>Μοντέλο Ενδεχομένων του Fiedler</strong><br><br>
+                Παρουσιάστε το μοντέλο ηγεσίας του Fiedler, εξηγώντας τον τρόπο με τον οποίο η «ευνοϊκότητα της κατάστασης» καθορίζει το αποτελεσματικό στυλ ηγεσίας. Πώς μπορεί ένας Διευθυντής να χρησιμοποιήσει αυτή τη θεωρία;
+            </div>
+
+            <button class="theory-toggle" onclick="toggleTheory(10)">
+                📖 Εμφάνιση Θεωρίας
+            </button>
+
+            <div class="theory-section" id="theory10">
+                <h4>📚 Θεωρητικό Πλαίσιο</h4>
+                <div class="theory-content">
+                    <h5>🎯 Βασική Ιδέα</h5>
+                    <p>Το στυλ ηγεσίας είναι <strong>σταθερό χαρακτηριστικό της προσωπικότητας</strong> - δεν αλλάζει εύκολα. Η λύση είναι να ταιριάξουμε τον ηγέτη με την κατάλληλη κατάσταση!</p>
+
+                    <div class="keywords">
+                        <span class="keyword">LPC (Least Preferred Coworker)</span>
+                        <span class="keyword">Ευνοϊκότητα κατάστασης</span>
+                        <span class="keyword">Ταίριασμα</span>
+                    </div>
+
+                    <h5>📊 Κλίμακα LPC</h5>
+                    <p>• <strong>Υψηλό LPC:</strong> Ηγέτης με κίνητρο τις σχέσεις (αξιολογεί θετικά ακόμα και τον λιγότερο αγαπητό συνεργάτη)<br>
+                    • <strong>Χαμηλό LPC:</strong> Ηγέτης με κίνητρο την εργασία (αξιολογεί αρνητικά τον λιγότερο αποδοτικό)</p>
+
+                    <h5>📊 3 Παράγοντες Ευνοϊκότητας</h5>
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Παράγοντας</th>
+                                <th>Περιγραφή</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Σχέσεις ηγέτη-μελών</strong></td>
+                                <td>Βαθμός εμπιστοσύνης και σεβασμού</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Δομή έργου</strong></td>
+                                <td>Πόσο σαφώς καθορισμένες οι εργασίες;</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ισχύς θέσης</strong></td>
+                                <td>Επίσημη εξουσία ανταμοιβής/τιμωρίας</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>📌 Βασικό Εύρημα:</strong><br>
+                        • Πολύ ευνοϊκές ή πολύ δυσμενείς καταστάσεις → Ηγέτης εστιασμένος στην εργασία (χαμηλό LPC)<br>
+                        • Μέτρια ευνοϊκές καταστάσεις → Ηγέτης εστιασμένος στις σχέσεις (υψηλό LPC)
+                    </div>
+
+                    <p class="reference">📖 Αναφορά: «ΔΕ 6 Ηγεσία - Καθοδήγηση.pdf», Διαφάνειες 25-29</p>
+                </div>
+            </div>
+
+            <textarea placeholder="Γράψτε την απάντησή σας εδώ..." id="answer10"></textarea>
+
+            <button class="answer-toggle" onclick="showAnswer(10)">
+                ✅ Εμφάνιση Υποδειγματικής Απάντησης
+            </button>
+
+            <div class="model-answer" id="model10">
+                <h4>📝 Υποδειγματική Απάντηση</h4>
+                <div class="theory-content">
+                    <p><strong>Εισαγωγή:</strong> Το μοντέλο του Fiedler υποστηρίζει ότι η αποτελεσματικότητα της ηγεσίας εξαρτάται από το ταίριασμα μεταξύ του στυλ του ηγέτη και της κατάστασης.</p>
+
+                    <p><strong>Το Στυλ Ηγεσίας (LPC):</strong></p>
+                    <p>Ο Fiedler θεωρεί το στυλ σταθερό χαρακτηριστικό. Μετριέται με την κλίμακα LPC: υψηλό LPC = εστίαση στις σχέσεις, χαμηλό LPC = εστίαση στην εργασία.</p>
+
+                    <p><strong>Οι 3 Παράγοντες Κατάστασης:</strong></p>
+                    <p><strong>1. Σχέσεις ηγέτη-μελών:</strong> Καλές σχέσεις = ευνοϊκό (στο σχολείο: εμπιστοσύνη εκπαιδευτικών στον Διευθυντή).<br>
+                    <strong>2. Δομή έργου:</strong> Σαφείς στόχοι = ευνοϊκό (στο σχολείο: καθορισμένο αναλυτικό πρόγραμμα).<br>
+                    <strong>3. Ισχύς θέσης:</strong> Μεγάλη εξουσία = ευνοϊκό (στο σχολείο: ο Διευθυντής έχει σχετικά περιορισμένη ισχύ θέσης).</p>
+
+                    <p><strong>Εφαρμογή στην Εκπαίδευση:</strong></p>
+                    <p>Σε <em>πολύ ευνοϊκή κατάσταση</em> (καλές σχέσεις, σαφείς στόχοι, ισχύς): Ο Διευθυντής με εστίαση στην εργασία είναι αποτελεσματικός (π.χ. οργάνωση εξετάσεων).</p>
+                    <p>Σε <em>μέτρια ευνοϊκή κατάσταση</em>: Ο Διευθυντής με εστίαση στις σχέσεις είναι αποτελεσματικός (π.χ. αντιμετώπιση συγκρούσεων, αλλαγή σχολικής κουλτούρας).</p>
+                    <p>Σε <em>δυσμενή κατάσταση</em>: Απαιτείται ξανά εστίαση στην εργασία για να τεθεί τάξη (π.χ. κρίση, πρόβλημα πειθαρχίας).</p>
+
+                    <p><strong>Πρακτική Συμβουλή:</strong> Αν ο Διευθυντής δεν ταιριάζει με την κατάσταση, πρέπει είτε να αλλάξει η κατάσταση (ενδυνάμωση σχέσεων ή αποσαφήνιση ρόλων) είτε να αναλάβει κάποιος πιο κατάλληλος.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn" onclick="prevQuestion(10)">
+                    ← Προηγούμενο
+                </button>
+                <button class="nav-btn next-btn" onclick="showResults()">
+                    Ολοκλήρωση ✓
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div class="results-card" id="results">
+            <div class="results-icon">🎉</div>
+            <h2>Συγχαρητήρια!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Ολοκληρώσατε και τα 10 πιθανά θέματα εξετάσεων!</p>
+            
+            <div style="background: #f0fff4; padding: 20px; border-radius: 15px; margin: 20px 0; text-align: left;">
+                <h3 style="color: #276749; margin-bottom: 15px;">📋 Σύνοψη Θεμάτων:</h3>
+                <p><strong>🔥 SOS (Πολύ Πιθανά):</strong></p>
+                <p style="margin-left: 20px;">1. Hersey-Blanchard<br>2. Maslow<br>4. Vroom</p>
+                <p><strong>⚡ Υψηλή Πιθανότητα:</strong></p>
+                <p style="margin-left: 20px;">3. Herzberg<br>5. Blake & Mouton<br>6. SWOT<br>7. PDCA Deming</p>
+                <p><strong>📗 Μέτρια Πιθανότητα:</strong></p>
+                <p style="margin-left: 20px;">8. Balanced Scorecard<br>9. Λήψη Αποφάσεων<br>10. Fiedler</p>
+            </div>
+
+            <div style="background: #fff5f5; padding: 15px; border-radius: 10px; border-left: 4px solid #e53e3e; text-align: left;">
+                <strong style="color: #c53030;">⚠️ Υπενθύμιση:</strong> Ο καθηγητής ζητάει <strong>βασική ιδέα + βήματα + εφαρμογή σε παράδειγμα</strong>, όχι εξαντλητική θεωρία!
+            </div>
+
+            <button class="restart-btn" onclick="restartQuiz()">
+                🔄 Ξεκινήστε από την Αρχή
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 10;
+
+        function toggleTheory(num) {
+            const theory = document.getElementById('theory' + num);
+            const btn = theory.previousElementSibling;
+            
+            if (theory.classList.contains('show')) {
+                theory.classList.remove('show');
+                btn.innerHTML = '📖 Εμφάνιση Θεωρίας';
+            } else {
+                theory.classList.add('show');
+                btn.innerHTML = '📖 Απόκρυψη Θεωρίας';
+            }
+        }
+
+        function showAnswer(num) {
+            const model = document.getElementById('model' + num);
+            const btn = model.previousElementSibling;
+            
+            if (model.classList.contains('show')) {
+                model.classList.remove('show');
+                btn.innerHTML = '✅ Εμφάνιση Υποδειγματικής Απάντησης';
+            } else {
+                model.classList.add('show');
+                btn.innerHTML = '✅ Απόκρυψη Απάντησης';
+            }
+        }
+
+        function nextQuestion(num) {
+            if (num < totalQuestions) {
+                document.getElementById('q' + num).classList.remove('active');
+                document.getElementById('q' + (num + 1)).classList.add('active');
+                currentQuestion = num + 1;
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevQuestion(num) {
+            if (num > 1) {
+                document.getElementById('q' + num).classList.remove('active');
+                document.getElementById('q' + (num - 1)).classList.add('active');
+                currentQuestion = num - 1;
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function updateProgress() {
+            const percent = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = 'Θέμα ' + currentQuestion + '/' + totalQuestions;
+            document.getElementById('progress-percent').textContent = Math.round(percent) + '%';
+        }
+
+        function showResults() {
+            document.getElementById('q10').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+            document.getElementById('progress-fill').style.width = '100%';
+            document.getElementById('progress-text').textContent = 'Ολοκληρώθηκε!';
+            document.getElementById('progress-percent').textContent = '100%';
+            window.scrollTo(0, 0);
+        }
+
+        function restartQuiz() {
+            // Hide results and all questions
+            document.getElementById('results').classList.remove('active');
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById('q' + i).classList.remove('active');
+                // Clear answers
+                document.getElementById('answer' + i).value = '';
+                // Hide theory and model answers
+                document.getElementById('theory' + i).classList.remove('show');
+                document.getElementById('model' + i).classList.remove('show');
+            }
+            // Show first question
+            document.getElementById('q1').classList.add('active');
+            currentQuestion = 1;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

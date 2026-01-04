@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Λήψη Αποφάσεων στο Management - Διοίκηση Εκπαίδευσης</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header h1 {
+            color: #00d4ff;
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .progress-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        .score-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .score-item {
+            text-align: center;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .score-item .number {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .score-item.correct .number { color: #00ff88; }
+        .score-item.wrong .number { color: #ff6b6b; }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .theory-section {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #00d4ff;
+            display: none;
+        }
+
+        .theory-section.visible {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 1000px; }
+        }
+
+        .theory-section h4 {
+            color: #00d4ff;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theory-section h4::before {
+            content: "📚";
+        }
+
+        .theory-description {
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        .theory-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .keyword {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .theory-example {
+            background: rgba(255, 193, 7, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #ffc107;
+        }
+
+        .theory-example h5 {
+            color: #ffc107;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .theory-example p {
+            color: #c0c0c0;
+            font-size: 0.9em;
+        }
+
+        .theory-toggle {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #1a1a2e;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theory-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .theory-toggle.active {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover:not(.disabled) {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: #00d4ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .option.wrong {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option.correct .option-letter {
+            background: #00ff88;
+            color: #1a1a2e;
+        }
+
+        .option.wrong .option-letter {
+            background: #ff6b6b;
+            color: #1a1a2e;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .feedback.wrong {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .feedback-icon {
+            font-size: 1.3em;
+            margin-right: 10px;
+        }
+
+        .explanation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #c0c0c0;
+            font-size: 0.95em;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn.prev:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            color: #1a1a2e;
+        }
+
+        .nav-btn.next:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-section {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results-title {
+            font-size: 2em;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        .results-score {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .results-message {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+        }
+
+        .results-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .result-stat {
+            text-align: center;
+        }
+
+        .result-stat .value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .result-stat.correct .value { color: #00ff88; }
+        .result-stat.wrong .value { color: #ff6b6b; }
+
+        .result-stat .label {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+
+        .restart-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            border: none;
+            border-radius: 30px;
+            color: #1a1a2e;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: #a0a0a0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+
+        .start-section {
+            text-align: center;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .start-section h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .start-section p {
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .start-btn {
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            border: none;
+            border-radius: 30px;
+            color: #1a1a2e;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .info-card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .info-card .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .info-card .label {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 1.1em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+
+            .score-display {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .results-details {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Λήψη Αποφάσεων στο Management</h1>
+            <p>Διοίκηση Εκπαιδευτικών Μονάδων - MST352</p>
+        </header>
+
+        <!-- Start Section -->
+        <div class="start-section" id="startSection">
+            <h2>🎯 Καλωσήρθες στο Quiz!</h2>
+            <p>Εξέτασε τις γνώσεις σου στη Λήψη Αποφάσεων στο Management με θεωρία και πρακτικές ερωτήσεις.</p>
+            
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="icon">📝</div>
+                    <div class="value" id="totalQuestionsInfo">24</div>
+                    <div class="label">Ερωτήσεις</div>
+                </div>
+                <div class="info-card">
+                    <div class="icon">📚</div>
+                    <div class="value">9</div>
+                    <div class="label">Θεματικές Ενότητες</div>
+                </div>
+                <div class="info-card">
+                    <div class="icon">💡</div>
+                    <div class="value">✓</div>
+                    <div class="label">Θεωρία σε κάθε ερώτηση</div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.95em; margin-bottom: 20px;">
+                <strong>💡 Συμβουλή:</strong> Πάτα "Εμφάνιση Θεωρίας" πριν απαντήσεις για να διαβάσεις τη σχετική θεωρία!
+            </p>
+
+            <button class="start-btn" onclick="startQuiz()">Ξεκίνα το Quiz 🚀</button>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quizSection" style="display: none;">
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span>Ερώτηση <span id="currentQ">1</span> από <span id="totalQ">24</span></span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="score-display">
+                    <div class="score-item correct">
+                        <div class="number" id="correctScore">0</div>
+                        <div>Σωστές</div>
+                    </div>
+                    <div class="score-item wrong">
+                        <div class="number" id="wrongScore">0</div>
+                        <div>Λάθος</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div class="navigation">
+                <button class="nav-btn prev" id="prevBtn" onclick="prevQuestion()" disabled>← Προηγούμενη</button>
+                <button class="nav-btn next" id="nextBtn" onclick="nextQuestion()" disabled>Επόμενη →</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <h2 class="results-title">🎉 Ολοκλήρωσες το Quiz!</h2>
+            <div class="results-score" id="finalScore">0%</div>
+            <p class="results-message" id="resultsMessage"></p>
+            <div class="results-details">
+                <div class="result-stat correct">
+                    <div class="value" id="finalCorrect">0</div>
+                    <div class="label">Σωστές Απαντήσεις</div>
+                </div>
+                <div class="result-stat wrong">
+                    <div class="value" id="finalWrong">0</div>
+                    <div class="label">Λάθος Απαντήσεις</div>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Ξαναπαίξε</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // ΕΝΟΤΗΤΑ 1: Ορισμός & Διαδικασία Λήψης Αποφάσεων
+            {
+                category: "Ορισμός & Διαδικασία",
+                theory: {
+                    title: "Ορισμός Λήψης Αποφάσεων",
+                    description: "Η Λήψη Αποφάσεων είναι η διαδικασία ορισμού του προβλήματος, ανάπτυξης/καταγραφής των εναλλακτικών λύσεων, επιλογής της καλύτερης λύσης και υλοποίησής της. Αποτελεί θεμελιώδη λειτουργία του management.",
+                    keywords: ["πρόβλημα", "εναλλακτικές λύσεις", "επιλογή", "υλοποίηση", "αξιολόγηση"],
+                    example: "Ο Διευθυντής ενός σχολείου αντιμετωπίζει πτώση της επίδοσης των μαθητών. Ορίζει το πρόβλημα, αναζητά λύσεις (επιμόρφωση εκπαιδευτικών, αλλαγή μεθόδων διδασκαλίας, ενισχυτική διδασκαλία), επιλέγει και εφαρμόζει την καλύτερη."
+                },
+                question: "Ποια είναι η σωστή σειρά των βημάτων στη διαδικασία λήψης αποφάσεων;",
+                options: [
+                    "Επιλογή λύσης → Ορισμός προβλήματος → Αξιολόγηση → Εφαρμογή",
+                    "Ορισμός προβλήματος → Δημιουργία εναλλακτικών → Αξιολόγηση → Επιλογή → Εφαρμογή → Επαναπληροφόρηση",
+                    "Εφαρμογή → Αξιολόγηση → Ορισμός προβλήματος → Επιλογή",
+                    "Δημιουργία εναλλακτικών → Ορισμός προβλήματος → Εφαρμογή"
+                ],
+                correct: 1,
+                explanation: "Η διαδικασία ξεκινά με τον προσδιορισμό του προβλήματος, συνεχίζει με τη δημιουργία εναλλακτικών προτάσεων, την αξιολόγησή τους, την επιλογή της καλύτερης λύσης, την εφαρμογή της και τέλος την επαναπληροφόρηση (feedback)."
+            },
+            {
+                category: "Ορισμός & Διαδικασία",
+                theory: {
+                    title: "Στάδια Διαδικασίας Λήψης Αποφάσεων",
+                    description: "Η διαδικασία λήψης αποφάσεων περιλαμβάνει 6 βήματα: 1) Προσδιορισμός προβλήματος (αναγνώριση, καθορισμός, διάγνωση), 2) Δημιουργία εναλλακτικών προτάσεων, 3) Αξιολόγηση εναλλακτικών, 4) Επιλογή καλύτερης λύσης, 5) Εφαρμογή απόφασης, 6) Αξιολόγηση αποτελεσμάτων και επαναπληροφόρηση.",
+                    keywords: ["προσδιορισμός προβλήματος", "εναλλακτικές", "αξιολόγηση", "επιλογή", "εφαρμογή", "επαναπληροφόρηση"],
+                    example: "Το σχολείο πρέπει να αποφασίσει για νέο πρόγραμμα ρομποτικής: συλλέγει δεδομένα κόστους, εξετάζει εναλλακτικές (συνεργασία με ΑΕΙ, αγορά εξοπλισμού), επιλέγει τη βέλτιστη λύση και παρακολουθεί την εφαρμογή."
+                },
+                question: "Κατά τον προσδιορισμό του προβλήματος, οι μάνατζερ πρέπει να:",
+                options: [
+                    "Επιλέξουν αμέσως τη λύση που φαίνεται καλύτερη",
+                    "Αναγνωρίσουν το πρόβλημα, καθορίσουν τα στοιχεία του και διαγνώσουν την κατάσταση",
+                    "Αγνοήσουν τις αιτίες του προβλήματος",
+                    "Εφαρμόσουν την πρώτη διαθέσιμη λύση"
+                ],
+                correct: 1,
+                explanation: "Στον προσδιορισμό του προβλήματος οι μάνατζερ πρέπει να: αναγνωρίσουν το πρόβλημα, να εντοπίσουν τη διαφορά μεταξύ επιθυμητής και υφιστάμενης κατάστασης, να καθορίσουν τα στοιχεία που το συνθέτουν και να διαγνώσουν τις αιτίες."
+            },
+            {
+                category: "Ορισμός & Διαδικασία",
+                theory: {
+                    title: "Εναλλακτικές Λύσεις",
+                    description: "Οι εναλλακτικές λύσεις διακρίνονται σε: α) Έτοιμες λύσεις - έχουν ήδη δοκιμαστεί από εμάς ή άλλους, και β) Λύσεις κατά παραγγελία - σχεδιάζονται ειδικά για την επίλυση του συγκεκριμένου προβλήματος.",
+                    keywords: ["έτοιμες λύσεις", "λύσεις κατά παραγγελία", "δημιουργικότητα", "εμπειρία"],
+                    example: "Για τη βελτίωση της σχολικής βίας, το σχολείο μπορεί να χρησιμοποιήσει έτοιμες λύσεις (πρόγραμμα που εφάρμοσε άλλο σχολείο) ή να σχεδιάσει δική του παρέμβαση προσαρμοσμένη στις ανάγκες του."
+                },
+                question: "Ποια είναι η διαφορά μεταξύ 'έτοιμων λύσεων' και 'λύσεων κατά παραγγελία';",
+                options: [
+                    "Δεν υπάρχει καμία διαφορά",
+                    "Οι έτοιμες λύσεις έχουν δοκιμαστεί ήδη, ενώ οι λύσεις κατά παραγγελία σχεδιάζονται ειδικά για το συγκεκριμένο πρόβλημα",
+                    "Οι λύσεις κατά παραγγελία είναι πάντα καλύτερες",
+                    "Οι έτοιμες λύσεις χρησιμοποιούνται μόνο σε επείγουσες καταστάσεις"
+                ],
+                correct: 1,
+                explanation: "Οι έτοιμες λύσεις έχουν ήδη δοκιμαστεί (από εμάς ή άλλους οργανισμούς), ενώ οι λύσεις κατά παραγγελία σχεδιάζονται ειδικά για την επίλυση του συγκεκριμένου προβλήματος που αντιμετωπίζουμε."
+            },
+
+            // ΕΝΟΤΗΤΑ 2: Επίπεδα Λήψης Αποφάσεων
+            {
+                category: "Επίπεδα Αποφάσεων",
+                theory: {
+                    title: "Τα Τρία Επίπεδα Λήψης Αποφάσεων",
+                    description: "Οι αποφάσεις διακρίνονται σε τρία επίπεδα: 1) Στρατηγικό (ανώτερο επίπεδο) - επηρεάζουν το σκοπό και την κατεύθυνση όλου του οργανισμού, 2) Διαχειριστικό (μέσο επίπεδο) - αφορούν την υλοποίηση των στρατηγικών αποφάσεων, 3) Λειτουργικό (κατώτερο επίπεδο) - αφορούν καθημερινές λειτουργίες.",
+                    keywords: ["στρατηγικό", "διαχειριστικό", "λειτουργικό", "ιεραρχία", "διοίκηση"],
+                    example: "Στρατηγική απόφαση: Το Υπουργείο αποφασίζει εισαγωγή νέου προγράμματος σπουδών. Διαχειριστική: Η Περιφέρεια οργανώνει επιμόρφωση εκπαιδευτικών. Λειτουργική: Ο εκπαιδευτικός αποφασίζει πώς θα διδάξει τη συγκεκριμένη ενότητα."
+                },
+                question: "Σε ποιο επίπεδο λήψης αποφάσεων ανήκει η απόφαση για αλλαγή του προγράμματος σπουδών σε εθνικό επίπεδο;",
+                options: [
+                    "Λειτουργικό επίπεδο",
+                    "Διαχειριστικό επίπεδο",
+                    "Στρατηγικό επίπεδο",
+                    "Τακτικό επίπεδο"
+                ],
+                correct: 2,
+                explanation: "Οι στρατηγικές αποφάσεις λαμβάνονται στο ανώτερο επίπεδο διοίκησης και επηρεάζουν το σκοπό και την κατεύθυνση όλου του οργανισμού. Η αλλαγή προγράμματος σπουδών είναι τέτοια απόφαση."
+            },
+            {
+                category: "Επίπεδα Αποφάσεων",
+                theory: {
+                    title: "Διαχειριστικές και Λειτουργικές Αποφάσεις",
+                    description: "Οι διαχειριστικές αποφάσεις λαμβάνονται από στελέχη μεσαίας βαθμίδας και αφορούν την υλοποίηση στρατηγικών αποφάσεων. Οι λειτουργικές αποφάσεις λαμβάνονται στο κατώτερο επίπεδο και αφορούν καθημερινές λειτουργίες.",
+                    keywords: ["μεσαίο επίπεδο", "κατώτερο επίπεδο", "υλοποίηση", "καθημερινότητα"],
+                    example: "Διαχειριστική: Ο Διευθυντής σχολείου αποφασίζει πώς θα κατανεμηθούν οι ώρες διδασκαλίας. Λειτουργική: Ο εκπαιδευτικός αποφασίζει ποια άσκηση θα δώσει στους μαθητές."
+                },
+                question: "Ο Διευθυντής σχολείου αποφασίζει για την κατανομή του προσωπικού στα τμήματα. Αυτή είναι απόφαση:",
+                options: [
+                    "Στρατηγικού επιπέδου",
+                    "Διαχειριστικού επιπέδου",
+                    "Λειτουργικού επιπέδου",
+                    "Προσωπικού επιπέδου"
+                ],
+                correct: 1,
+                explanation: "Οι διαχειριστικές αποφάσεις (μέσο επίπεδο) αφορούν την υλοποίηση των στρατηγικών αποφάσεων. Η κατανομή προσωπικού είναι τέτοια απόφαση, καθώς υλοποιεί το ευρύτερο εκπαιδευτικό σχεδιασμό."
+            },
+
+            // ΕΝΟΤΗΤΑ 3: Κατηγορίες Αποφάσεων
+            {
+                category: "Κατηγορίες Αποφάσεων",
+                theory: {
+                    title: "Προγραμματισμένες και Απρογραμμάτιστες Αποφάσεις",
+                    description: "Οι αποφάσεις διακρίνονται σε: α) Προγραμματισμένες - αφορούν προβλήματα ρουτίνας που επαναλαμβάνονται συχνά, β) Απρογραμμάτιστες - αφορούν προβλήματα που δεν εμφανίζονται συχνά και απαιτούν πρωτότυπες λύσεις.",
+                    keywords: ["ρουτίνα", "επανάληψη", "πρωτότυπα προβλήματα", "τυποποίηση"],
+                    example: "Προγραμματισμένη: Η διαδικασία εγγραφής μαθητών κάθε χρόνο. Απρογραμμάτιστη: Η αντιμετώπιση μιας πανδημίας που κλείνει τα σχολεία - απαιτεί πρωτοφανή λύση (εξ αποστάσεως διδασκαλία)."
+                },
+                question: "Η απόφαση για το ετήσιο πρόγραμμα διδασκαλίας που ακολουθεί καθιερωμένους κανόνες είναι:",
+                options: [
+                    "Απρογραμμάτιστη απόφαση",
+                    "Προγραμματισμένη απόφαση",
+                    "Στρατηγική απόφαση",
+                    "Έκτακτη απόφαση"
+                ],
+                correct: 1,
+                explanation: "Οι προγραμματισμένες αποφάσεις αφορούν προβλήματα ή καταστάσεις ρουτίνας που επαναλαμβάνονται συχνά. Το ετήσιο πρόγραμμα διδασκαλίας ακολουθεί καθιερωμένες διαδικασίες."
+            },
+            {
+                category: "Κατηγορίες Αποφάσεων",
+                theory: {
+                    title: "Χαρακτηριστικά Απρογραμμάτιστων Αποφάσεων",
+                    description: "Οι απρογραμμάτιστες αποφάσεις αντιμετωπίζουν νέες, μοναδικές καταστάσεις. Απαιτούν δημιουργικότητα, κριτική σκέψη και συχνά λαμβάνονται υπό συνθήκες αβεβαιότητας.",
+                    keywords: ["νέες καταστάσεις", "αβεβαιότητα", "δημιουργικότητα", "κρίση"],
+                    example: "Η απόφαση ενός σχολείου να δημιουργήσει για πρώτη φορά τμήμα ένταξης για μαθητές με ειδικές ανάγκες, χωρίς προηγούμενη εμπειρία."
+                },
+                question: "Η αντιμετώπιση μιας πρωτόγνωρης κρίσης στο σχολείο απαιτεί:",
+                options: [
+                    "Προγραμματισμένη απόφαση",
+                    "Απρογραμμάτιστη απόφαση",
+                    "Αποφυγή λήψης απόφασης",
+                    "Αναβολή της απόφασης"
+                ],
+                correct: 1,
+                explanation: "Οι απρογραμμάτιστες αποφάσεις αφορούν προβλήματα ή καταστάσεις που δεν εμφανίζονται συχνά. Μια πρωτόγνωρη κρίση απαιτεί πρωτότυπη αντιμετώπιση."
+            },
+
+            // ΕΝΟΤΗΤΑ 4: Συνθήκες Λήψης Αποφάσεων
+            {
+                category: "Συνθήκες Αποφάσεων",
+                theory: {
+                    title: "Οι Τρεις Συνθήκες Λήψης Αποφάσεων",
+                    description: "Οι αποφάσεις λαμβάνονται κάτω από τρεις συνθήκες: 1) Απόλυτης βεβαιότητας - γνωρίζουμε τα αποτελέσματα κάθε εναλλακτικής, 2) Κινδύνου - γνωρίζουμε τις πιθανότητες των αποτελεσμάτων, 3) Αβεβαιότητας - δεν γνωρίζουμε ούτε τα αποτελέσματα ούτε τις πιθανότητές τους.",
+                    keywords: ["βεβαιότητα", "κίνδυνος", "αβεβαιότητα", "πιθανότητες", "αποτελέσματα"],
+                    example: "Βεβαιότητα: Αν προσλάβουμε έναν εκπαιδευτικό, μειώνονται οι ώρες υπερωριών. Κίνδυνος: Υπάρχει 70% πιθανότητα η επιμόρφωση να βελτιώσει τη διδασκαλία. Αβεβαιότητα: Δεν ξέρουμε πώς θα αντιδράσουν οι μαθητές σε νέα μέθοδο."
+                },
+                question: "Όταν ο μάνατζερ γνωρίζει τις πιθανότητες των αποτελεσμάτων κάθε εναλλακτικής, λαμβάνει απόφαση υπό συνθήκες:",
+                options: [
+                    "Απόλυτης βεβαιότητας",
+                    "Αβεβαιότητας",
+                    "Κινδύνου",
+                    "Χάους"
+                ],
+                correct: 2,
+                explanation: "Στις συνθήκες κινδύνου, ο μάνατζερ γνωρίζει τις πιθανότητες επιτυχίας ή αποτυχίας κάθε εναλλακτικής, αλλά δεν μπορεί να προβλέψει με απόλυτη βεβαιότητα το αποτέλεσμα."
+            },
+            {
+                category: "Συνθήκες Αποφάσεων",
+                theory: {
+                    title: "Περιορισμοί στη Λήψη Αποφάσεων",
+                    description: "Υπάρχουν σημαντικοί περιορισμοί που επηρεάζουν τη λήψη αποφάσεων: έλλειψη ευελιξίας, άγχος, έλλειψη αξιόπιστης πληροφόρησης, προβληματική επικοινωνία, γραφειοκρατία και αναποφασιστικότητα.",
+                    keywords: ["περιορισμοί", "άγχος", "πληροφόρηση", "γραφειοκρατία", "επικοινωνία"],
+                    example: "Ένας Διευθυντής σχολείου πρέπει να αποφασίσει γρήγορα για ένα περιστατικό, αλλά δεν έχει πλήρη πληροφόρηση από τους εμπλεκόμενους και η γραφειοκρατία καθυστερεί τις διαδικασίες."
+                },
+                question: "Ποιος από τους παρακάτω ΔΕΝ αποτελεί περιορισμό στη διαδικασία λήψης αποφάσεων;",
+                options: [
+                    "Έλλειψη αξιόπιστης πληροφόρησης",
+                    "Άγχος",
+                    "Πολυτέλεια χρόνου",
+                    "Γραφειοκρατία"
+                ],
+                correct: 2,
+                explanation: "Η πολυτέλεια χρόνου είναι προϋπόθεση για καλή λήψη αποφάσεων, όχι περιορισμός. Οι περιορισμοί περιλαμβάνουν: έλλειψη ευελιξίας, άγχος, έλλειψη πληροφόρησης, προβληματική επικοινωνία, γραφειοκρατία, αναποφασιστικότητα."
+            },
+
+            // ΕΝΟΤΗΤΑ 5: Προσεγγίσεις Μάνατζερ
+            {
+                category: "Προσεγγίσεις Μάνατζερ",
+                theory: {
+                    title: "Τρεις Τύποι Μάνατζερ στη Λήψη Αποφάσεων",
+                    description: "Υπάρχουν τρεις προσεγγίσεις: 1) Ο μάνατζερ που λύνει προβλήματα (problem solver) - προσαρμόζεται στις συνθήκες, 2) Ο μάνατζερ που αποφεύγει τα προβλήματα (problem avoider) - αποφεύγει αλλαγές, διατηρεί την υπάρχουσα κατάσταση, 3) Ο μάνατζερ που αναζητά προβλήματα (problem seeker) - εκμεταλλεύεται ευκαιρίες.",
+                    keywords: ["problem solver", "problem avoider", "problem seeker", "προσαρμογή", "ευκαιρίες"],
+                    example: "Problem Solver: Ο Διευθυντής αντιμετωπίζει το πρόβλημα των απουσιών με νέο σύστημα ενημέρωσης γονέων. Problem Seeker: Αναζητά ευκαιρίες για ευρωπαϊκά προγράμματα ανταλλαγών."
+                },
+                question: "Ο μάνατζερ που ενεργά αναζητά ευκαιρίες για βελτίωση και καινοτομία είναι:",
+                options: [
+                    "Ο μάνατζερ που αποφεύγει τα προβλήματα",
+                    "Ο μάνατζερ που λύνει τα προβλήματα",
+                    "Ο μάνατζερ που αναζητά τα προβλήματα",
+                    "Ο παθητικός μάνατζερ"
+                ],
+                correct: 2,
+                explanation: "Ο μάνατζερ που αναζητά τα προβλήματα (problem seeker) δεν περιμένει να εμφανιστούν προβλήματα, αλλά ενεργά αναζητά ευκαιρίες για βελτίωση και καινοτομία."
+            },
+            {
+                category: "Προσεγγίσεις Μάνατζερ",
+                theory: {
+                    title: "Χαρακτηριστικά του Problem Avoider",
+                    description: "Ο μάνατζερ που αποφεύγει τα προβλήματα τείνει να διατηρεί την υπάρχουσα κατάσταση, αποφεύγει τις αλλαγές και προτιμά τη σταθερότητα. Αυτή η προσέγγιση μπορεί να είναι βραχυπρόθεσμα αποτελεσματική αλλά μακροπρόθεσμα προβληματική.",
+                    keywords: ["αποφυγή", "σταθερότητα", "αντίσταση στην αλλαγή", "status quo"],
+                    example: "Ένας Διευθυντής που αρνείται να εφαρμόσει νέες τεχνολογίες στη διδασκαλία επειδή 'έτσι λειτουργούσαμε πάντα' και δεν θέλει να διαταράξει την υπάρχουσα ισορροπία."
+                },
+                question: "Ο μάνατζερ που διατηρεί την υπάρχουσα κατάσταση και αποφεύγει τις αλλαγές είναι:",
+                options: [
+                    "Ο μάνατζερ που αναζητά τα προβλήματα",
+                    "Ο μάνατζερ που αποφεύγει τα προβλήματα",
+                    "Ο καινοτόμος μάνατζερ",
+                    "Ο μάνατζερ που λύνει τα προβλήματα"
+                ],
+                correct: 1,
+                explanation: "Ο μάνατζερ που αποφεύγει τα προβλήματα (problem avoider) αποφεύγει αλλαγές και προτιμά τη διατήρηση της υπάρχουσας κατάστασης."
+            },
+
+            // ΕΝΟΤΗΤΑ 6: Σφάλματα στη Λήψη Αποφάσεων
+            {
+                category: "Σφάλματα Αποφάσεων",
+                theory: {
+                    title: "Τα Τέσσερα Βασικά Σφάλματα",
+                    description: "Τα κύρια σφάλματα είναι: 1) Σφάλμα διαθεσιμότητας - χρήση πιο πρόσφατων ή άμεσα διαθέσιμων πληροφοριών, 2) Σφάλμα πλαισίωσης - η αντίληψή μας (θετική/αρνητική) επηρεάζει την απόφαση, 3) Σφάλμα επιβεβαίωσης - αναζητούμε μόνο πληροφορίες που επιβεβαιώνουν την ήδη ληφθείσα απόφαση, 4) Κλιμακούμενη δέσμευση - συνεχίζουμε μια αποτυχημένη πορεία δράσης.",
+                    keywords: ["διαθεσιμότητα", "πλαισίωση", "επιβεβαίωση", "κλιμακούμενη δέσμευση"],
+                    example: "Σφάλμα επιβεβαίωσης: Ο Διευθυντής αποφάσισε να προσλάβει συγκεκριμένο εκπαιδευτικό και μετά αναζητά μόνο θετικές πληροφορίες για αυτόν, αγνοώντας τις αρνητικές."
+                },
+                question: "Όταν ένας μάνατζερ συλλέγει μόνο πληροφορίες που επιβεβαιώνουν την ήδη ληφθείσα απόφασή του, υποπίπτει σε:",
+                options: [
+                    "Σφάλμα διαθεσιμότητας",
+                    "Σφάλμα πλαισίωσης",
+                    "Σφάλμα επιβεβαίωσης",
+                    "Κλιμακούμενη δέσμευση"
+                ],
+                correct: 2,
+                explanation: "Το σφάλμα επιβεβαίωσης (confirmation bias) συμβαίνει όταν η απόφαση έχει ήδη ληφθεί και ο μάνατζερ συλλέγει/χρησιμοποιεί μόνο πληροφορίες που την επιβεβαιώνουν."
+            },
+            {
+                category: "Σφάλματα Αποφάσεων",
+                theory: {
+                    title: "Κλιμακούμενη Δέσμευση",
+                    description: "Η κλιμακούμενη δέσμευση (escalation of commitment) είναι η απόφαση για κλιμάκωση μιας πορείας δράσης που έχει ήδη αποδειχτεί ότι δεν αποφέρει αποτελέσματα. Ο μάνατζερ συνεχίζει να επενδύει πόρους σε ένα αποτυχημένο εγχείρημα.",
+                    keywords: ["κλιμάκωση", "αποτυχία", "επένδυση πόρων", "επιμονή"],
+                    example: "Το σχολείο συνεχίζει να χρηματοδοτεί ένα πρόγραμμα που αποδεδειγμένα δεν βελτιώνει τις επιδόσεις των μαθητών, επειδή έχει ήδη επενδύσει πολλά χρήματα σε αυτό."
+                },
+                question: "Η συνέχιση μιας αποτυχημένης στρατηγικής επειδή έχουν ήδη επενδυθεί πολλοί πόροι σε αυτήν ονομάζεται:",
+                options: [
+                    "Σφάλμα διαθεσιμότητας",
+                    "Κλιμακούμενη δέσμευση",
+                    "Σφάλμα πλαισίωσης",
+                    "Ορθολογική απόφαση"
+                ],
+                correct: 1,
+                explanation: "Η κλιμακούμενη δέσμευση είναι η απόφαση για κλιμάκωση μιας πορείας δράσης (αύξηση προσπαθειών, χρησιμοποίηση περισσότερων πόρων) που έχει ήδη αποδειχτεί ότι δεν αποφέρει αποτελέσματα."
+            },
+            {
+                category: "Σφάλματα Αποφάσεων",
+                theory: {
+                    title: "Σφάλμα Διαθεσιμότητας και Πλαισίωσης",
+                    description: "Σφάλμα διαθεσιμότητας: χρησιμοποιούμε πληροφορίες που είναι άμεσα διαθέσιμες στη μνήμη (πιο πρόσφατες ή σημαντικές). Σφάλμα πλαισίωσης: εκτιμούμε και επιλύουμε ένα πρόβλημα εντός του πλαισίου αντίληψής μας (θετικού ή αρνητικού).",
+                    keywords: ["μνήμη", "πρόσφατο", "αντίληψη", "πλαίσιο"],
+                    example: "Διαθεσιμότητα: Ο Διευθυντής κρίνει όλους τους νέους εκπαιδευτικούς με βάση τον τελευταίο που προσέλαβε. Πλαισίωση: Βλέπει αρνητικά μια πρόταση επειδή ήρθε από άτομο με το οποίο έχει κακές σχέσεις."
+                },
+                question: "Όταν βασίζουμε την απόφασή μας κυρίως στις πιο πρόσφατες ή εντυπωσιακές πληροφορίες, υποπίπτουμε σε:",
+                options: [
+                    "Σφάλμα επιβεβαίωσης",
+                    "Σφάλμα διαθεσιμότητας",
+                    "Κλιμακούμενη δέσμευση",
+                    "Σφάλμα πλαισίωσης"
+                ],
+                correct: 1,
+                explanation: "Το σφάλμα διαθεσιμότητας συμβαίνει όταν χρησιμοποιούμε πληροφορίες που είναι άμεσα διαθέσιμες στη μνήμη (πιο πρόσφατες ή σημαντικές) για να εκτιμήσουμε μια κατάσταση."
+            },
+
+            // ΕΝΟΤΗΤΑ 7: Μέθοδοι Λήψης Αποφάσεων
+            {
+                category: "Μέθοδοι Αποφάσεων",
+                theory: {
+                    title: "Επιχειρησιακή Έρευνα και Μοντέλα",
+                    description: "Οι κύριες μέθοδοι λήψης αποφάσεων είναι: 1) Επιχειρησιακή έρευνα - χρήση επιστημονικής γνώσης με διατύπωση υπόθεσης, συλλογή πληροφοριών και επιβεβαίωση/απόρριψη, 2) Προσομοίωση και μοντέλα - κατασκευή μοντέλων για διερεύνηση σεναρίων, 3) Οργανόγραμμα λήψης αποφάσεων - σχεδίαση προβλήματος και πιθανών λύσεων.",
+                    keywords: ["επιχειρησιακή έρευνα", "προσομοίωση", "μοντέλα", "οργανόγραμμα", "σενάρια"],
+                    example: "Επιχειρησιακή έρευνα: Το σχολείο διατυπώνει την υπόθεση ότι η ενισχυτική διδασκαλία θα βελτιώσει τις επιδόσεις, συλλέγει δεδομένα και αναλύει στατιστικά αν επιβεβαιώνεται."
+                },
+                question: "Η χρήση επιστημονικής γνώσης με διατύπωση υπόθεσης, συλλογή πληροφοριών και στατιστική επεξεργασία αποτελεί:",
+                options: [
+                    "Προσομοίωση",
+                    "Επιχειρησιακή έρευνα",
+                    "Οργανόγραμμα αποφάσεων",
+                    "Brainstorming"
+                ],
+                correct: 1,
+                explanation: "Η επιχειρησιακή έρευνα χρησιμοποιεί επιστημονική γνώση για αποτελεσματική διοίκηση, περιλαμβάνοντας διατύπωση υπόθεσης, συλλογή πληροφοριών, επεξεργασία (μαθηματικά, στατιστική) και επιβεβαίωση/απόρριψη."
+            },
+            {
+                category: "Μέθοδοι Αποφάσεων",
+                theory: {
+                    title: "Προσομοίωση και Σενάρια",
+                    description: "Η προσομοίωση περιλαμβάνει κατασκευή μοντέλου (μαθηματικό, φυσικό, στατιστικό) για διερεύνηση πιθανών σεναρίων και πιθανοτήτων. Βοηθά τους μάνατζερ να προβλέψουν αποτελέσματα πριν λάβουν την τελική απόφαση.",
+                    keywords: ["μοντέλο", "σενάρια", "πιθανότητες", "πρόβλεψη"],
+                    example: "Το σχολείο χρησιμοποιεί στατιστικό μοντέλο για να προβλέψει πώς θα επηρεαστεί η επίδοση των μαθητών αν μειωθεί ο αριθμός μαθητών ανά τμήμα."
+                },
+                question: "Η κατασκευή μοντέλου για διερεύνηση πιθανών σεναρίων και πιθανοτήτων αποτελεί τη μέθοδο της:",
+                options: [
+                    "Επιχειρησιακής έρευνας",
+                    "Προσομοίωσης",
+                    "Συνέντευξης",
+                    "Παρατήρησης"
+                ],
+                correct: 1,
+                explanation: "Η προσομοίωση περιλαμβάνει την κατασκευή μοντέλου (μαθηματικό, φυσικό, στατιστικό) για τη διερεύνηση πιθανών σεναρίων και τον υπολογισμό πιθανοτήτων."
+            },
+
+            // ΕΝΟΤΗΤΑ 8: Λήψη Αποφάσεων σε Ομάδες
+            {
+                category: "Ομαδική Λήψη Αποφάσεων",
+                theory: {
+                    title: "Πλεονεκτήματα Ομαδικής Λήψης Αποφάσεων",
+                    description: "Τα πλεονεκτήματα της ομαδικής λήψης αποφάσεων είναι: περισσότερες πληροφορίες/γνώση/εξειδίκευση, περισσότερες εναλλακτικές, αποφυγή σφαλμάτων, αυξημένη αποδοχή της απόφασης, αυξημένη δέσμευση στην εφαρμογή.",
+                    keywords: ["πληροφορίες", "εναλλακτικές", "αποδοχή", "δέσμευση", "συμμετοχή"],
+                    example: "Ο Σύλλογος Διδασκόντων αποφασίζει συλλογικά για το πρόγραμμα της σχολικής γιορτής. Η συμμετοχή όλων εξασφαλίζει καλύτερες ιδέες και μεγαλύτερη δέσμευση στην υλοποίηση."
+                },
+                question: "Ποιο από τα παρακάτω είναι πλεονέκτημα της ομαδικής λήψης αποφάσεων;",
+                options: [
+                    "Μεγαλύτερη ταχύτητα στη λήψη απόφασης",
+                    "Αυξημένη αποδοχή και δέσμευση στην εφαρμογή",
+                    "Μικρότερο κόστος",
+                    "Λιγότερες εναλλακτικές"
+                ],
+                correct: 1,
+                explanation: "Η ομαδική λήψη αποφάσεων προσφέρει αυξημένη αποδοχή της απόφασης και αυξημένη δέσμευση στην εφαρμογή της, καθώς τα μέλη έχουν συμμετάσχει στη διαδικασία."
+            },
+            {
+                category: "Ομαδική Λήψη Αποφάσεων",
+                theory: {
+                    title: "Μειονεκτήματα Ομαδικής Λήψης Αποφάσεων",
+                    description: "Τα μειονεκτήματα της ομαδικής λήψης αποφάσεων είναι: αυξημένος χρόνος λήψης απόφασης, πιθανές πιέσεις από δυναμικές ομάδες για συμμόρφωση (groupthink), κίνδυνος κυριαρχίας ορισμένων μελών.",
+                    keywords: ["χρόνος", "συμμόρφωση", "groupthink", "πίεση"],
+                    example: "Ο Σύλλογος Διδασκόντων χρειάζεται 3 συνεδριάσεις για να αποφασίσει για μια δράση, ενώ ο Διευθυντής θα μπορούσε να αποφασίσει άμεσα. Επίσης, ορισμένα μέλη μπορεί να συμφωνούν για να αποφύγουν τη σύγκρουση."
+                },
+                question: "Ποιο είναι βασικό μειονέκτημα της ομαδικής λήψης αποφάσεων;",
+                options: [
+                    "Λιγότερες πληροφορίες",
+                    "Αυξημένος χρόνος λήψης απόφασης",
+                    "Μικρότερη αποδοχή",
+                    "Λιγότερες εναλλακτικές"
+                ],
+                correct: 1,
+                explanation: "Βασικό μειονέκτημα είναι ο αυξημένος χρόνος λήψης απόφασης και οι πιθανές πιέσεις από δυναμικές ομάδες για συμμόρφωση."
+            },
+            {
+                category: "Ομαδική Λήψη Αποφάσεων",
+                theory: {
+                    title: "Θεωρία Vroom-Jago για Συμμετοχική Λήψη Αποφάσεων",
+                    description: "Η θεωρία ηγέτη-συμμετοχής Vroom-Jago προτείνει 5 επιλογές: 1) Αποφάσισε μόνος, 2) Συμβουλέψου ατομικά, 3) Διασκέψου με την ομάδα, 4) Διευκόλυνε την ομάδα, 5) Εξουσιοδότησε την ομάδα. Η επιλογή εξαρτάται από τη φύση του προβλήματος.",
+                    keywords: ["Vroom-Jago", "συμμετοχή", "εξουσιοδότηση", "διαβούλευση"],
+                    example: "Για επείγον θέμα ασφάλειας, ο Διευθυντής αποφασίζει μόνος. Για το νέο σχολικό κανονισμό, διασκέπτεται με την ομάδα. Για την οργάνωση μιας εκδρομής, εξουσιοδοτεί την ομάδα εκπαιδευτικών."
+                },
+                question: "Σύμφωνα με τη θεωρία Vroom-Jago, ποια είναι η πιο συμμετοχική επιλογή λήψης αποφάσεων;",
+                options: [
+                    "Αποφάσισε μόνος",
+                    "Συμβουλέψου ατομικά",
+                    "Εξουσιοδότησε την ομάδα",
+                    "Διασκέψου με την ομάδα"
+                ],
+                correct: 2,
+                explanation: "Η εξουσιοδότηση της ομάδας είναι η πιο συμμετοχική επιλογή, όπου ο ηγέτης μεταβιβάζει την απόφαση στην ομάδα."
+            },
+
+            // ΕΝΟΤΗΤΑ 9: Ιδιαιτερότητες Εκπαιδευτικών Οργανισμών
+            {
+                category: "Ιδιαιτερότητες Εκπαίδευσης",
+                theory: {
+                    title: "Παιδαγωγικός και Κοινωνικός Χαρακτήρας",
+                    description: "Οι αποφάσεις στην εκπαίδευση δεν έχουν μόνο οικονομικό/διοικητικό σκοπό, αλλά επιδρούν άμεσα στην ανάπτυξη και διαμόρφωση των μαθητών. Κάθε απόφαση πρέπει να λαμβάνει υπόψη την ψυχολογία, την ηλικία και τις ανάγκες των μαθητών.",
+                    keywords: ["παιδαγωγικός", "ανάπτυξη μαθητών", "κοινωνικός", "ισότητα ευκαιριών"],
+                    example: "Η απόφαση για αλλαγή ωραρίου δεν κρίνεται μόνο από διοικητικά κριτήρια, αλλά και από το πώς θα επηρεάσει τη μάθηση, την κούραση και την ψυχολογία των μαθητών."
+                },
+                question: "Ποια είναι η βασική ιδιαιτερότητα των αποφάσεων στους εκπαιδευτικούς οργανισμούς;",
+                options: [
+                    "Έχουν μόνο οικονομικό χαρακτήρα",
+                    "Επιδρούν άμεσα στην ανάπτυξη και διαμόρφωση των μαθητών",
+                    "Λαμβάνονται πάντα από ένα άτομο",
+                    "Δεν επηρεάζονται από νομικό πλαίσιο"
+                ],
+                correct: 1,
+                explanation: "Οι αποφάσεις στην εκπαίδευση έχουν παιδαγωγικό και κοινωνικό χαρακτήρα - επιδρούν άμεσα στην ανάπτυξη και διαμόρφωση των μαθητών, πέρα από τον οικονομικό ή διοικητικό σκοπό."
+            },
+            {
+                category: "Ιδιαιτερότητες Εκπαίδευσης",
+                theory: {
+                    title: "Συμμετοχικός Χαρακτήρας και Stakeholders",
+                    description: "Στην εκπαίδευση, οι αποφάσεις λαμβάνονται συχνά από συλλογικά όργανα (σύλλογος διδασκόντων, μαθητικά συμβούλια, σύλλογοι γονέων). Κάθε απόφαση επηρεάζει διαφορετικές ομάδες: μαθητές, εκπαιδευτικούς, γονείς, διοίκηση, τοπική κοινωνία.",
+                    keywords: ["συλλογικότητα", "stakeholders", "δημοκρατία", "διαπραγμάτευση"],
+                    example: "Η απόφαση για αλλαγή του σχολικού κανονισμού συζητείται στο Σύλλογο Διδασκόντων, λαμβάνει υπόψη τις απόψεις του μαθητικού συμβουλίου και ενημερώνονται οι γονείς."
+                },
+                question: "Ο συμμετοχικός χαρακτήρας της λήψης αποφάσεων στα σχολεία σημαίνει ότι:",
+                options: [
+                    "Μόνο ο Διευθυντής αποφασίζει",
+                    "Οι αποφάσεις λαμβάνονται από συλλογικά όργανα",
+                    "Οι μαθητές αποφασίζουν μόνοι τους",
+                    "Το Υπουργείο αποφασίζει για όλα"
+                ],
+                correct: 1,
+                explanation: "Στην εκπαίδευση οι αποφάσεις συχνά λαμβάνονται από συλλογικά όργανα (σύλλογος διδασκόντων, μαθητικά συμβούλια, σύλλογοι γονέων), καθιστώντας τη διαδικασία συνεργατική και δημοκρατική."
+            },
+            {
+                category: "Ιδιαιτερότητες Εκπαίδευσης",
+                theory: {
+                    title: "Νομικοί Περιορισμοί και Μακροχρόνια Επίδραση",
+                    description: "Οι δημόσιοι εκπαιδευτικοί οργανισμοί λειτουργούν σε αυστηρό νομικό πλαίσιο του Υπουργείου Παιδείας. Πολλές αποφάσεις είναι προκαθορισμένες. Επιπλέον, οι επιπτώσεις των εκπαιδευτικών αποφάσεων φαίνονται μετά από χρόνια.",
+                    keywords: ["νομοθεσία", "Υπουργείο", "μακροχρόνιο", "περιορισμοί"],
+                    example: "Ο Διευθυντής δεν μπορεί να αλλάξει το αναλυτικό πρόγραμμα - αυτό καθορίζεται κεντρικά. Η απόφαση για νέες παιδαγωγικές μεθόδους θα δείξει αποτελέσματα μετά από χρόνια."
+                },
+                question: "Γιατί οι αποφάσεις στην εκπαίδευση απαιτούν προσεκτικό σχεδιασμό;",
+                options: [
+                    "Επειδή είναι πάντα εύκολες",
+                    "Επειδή οι επιπτώσεις τους φαίνονται μετά από χρόνια",
+                    "Επειδή δεν υπάρχουν περιορισμοί",
+                    "Επειδή αφορούν μόνο οικονομικά θέματα"
+                ],
+                correct: 1,
+                explanation: "Οι επιπτώσεις των αποφάσεων στην εκπαίδευση φαίνονται μετά από χρόνια (π.χ. αλλαγές προγραμμάτων, επιμόρφωση, παιδαγωγικές μέθοδοι). Αυτό απαιτεί προσεκτικό σχεδιασμό και συνέπεια."
+            },
+            {
+                category: "Ιδιαιτερότητες Εκπαίδευσης",
+                theory: {
+                    title: "Ανθρωποκεντρικός Προσανατολισμός και Περιορισμένοι Πόροι",
+                    description: "Το 'ανθρώπινο στοιχείο' είναι κεντρικό στην εκπαίδευση - κάθε απόφαση πρέπει να σέβεται και να υποστηρίζει τους ανθρώπους του σχολείου. Παράλληλα, πολλές αποφάσεις λαμβάνονται μέσα σε περιορισμούς χρηματοδότησης, προσωπικού και υποδομών.",
+                    keywords: ["ανθρωποκεντρικός", "σχέσεις", "εμπιστοσύνη", "πόροι", "δημιουργικότητα"],
+                    example: "Ο Διευθυντής θέλει να προσφέρει επιπλέον δραστηριότητες, αλλά έχει περιορισμένο προϋπολογισμό. Πρέπει να ιεραρχήσει προτεραιότητες και να αξιοποιήσει δημιουργικά τους υπάρχοντες πόρους (εθελοντισμός, συνεργασίες)."
+                },
+                question: "Ποιος παράγοντας επηρεάζει σημαντικά την επιτυχία μιας εκπαιδευτικής απόφασης;",
+                options: [
+                    "Μόνο το οικονομικό κόστος",
+                    "Οι σχέσεις και το κλίμα συνεργασίας μεταξύ των ανθρώπων του σχολείου",
+                    "Η γνώμη μόνο του Διευθυντή",
+                    "Η απόσταση του σχολείου από το κέντρο"
+                ],
+                correct: 1,
+                explanation: "Ο ανθρωποκεντρικός προσανατολισμός σημαίνει ότι οι σχέσεις μεταξύ διδασκόντων και μαθητών, το κλίμα συνεργασίας και η εμπιστοσύνη επηρεάζουν άμεσα την επιτυχία της απόφασης."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let answeredQuestions = new Set();
+        let shuffledQuestions = [];
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startQuiz() {
+            shuffledQuestions = shuffleArray(questions);
+            document.getElementById('startSection').style.display = 'none';
+            document.getElementById('quizSection').style.display = 'block';
+            document.getElementById('totalQ').textContent = shuffledQuestions.length;
+            renderQuestions();
+            showQuestion(0);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            shuffledQuestions.forEach((q, index) => {
+                const questionHTML = `
+                    <div class="question-card" id="question-${index}">
+                        <span class="category-badge">${q.category}</span>
+                        
+                        <button class="theory-toggle" onclick="toggleTheory(${index})">
+                            📖 Εμφάνιση Θεωρίας
+                        </button>
+                        
+                        <div class="theory-section" id="theory-${index}">
+                            <h4>${q.theory.title}</h4>
+                            <p class="theory-description">${q.theory.description}</p>
+                            <div class="theory-keywords">
+                                ${q.theory.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                            </div>
+                            <div class="theory-example">
+                                <h5>🏫 Παράδειγμα στην Εκπαίδευση:</h5>
+                                <p>${q.theory.example}</p>
+                            </div>
+                        </div>
+                        
+                        <p class="question-text">
+                            <span class="question-number">Ερώτηση ${index + 1}:</span> ${q.question}
+                        </p>
+                        
+                        <div class="options">
+                            ${q.options.map((opt, i) => `
+                                <div class="option" onclick="selectOption(${index}, ${i})" id="option-${index}-${i}">
+                                    <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                                    <span>${opt}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="feedback" id="feedback-${index}">
+                            <span class="feedback-icon"></span>
+                            <span class="feedback-text"></span>
+                            <p class="explanation">${q.explanation}</p>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += questionHTML;
+            });
+        }
+
+        function toggleTheory(index) {
+            const theorySection = document.getElementById(`theory-${index}`);
+            const toggleBtn = theorySection.previousElementSibling;
+            
+            theorySection.classList.toggle('visible');
+            
+            if (theorySection.classList.contains('visible')) {
+                toggleBtn.innerHTML = '📕 Απόκρυψη Θεωρίας';
+                toggleBtn.classList.add('active');
+            } else {
+                toggleBtn.innerHTML = '📖 Εμφάνιση Θεωρίας';
+                toggleBtn.classList.remove('active');
+            }
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`question-${index}`).classList.add('active');
+            
+            document.getElementById('currentQ').textContent = index + 1;
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            if (answeredQuestions.has(questionIndex)) return;
+            
+            const q = shuffledQuestions[questionIndex];
+            const options = document.querySelectorAll(`#question-${questionIndex} .option`);
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
+            
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            const selectedOption = document.getElementById(`option-${questionIndex}-${optionIndex}`);
+            selectedOption.classList.add('selected');
+            
+            if (optionIndex === q.correct) {
+                selectedOption.classList.add('correct');
+                feedback.classList.add('correct');
+                feedback.querySelector('.feedback-icon').textContent = '✅';
+                feedback.querySelector('.feedback-text').textContent = 'Σωστό!';
+                correctAnswers++;
+                document.getElementById('correctScore').textContent = correctAnswers;
+            } else {
+                selectedOption.classList.add('wrong');
+                document.getElementById(`option-${questionIndex}-${q.correct}`).classList.add('correct');
+                feedback.classList.add('wrong');
+                feedback.querySelector('.feedback-icon').textContent = '❌';
+                feedback.querySelector('.feedback-text').textContent = 'Λάθος!';
+                wrongAnswers++;
+                document.getElementById('wrongScore').textContent = wrongAnswers;
+            }
+            
+            feedback.classList.add('visible');
+            answeredQuestions.add(questionIndex);
+            
+            updateProgress();
+            updateNavButtons();
+            
+            // Auto-advance after delay if not last question
+            if (currentQuestion < shuffledQuestions.length - 1) {
+                setTimeout(() => {
+                    document.getElementById('nextBtn').focus();
+                }, 500);
+            }
+        }
+
+        function updateProgress() {
+            const progress = (answeredQuestions.size / shuffledQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentQuestion === shuffledQuestions.length - 1) {
+                if (answeredQuestions.size === shuffledQuestions.length) {
+                    nextBtn.textContent = 'Δες τα Αποτελέσματα 🎉';
+                    nextBtn.disabled = false;
+                } else {
+                    nextBtn.textContent = 'Απάντησε πρώτα';
+                    nextBtn.disabled = true;
+                }
+            } else {
+                nextBtn.textContent = 'Επόμενη →';
+                nextBtn.disabled = !answeredQuestions.has(currentQuestion);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < shuffledQuestions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else if (answeredQuestions.size === shuffledQuestions.length) {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('resultsSection').classList.add('active');
+            
+            const percentage = Math.round((correctAnswers / shuffledQuestions.length) * 100);
+            document.getElementById('finalScore').textContent = `${percentage}%`;
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalWrong').textContent = wrongAnswers;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 Εξαιρετική επίδοση! Κατέχεις άριστα τη θεωρία!';
+            } else if (percentage >= 70) {
+                message = '👏 Πολύ καλά! Έχεις καλή κατανόηση του αντικειμένου.';
+            } else if (percentage >= 50) {
+                message = '📚 Καλή προσπάθεια! Χρειάζεται λίγο περισσότερη μελέτη.';
+            } else {
+                message = '💪 Μην απογοητεύεσαι! Διάβασε ξανά τη θεωρία και δοκίμασε πάλι.';
+            }
+            document.getElementById('resultsMessage').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            answeredQuestions.clear();
+            
+            document.getElementById('resultsSection').classList.remove('active');
+            document.getElementById('correctScore').textContent = '0';
+            document.getElementById('wrongScore').textContent = '0';
+            
+            startQuiz();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && !document.getElementById('nextBtn').disabled) {
+                nextQuestion();
+            } else if (e.key === 'ArrowLeft' && !document.getElementById('prevBtn').disabled) {
+                prevQuestion();
+            } else if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (!answeredQuestions.has(currentQuestion)) {
+                    selectOption(currentQuestion, optionIndex);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
