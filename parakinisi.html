@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μελέτη Μάνατζμεντ: Θεωρίες Παρακίνησης</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --content-bg: #d5e6f3;
+            --process-bg: #fdf2e9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: var(--primary);
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav {
+            background: var(--secondary);
+            padding: 0.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 0.9rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .group-title {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 3rem;
+            border-bottom: 3px solid var(--accent);
+            text-transform: uppercase;
+        }
+        .theory-card {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            border-left: 5px solid var(--accent);
+        }
+        .theory-content {
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 300px;
+        }
+        .theory-image {
+            flex: 1;
+            min-width: 300px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theory-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        .exam-notes {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        .exam-notes h4 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .content-group { border-left-color: #3498db; }
+        .process-group { border-left-color: #e67e22; }
+
+        /* Slideshow Style */
+        .slideshow-container {
+            max-width: 800px;
+            position: relative;
+            margin: 2rem auto;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        .mySlides { display: none; }
+        .mySlides img { width: 100%; vertical-align: middle; }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .next { right: 0; border-radius: 3px 0 0 3px; }
+        .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+        .dot-container { text-align: center; padding: 1rem; }
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        .active, .dot:hover { background-color: #717171; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Διοίκηση Εκπαίδευσης: Παρακίνηση</h1>
+    <p>Συνοπτικός Οδηγός Μελέτης & Απομνημόνευσης για τις Εξετάσεις</p>
+</header>
+
+<nav>
+    <a href="index.html">← Αρχική</a>
+    <a href="#content">Θεωρίες Περιεχομένου</a>
+    <a href="#process">Θεωρίες Διαδικασίας</a>
+    <a href="#slideshow">Slideshow Εικόνων</a>
+</nav>
+
+<div class="container">
+
+    <h2 id="slideshow" class="group-title">Slideshow Συνοπτικών Εικόνων</h2>
+    <div class="slideshow-container">
+        <div class="mySlides"><img src="assets/slideshow/1_parakinisi_all.jpg" alt="Περιεχόμενο"></div>
+        <div class="mySlides"><img src="assets/slideshow/2_Content_vs_Process.png" alt="Διαδικασία"></div>
+        <div class="mySlides"><img src="assets/slideshow/3_maslow-herzberg-erg-2.png" alt="Σύγκριση"></div>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <div class="dot-container">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+
+    <h2 id="content" class="group-title">Α. Θεωρίες Περιεχομένου (Τι μας παρακινεί;)</h2>
+
+    <div class="theory-card content-group">
+        <div class="theory-content">
+            <h3>1. Θεωρία Maslow (Ιεράρχηση Αναγκών)</h3>
+            <p>Οι ανθρώπινες ανάγκες είναι οργανωμένες σε μια πυραμίδα 5 επιπέδων. Μια ανάγκη γίνεται κίνητρο μόνο όταν ικανοποιηθεί η προηγούμενη (κατώτερη).</p>
+            <div class="exam-notes">
+                <h4>📝 Σημειώσεις Εξετάσεων (SOS)</h4>
+                <ul>
+                    <li>Η Αυτοπραγμάτωση είναι η κορυφή και δεν "κορέζεται" ποτέ.</li>
+                    <li>Κριτική: Δεν ακολουθούν όλοι οι άνθρωποι την ίδια αυστηρή σειρά.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="theory-image">
+            <img src="assets/maslow.png" alt="Maslow">
+        </div>
+    </div>
+
+    <div class="theory-card content-group">
+        <div class="theory-content">
+            <h3>2. Θεωρία Herzberg (Δύο Παράγοντες)</h3>
+            <p>Διαχωρίζει τους παράγοντες σε <b>Υγιεινής</b> (περιβάλλον εργασίας) και <b>Παρακίνησης</b> (το ίδιο το έργο).</p>
+            <div class="exam-notes">
+                <h4>📝 Σημειώσεις Εξετάσεων (SOS)</h4>
+                <ul>
+                    <li>Ο μισθός είναι παράγοντας "Υγιεινής" (προλαμβάνει δυσαρέσκεια αλλά δεν παρακινεί μακροπρόθεσμα).</li>
+                    <li>Για παρακίνηση απαιτούνται: Αναγνώριση, Ευθύνη, Εξέλιξη.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="theory-image">
+            <img src="assets/herzberg.png" alt="Herzberg">
+        </div>
+    </div>
+
+    <div class="theory-card content-group">
+        <div class="theory-content">
+            <h3>3. Θεωρία ERG (Alderfer)</h3>
+            <p>Σύμπτυξη του Maslow σε 3 κατηγορίες: <b>E</b>xistence (Ύπαρξη), <b>R</b>elatedness (Συσχέτιση), <b>G</b>rowth (Ανάπτυξη).</p>
+            <div class="exam-notes">
+                <h4>📝 Σημειώσεις Εξετάσεων (SOS)</h4>
+                <ul>
+                    <li><b>Αρχή Ματαίωσης-Παλινδρόμησης:</b> Αν δεν ικανοποιηθεί μια ανώτερη ανάγκη, το άτομο επιστρέφει με μεγαλύτερη ένταση σε μια κατώτερη.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="theory-image">
+            <img src="assets/erg.png" alt="ERG">
+        </div>
+    </div>
+
+    <h2 id="process" class="group-title">Β. Θεωρίες Διαδικασίας (Πώς παρακινούμαστε;)</h2>
+
+    <div class="theory-card process-group">
+        <div class="theory-content">
+            <h3>1. Θεωρία Vroom (Προσδοκιών)</h3>
+            <p>Η παρακίνηση είναι το αποτέλεσμα του γινομένου: Προσδοκία (Π) x Συντελεστικότητα (Σ) x Σθένος (Σθ).</p>
+            <div class="exam-notes">
+                <h4>📝 Σημειώσεις Εξετάσεων (SOS)</h4>
+                <ul>
+                    <li>Αν οποιοδήποτε από τα τρία είναι μηδέν, η συνολική παρακίνηση είναι μηδέν.</li>
+                    <li>Εφαρμογή: Ο εκπαιδευτικός πρέπει να πιστεύει ότι μπορεί να πετύχει το στόχο (Π).</li>
+                </ul>
+            </div>
+        </div>
+        <div class="theory-image">
+            <img src="assets/vroom.png" alt="Vroom">
+        </div>
+    </div>
+
+    <div class="theory-card process-group">
+        <div class="theory-content">
+            <h3>2. Θεωρία Adams (Δικαιοσύνης)</h3>
+            <p>Οι άνθρωποι συγκρίνουν τη σχέση των εισροών τους (προσπάθεια) και των εκροών τους (αμοιβή) με εκείνη των άλλων.</p>
+            <div class="exam-notes">
+                <h4>📝 Σημειώσεις Εξετάσεων (SOS)</h4>
+                <ul>
+                    <li>Η αίσθηση αδικίας οδηγεί σε μείωση της προσπάθειας ή αποχώρηση.</li>
+                    <li>Σημαντική για τη διαχείριση συγκρούσεων στο σχολείο.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="theory-image">
+            <img src="assets/adams.png" alt="Adams">
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p style="text-align: center; padding: 2rem; background: var(--primary); color: white; margin-top: 3rem;">
+        Καλή Επιτυχία στις Εξετάσεις! | Μεταπτυχιακό Διοίκηση Εκπαίδευσης
+    </p>
+</footer>
+
+<script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        if (n > slides.length) {slideIndex = 1}    
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";  
+        dots[slideIndex-1].className += " active";
+    }
+</script>
+
+</body>
+</html>

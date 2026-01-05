@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Motivation - Διοίκηση Εκπαίδευσης</title>
+    <style>
+        :root {
+            --content-color: #2980b9;
+            --process-color: #d35400;
+            --bg-light: #f4f7f6;
+            --text-dark: #2c3e50;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(135deg, #2c3e50, #000);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        nav {
+            background: #fff;
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .group-header {
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            margin-top: 40px;
+        }
+        .content-header { background-color: var(--content-color); }
+        .process-header { background-color: var(--process-color); }
+
+        .theory-card {
+            background: white;
+            border-radius: 12px;
+            margin: 25px 0;
+            display: flex;
+            flex-wrap: wrap;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        .theory-text {
+            flex: 1;
+            padding: 30px;
+            min-width: 300px;
+        }
+        .theory-image-container {
+            flex: 1;
+            min-width: 300px;
+            background: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .theory-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .exam-tips {
+            background-color: #fff9c4;
+            border-left: 5px solid #fbc02d;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+        .exam-tips h4 { margin: 0 0 10px 0; color: #f57f17; }
+
+        /* Slideshow */
+        .slideshow-section {
+            background: #fff;
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .slide-container {
+            max-width: 700px;
+            position: relative;
+            margin: auto;
+        }
+        .mySlides { display: none; }
+        .slide-img { width: 100%; border-radius: 10px; }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            user-select: none;
+        }
+        .next { right: -50px; }
+        .prev { left: -50px; }
+
+        footer { text-align: center; padding: 40px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Μεταπτυχιακό: Διοίκηση Εκπαίδευσης</h1>
+    <h2>Οπτικός Οδηγός Θεωριών Παρακίνησης</h2>
+</header>
+
+<nav>
+    <a href="index.html">← Αρχική</a>
+    <a href="#content-group">Θεωρίες Περιεχομένου</a>
+    <a href="#process-group">Θεωρίες Διαδικασίας</a>
+    <a href="#slideshow">Συγκεντρωτικό Slideshow</a>
+</nav>
+
+<div class="container">
+
+    <div id="content-group" class="group-header content-header">
+        <h2>Α. Θεωρίες Περιεχομένου (Εστίαση στο "ΤΙ" παρακινεί)</h2>
+    </div>
+
+    <article class="theory-card">
+        <div class="theory-text">
+            <h3>Θεωρία Maslow (Ιεράρχηση Αναγκών)</h3>
+            <p>Η κλασική πυραμίδα 5 επιπέδων. Η παρακίνηση κινείται από κάτω προς τα πάνω. Μόνο οι ανικανοποίητες ανάγκες παρακινούν.</p>
+            <div class="exam-tips">
+                <h4>🎯 Για τις Εξετάσεις:</h4>
+                <p>SOS: Η αυτοπραγμάτωση δεν ικανοποιείται ποτέ πλήρως. Αν ζητηθεί κριτική, ανέφερε την έλλειψη ευελιξίας στη σειρά των αναγκών.</p>
+            </div>
+        </div>
+        <div class="theory-image-container">
+            <img src="assets/maslow.png" alt="Πυραμίδα Maslow">
+        </div>
+    </article>
+
+    <article class="theory-card">
+        <div class="theory-text">
+            <h3>Θεωρία Herzberg (Δύο Παράγοντες)</h3>
+            <p>Διαχωρισμός σε παράγοντες Υγιεινής (δυσαρέσκεια) και Παρακίνησης (ικανοποίηση).</p>
+            <div class="exam-tips">
+                <h4>🎯 Για τις Εξετάσεις:</h4>
+                <p>Ο μισθός και οι συνθήκες εργασίας ΔΕΝ παρακινούν (είναι Υγιεινή). Η παρακίνηση έρχεται από το περιεχόμενο της εργασίας (ευθύνη, αναγνώριση).</p>
+            </div>
+        </div>
+        <div class="theory-image-container">
+            <img src="assets/herzberg.png" alt="Θεωρία Herzberg">
+        </div>
+    </article>
+
+    <article class="theory-card">
+        <div class="theory-text">
+            <h3>Θεωρία ERG (Alderfer)</h3>
+            <p>Σύμπτυξη Maslow σε 3 επίπεδα: Existence (Ύπαρξη), Relatedness (Συσχέτιση), Growth (Ανάπτυξη).</p>
+            <div class="exam-tips">
+                <h4>🎯 Για τις Εξετάσεις:</h4>
+                <p>Θυμήσου την "Αρχή Ματαίωσης-Παλινδρόμησης". Είναι η κύρια διαφορά από τον Maslow.</p>
+            </div>
+        </div>
+        <div class="theory-image-container">
+            <img src="assets/erg.png" alt="Θεωρία ERG">
+        </div>
+    </article>
+
+    <article class="theory-card">
+        <div class="theory-text">
+            <h3>Θεωρία McClelland (Επίκτητες Ανάγκες)</h3>
+            <p>Εστιάζει σε 3 ανάγκες: Επίτευξη (nAch), Ισχύς (nPow), Συσχέτιση (nAff).</p>
+            <div class="exam-tips">
+                <h4>🎯 Για τις Εξετάσεις:</h4>
+                <p>Στην εκπαίδευση, ένας αποτελεσματικός διευθυντής χρειάζεται ισορροπία μεταξύ ανάγκης για Ισχύ (για οργάνωση) και Συσχέτιση (για το κλίμα).</p>
+            </div>
+        </div>
+        <div class="theory-image-container">
+            <img src="assets/mcclelland.png" alt="Θεωρία McClelland">
+        </div>
+    </article>
+
+    <div id="process-group" class="group-header process-header">
+        <h2>Β. Θεωρίες Διαδικασίας (Εστίαση στο "ΠΩΣ" παρακινεί)</h2>
+    </div>
+
+    <article class="theory-card">
+        <div class="theory-text">
+            <h3>Θεωρία Vroom (Προσδοκία)</h3>
+            <p>Η παρακίνηση είναι μαθηματικό γινόμενο: Προσδοκία x Συντελεστικότητα x Σθένος.</p>
+            <div class="exam-tips">
+                <h4>🎯 Για τις Εξετάσεις:</h4>
+                <p>Αν ένας δάσκαλος πιστεύει ότι η προσπάθειά του δεν θα αναγνωριστεί (Συντελεστικότητα=0), τότε η παρακίνησή του θα είναι μηδέν.</p>
+            </div>
+        </div>
+        <div class="theory-image-container">
+            <img src="assets/vroom.png" alt="Θεωρία Vroom">
+        </div>
+    </article>
+
+    <article class="theory-card">
+        <div class="theory-text">
+            <h3>Θεωρία Adams (Δικαιοσύνη)</h3>
+            <p>Σύγκριση ατομικής σχέσης Εισροών/Εκροών με τη σχέση "άλλων αναφοράς".</p>
+            <div class="exam-tips">
+                <h4>🎯 Για τις Εξετάσεις:</h4>
+                <p>Η "υποκειμενική" αντίληψη της αδικίας είναι αυτή που μετράει, όχι η αντικειμενική πραγματικότητα.</p>
+            </div>
+        </div>
+        <div class="theory-image-container">
+            <img src="assets/adams.png" alt="Θεωρία Adams">
+        </div>
+    </article>
+
+    <section id="slideshow" class="slideshow-section">
+        <h2>Γρήγορη Επανάληψη (Slideshow)</h2>
+        <div class="slide-container">
+            <div class="mySlides fade"><img src="assets/slideshow/1_parakinisi_all.jpg" class="slide-img"></div>
+            <div class="mySlides fade"><img src="assets/slideshow/2_Content_vs_Process.png" class="slide-img"></div>
+            <div class="mySlides fade"><img src="assets/slideshow/3_maslow-herzberg-erg-2.png"></div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </section>
+
+        <section id="1" class="slideshow-section">
+        <h2>Γρήγορη Επανάληψη (Slideshow)</h2>
+        <div class="slide-container">
+            <div class="mySlides fade"><img src="assets/slideshow/1_parakinisi_all.jpg" class="slide-img"></div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>Δημιουργήθηκε για την υποστήριξη των φοιτητών στο μάθημα Μάνατζμεντ / Διοίκηση Εκπαίδευσης.</p>
+    <p><strong>Καλή Επιτυχία!</strong></p>
+</footer>
+
+<script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) { showSlides(slideIndex += n); }
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        if (n > slides.length) {slideIndex = 1}    
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) { slides[i].style.display = "none"; }
+        slides[slideIndex-1].style.display = "block";  
+    }
+</script>
+
+</body>
+</html>

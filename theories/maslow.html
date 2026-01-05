@@ -28,6 +28,7 @@
             box-sizing: border-box;
         }
 
+
         body {
             font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-cream);
@@ -155,10 +156,15 @@
             display: block;
             margin-top: 0.25rem;
         }
-
+        /* Image Placeholder */
+.theory-image {
+    max-width: 100%;  /* Η εικόνα δεν θα βγαίνει ποτέ έξω από το πλαίσιο */
+    height: auto;     /* Διατηρεί τις αναλογίες της εικόνας */
+    border-radius: 8px; /* Προαιρετικά: στρογγυλεμένες γωνίες για να ταιριάζει με το στυλ σας */
+}
         .image-placeholder {
             background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
-            padding: 3rem 2rem;
+            padding: 0rem 0rem;
             text-align: center;
             border-radius: 12px;
             margin: 2rem 0;
@@ -414,11 +420,7 @@
 
         <!-- Image Placeholder -->
         <div class="image-placeholder">
-            <p>🖼️ Εικόνα: Πυραμίδα Αναγκών Maslow</p>
-            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
-                Προσθέστε εικόνα: <code>maslow-pyramid.png</code>
-            </p>
-            <!-- Αντικαταστήστε με: <img src="../assets/maslow-pyramid.png" class="theory-image" alt="Maslow's Hierarchy of Needs"> -->
+                   <img src="../assets/maslow.png" class="theory-image" alt="Maslow's Hierarchy of Needs">
         </div>
 
         <!-- Περιγραφή -->
@@ -717,7 +719,7 @@
     <footer>
         <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
         <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
-            Πανεπιστήμιο Πατρών • Μεταπτυχιακό Διοίκησης Εκπαίδευσης
+            Διοίκησης Εκπαίδευσης
         </p>
     </footer>
 
