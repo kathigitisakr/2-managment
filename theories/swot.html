@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWOT Analysis - Ανάλυση Δυνάμεων, Αδυναμιών, Ευκαιριών, Απειλών | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#strategic">Στρατηγικός Σχεδιασμός</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⭐ ΣΤΡΑΤΗΓΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ</div>
+        <h1>SWOT Analysis</h1>
+        <p class="theorist">Ανάλυση Δυνάμεων, Αδυναμιών, Ευκαιριών & Απειλών</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/swot.png" alt="SWOT Analysis Matrix" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Η <strong>Ανάλυση SWOT</strong> (Strengths-Weaknesses-Opportunities-Threats) είναι ένα 
+                στρατηγικό εργαλείο σχεδιασμού που χρησιμοποιείται για την <strong>αξιολόγηση της τρέχουσας 
+                κατάστασης</strong> ενός οργανισμού. Εξετάζει τόσο το <strong>εσωτερικό περιβάλλον</strong> 
+                (δυνάμεις και αδυναμίες που ελέγχονται από τον οργανισμό) όσο και το <strong>εξωτερικό περιβάλλον</strong> 
+                (ευκαιρίες και απειλές που επηρεάζουν τον οργανισμό).
+            </p>
+            <p>
+                Η ανάλυση SWOT βοηθά τους διοικητές να <strong>προσδιορίσουν προτεραιότητες</strong>, να 
+                <strong>αναπτύξουν στρατηγικές</strong> και να <strong>λάβουν τεκμηριωμένες αποφάσεις</strong> 
+                για το μέλλον του οργανισμού.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Στρατηγικός Σχεδιασμός</span>
+                <span class="keyword">Εσωτερικό Περιβάλλον</span>
+                <span class="keyword">Εξωτερικό Περιβάλλον</span>
+                <span class="keyword">Δυνάμεις (S)</span>
+                <span class="keyword">Αδυναμίες (W)</span>
+                <span class="keyword">Ευκαιρίες (O)</span>
+                <span class="keyword">Απειλές (T)</span>
+                <span class="keyword">Ανταγωνιστικό Πλεονέκτημα</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Τα 4 Στοιχεία της SWOT</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στοιχείο</th>
+                        <th>Περιγραφή</th>
+                        <th>Ερωτήματα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Strengths<br>(Δυνάμεις)</strong></td>
+                        <td>Εσωτερικά χαρακτηριστικά που δίνουν πλεονέκτημα</td>
+                        <td>Τι κάνουμε καλά; Ποιοι πόροι έχουμε; Τι μας ξεχωρίζει;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Weaknesses<br>(Αδυναμίες)</strong></td>
+                        <td>Εσωτερικά χαρακτηριστικά που μας μειονεκτούν</td>
+                        <td>Τι πρέπει να βελτιώσουμε; Τι λείπει; Που υστερούμε;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Opportunities<br>(Ευκαιρίες)</strong></td>
+                        <td>Εξωτερικοί παράγοντες που μπορούν να αξιοποιηθούν</td>
+                        <td>Τι τάσεις ευνοούν; Ποιες αλλαγές μπορούμε να εκμεταλλευτούμε;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Threats<br>(Απειλές)</strong></td>
+                        <td>Εξωτερικοί παράγοντες που δημιουργούν κινδύνους</td>
+                        <td>Τι εμπόδια υπάρχουν; Ποιες αλλαγές μπορεί να βλάψουν;</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 1.5rem;">
+                <strong>Σημείωση:</strong> Οι δυνάμεις και αδυναμίες είναι <strong>εσωτερικές</strong> 
+                (ελέγχονται από τον οργανισμό), ενώ οι ευκαιρίες και απειλές είναι <strong>εξωτερικές</strong> 
+                (δεν ελέγχονται άμεσα).
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: Ανάλυση SWOT για Δημοτικό Σχολείο</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Δυνάμεις (S):</strong> Έμπειρο εκπαιδευτικό προσωπικό, σύγχρονες υποδομές, 
+                    καλή φήμη στην κοινότητα</li>
+                    <li><strong>Αδυναμίες (W):</strong> Περιορισμένος προϋπολογισμός για υλικά, έλλειψη 
+                    εξειδικευμένων εκπαιδευτικών για μαθητές με ειδικές ανάγκες</li>
+                    <li><strong>Ευκαιρίες (O):</strong> Νέα χρηματοδότηση από ευρωπαϊκά προγράμματα, 
+                    αυξημένο ενδιαφέρον γονέων για συμμετοχή</li>
+                    <li><strong>Απειλές (T):</strong> Μείωση μαθητικού πληθυσμού λόγω δημογραφικών αλλαγών, 
+                    ανταγωνισμός από γειτονικά ιδιωτικά σχολεία</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: Εφαρμογή σε Πρόγραμμα Επιμόρφωσης</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Δυνάμεις:</strong> Εξειδικευμένοι εισηγητές, ευέλικτο πρόγραμμα, online πλατφόρμα</li>
+                    <li><strong>Αδυναμίες:</strong> Περιορισμένη διαφήμιση, έλλειψη πιστοποίησης</li>
+                    <li><strong>Ευκαιρίες:</strong> Αυξημένη ζήτηση για ψηφιακές δεξιότητες, συνεργασίες με φορείς</li>
+                    <li><strong>Απειλές:</strong> Δωρεάν προγράμματα ανταγωνιστών, αλλαγές στη νομοθεσία</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: Ατομική SWOT για Διευθυντή Σχολείου</strong>
+                <p style="margin-top: 0.5rem;">
+                    Ο Διευθυντής μπορεί να κάνει προσωπική SWOT ανάλυση:
+                </p>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Δυνάμεις:</strong> 15ετής εμπειρία, καλές διαπροσωπικές δεξιότητες</li>
+                    <li><strong>Αδυναμίες:</strong> Περιορισμένη γνώση τεχνολογίας, δυσκολία στη διαχείριση συγκρούσεων</li>
+                    <li><strong>Ευκαιρίες:</strong> Πρόγραμμα επιμόρφωσης σε ηγεσία, δίκτυο με άλλους διευθυντές</li>
+                    <li><strong>Απειλές:</strong> Αυξημένες διοικητικές υποχρεώσεις, αντίσταση σε αλλαγές</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Βήματα Διεξαγωγής SWOT</h2>
+            <ol>
+                <li><strong>Συγκρότηση ομάδας:</strong> Συγκέντρωση εκπροσώπων από διάφορα τμήματα</li>
+                <li><strong>Καταιγισμός ιδεών:</strong> Καταγραφή όλων των δυνάμεων, αδυναμιών, ευκαιριών, απειλών</li>
+                <li><strong>Ιεράρχηση:</strong> Κατάταξη κατά σημασία και επείγον</li>
+                <li><strong>Ανάλυση συσχετίσεων:</strong> Πώς οι δυνάμεις μπορούν να αξιοποιήσουν ευκαιρίες; 
+                Πώς οι αδυναμίες εντείνουν τις απειλές;</li>
+                <li><strong>Διατύπωση στρατηγικών:</strong> Ανάπτυξη σχεδίου δράσης βάσει των ευρημάτων</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Οι δυνάμεις/αδυναμίες είναι <strong>εσωτερικές</strong>, οι ευκαιρίες/απειλές <strong>εξωτερικές</strong></li>
+                <li>Η SWOT είναι <strong>διαγνωστικό</strong> εργαλείο, όχι λύση από μόνη της</li>
+                <li>Πρέπει να συνδυάζεται με άλλα εργαλεία (π.χ. PEST, MBO)</li>
+                <li>Συχνή ερώτηση: <em>"Φτιάξτε SWOT για συγκεκριμένο σχολείο/πρόγραμμα"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 5 Σχεδιασμός.pdf»</strong>, 
+                Διαφάνειες 20-25
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

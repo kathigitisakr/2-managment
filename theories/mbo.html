@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBO - Διοίκηση με Στόχους | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#strategic">Στρατηγικός Σχεδιασμός</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⭐ ΣΤΡΑΤΗΓΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ</div>
+        <h1>MBO - Management by Objectives</h1>
+        <p class="theorist">Διοίκηση με Στόχους (Peter Drucker)</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/mbo.png" alt="MBO Process" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Η <strong>Διοίκηση με Στόχους (MBO - Management by Objectives)</strong> είναι μια προσέγγιση 
+                διοίκησης που αναπτύχθηκε από τον <strong>Peter Drucker</strong> το 1954. Βασίζεται στην 
+                <strong>συμμετοχική καθορισμό συγκεκριμένων στόχων</strong> μεταξύ διοικητών και εργαζομένων, 
+                και στην <strong>αξιολόγηση της απόδοσης</strong> με βάση την επίτευξη αυτών των στόχων.
+            </p>
+            <p>
+                Η φιλοσοφία του MBO υποστηρίζει ότι όταν οι εργαζόμενοι <strong>συμμετέχουν στον καθορισμό 
+                των στόχων</strong>, είναι πιο <strong>αφοσιωμένοι και παρακινημένοι</strong> να τους επιτύχουν. 
+                Οι στόχοι πρέπει να είναι <strong>SMART</strong> (Specific, Measurable, Achievable, Relevant, Time-bound).
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Peter Drucker</span>
+                <span class="keyword">Στόχοι</span>
+                <span class="keyword">Συμμετοχή</span>
+                <span class="keyword">SMART</span>
+                <span class="keyword">Αξιολόγηση Απόδοσης</span>
+                <span class="keyword">Ανατροφοδότηση</span>
+                <span class="keyword">Αποκέντρωση</span>
+                <span class="keyword">Παρακίνηση</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Βασικές Αρχές του MBO</h2>
+            <ol>
+                <li><strong>Συμμετοχικός καθορισμός στόχων:</strong> Οι στόχοι ορίζονται από κοινού 
+                (διευθυντής-εκπαιδευτικός), όχι επιβολή από πάνω προς τα κάτω</li>
+                <li><strong>Συγκεκριμένοι και μετρήσιμοι στόχοι:</strong> Χρήση κριτηρίων SMART</li>
+                <li><strong>Συγκεκριμένη χρονική περίοδος:</strong> Καθορισμός deadline για κάθε στόχο</li>
+                <li><strong>Ανατροφοδότηση και παρακολούθηση:</strong> Τακτικές συναντήσεις για έλεγχο προόδου</li>
+                <li><strong>Αξιολόγηση απόδοσης:</strong> Αξιολόγηση βάσει της επίτευξης των στόχων</li>
+            </ol>
+
+            <div class="highlight-box">
+                <strong>🎯 Κριτήρια SMART για Στόχους:</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>S</strong>pecific - Συγκεκριμένος</li>
+                    <li><strong>M</strong>easurable - Μετρήσιμος</li>
+                    <li><strong>A</strong>chievable - Εφικτός</li>
+                    <li><strong>R</strong>elevant - Σχετικός</li>
+                    <li><strong>T</strong>ime-bound - Χρονικά προσδιορισμένος</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Βήματα Εφαρμογής MBO</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Βήμα</th>
+                        <th>Περιγραφή</th>
+                        <th>Παράδειγμα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Καθορισμός<br>Οργανωσιακών Στόχων</strong></td>
+                        <td>Η ηγεσία ορίζει τους γενικούς στόχους του οργανισμού</td>
+                        <td>"Βελτίωση μαθησιακών αποτελεσμάτων κατά 15%"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Διάσπαση σε<br>Ατομικούς Στόχους</strong></td>
+                        <td>Μετάφραση οργανωσιακών στόχων σε ατομικούς</td>
+                        <td>"Ο εκπαιδευτικός Χ θα αυξήσει την επιτυχία στα Μαθηματικά κατά 20%"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Συμμετοχική<br>Διαμόρφωση</strong></td>
+                        <td>Διευθυντής και εκπαιδευτικός συμφωνούν στους στόχους</td>
+                        <td>Συνάντηση για συζήτηση, τροποποίηση και έγκριση στόχων</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Σχέδιο Δράσης</strong></td>
+                        <td>Ορισμός ενεργειών, πόρων και χρονοδιαγράμματος</td>
+                        <td>"Χρήση νέων διδακτικών μεθόδων, επιμόρφωση, αξιολόγηση ανά τρίμηνο"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Εφαρμογή &<br>Παρακολούθηση</strong></td>
+                        <td>Υλοποίηση σχεδίου με τακτικό έλεγχο προόδου</td>
+                        <td>Μηνιαίες συναντήσεις, ανατροφοδότηση</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Αξιολόγηση<br>Απόδοσης</strong></td>
+                        <td>Τελική αξιολόγηση επίτευξης στόχων</td>
+                        <td>"Στόχος επιτεύχθηκε κατά 85% - πολύ καλή απόδοση"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: MBO για Εκπαιδευτικό</strong>
+                <p style="margin-top: 0.5rem;">
+                    Ο Διευθυντής και ο εκπαιδευτικός συμφωνούν στους εξής στόχους για το σχολικό έτος:
+                </p>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Στόχος 1:</strong> Βελτίωση επίδοσης μαθητών στα Μαθηματικά κατά 15% μέχρι τον Ιούνιο</li>
+                    <li><strong>Στόχος 2:</strong> Συμμετοχή σε 2 σεμινάρια επιμόρφωσης για καινοτόμες μεθόδους διδασκαλίας</li>
+                    <li><strong>Στόχος 3:</strong> Ανάπτυξη 3 νέων εκπαιδευτικών σεναρίων με χρήση τεχνολογίας</li>
+                    <li><strong>Στόχος 4:</strong> Μείωση απουσιών μαθητών κατά 10%</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: MBO για Διευθυντή Σχολείου</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Στόχος 1:</strong> Αύξηση ικανοποίησης γονέων από 75% σε 85% μέχρι τέλος έτους</li>
+                    <li><strong>Στόχος 2:</strong> Υλοποίηση 5 δράσεων σύνδεσης σχολείου-κοινότητας</li>
+                    <li><strong>Στόχος 3:</strong> Βελτίωση σχολικού κλίματος (μέτρηση με ερωτηματολόγιο)</li>
+                    <li><strong>Στόχος 4:</strong> Εξασφάλιση χρηματοδότησης για ανακαίνιση βιβλιοθήκης</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: MBO για Σχολική Μονάδα</strong>
+                <p style="margin-top: 0.5rem;">
+                    Ολόκληρο το σχολείο υιοθετεί MBO με οργανωσιακό στόχο: "Βελτίωση μαθησιακών 
+                    αποτελεσμάτων και σχολικού κλίματος"
+                </p>
+                <ul style="margin-top: 1rem;">
+                    <li>Κάθε εκπαιδευτικός ορίζει προσωπικούς στόχους που συμβάλλουν στον οργανωσιακό</li>
+                    <li>Τριμηνιαίες συναντήσεις αξιολόγησης προόδου</li>
+                    <li>Ανατροφοδότηση και υποστήριξη από τον Διευθυντή</li>
+                    <li>Τελική αξιολόγηση στο τέλος του έτους</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✅ Πλεονεκτήματα MBO</h2>
+            <ul>
+                <li>Αυξάνει την <strong>παρακίνηση</strong> και την <strong>αφοσίωση</strong> (λόγω συμμετοχής)</li>
+                <li>Παρέχει <strong>σαφήνεια</strong> στους στόχους και προσδοκίες</li>
+                <li>Βελτιώνει την <strong>επικοινωνία</strong> μεταξύ διευθυντή-εκπαιδευτικού</li>
+                <li>Διευκολύνει την <strong>αντικειμενική αξιολόγηση</strong> απόδοσης</li>
+                <li>Ενθαρρύνει την <strong>ανάπτυξη δεξιοτήτων</strong></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Μειονεκτήματα & Προκλήσεις</h2>
+            <ul>
+                <li><strong>Χρονοβόρο:</strong> Απαιτεί συχνές συναντήσεις και παρακολούθηση</li>
+                <li><strong>Έμφαση στα μετρήσιμα:</strong> Μπορεί να αγνοήσει ποιοτικές πτυχές</li>
+                <li><strong>Πίεση:</strong> Υπερβολική πίεση για επίτευξη στόχων μπορεί να δημιουργήσει άγχος</li>
+                <li><strong>Απαιτεί κουλτούρα συμμετοχής:</strong> Δεν λειτουργεί σε αυταρχικά περιβάλλοντα</li>
+                <li><strong>Κίνδυνος ανταγωνισμού:</strong> Αντί για συνεργασία</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Το MBO είναι <strong>συμμετοχικό</strong> - οι στόχοι ΔΕΝ επιβάλλονται</li>
+                <li>Βασικό στοιχείο: κριτήρια <strong>SMART</strong></li>
+                <li>Διαφέρει από το <strong>MBE</strong> (Management by Exception)</li>
+                <li>Συνδέεται με θεωρίες παρακίνησης (Maslow, Herzberg, Goal-Setting Theory)</li>
+                <li>Συχνή ερώτηση: <em>"Πώς θα εφαρμόσετε MBO σε σχολείο; Δώστε παράδειγμα στόχων SMART"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 5 Σχεδιασμός.pdf»</strong>, 
+                Διαφάνειες 35-42
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

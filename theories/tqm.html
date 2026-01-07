@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TQM - Διοίκηση Ολικής Ποιότητας | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        .principle-box {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .principle-box strong {
+            color: var(--success);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#control">Έλεγχος</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">✅ ΕΛΕΓΧΟΣ & ΠΟΙΟΤΗΤΑ</div>
+        <h1>TQM - Total Quality Management</h1>
+        <p class="theorist">Διοίκηση Ολικής Ποιότητας (Deming, Juran, Crosby)</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/tqm.png" alt="TQM Principles" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Η <strong>Διοίκηση Ολικής Ποιότητας (TQM - Total Quality Management)</strong> είναι μια 
+                <strong>φιλοσοφία διοίκησης</strong> που εστιάζει στη <strong>συνεχή βελτίωση της ποιότητας</strong> 
+                σε όλες τις πτυχές του οργανισμού. Η ποιότητα δεν είναι ευθύνη μόνο ενός τμήματος, αλλά 
+                <strong>όλων των μελών του οργανισμού</strong>.
+            </p>
+            <p>
+                Το TQM βασίζεται στην <strong>ικανοποίηση των πελατών/χρηστών</strong> (στην εκπαίδευση: 
+                μαθητές, γονείς, κοινότητα), τη <strong>συμμετοχή όλων</strong> των εργαζομένων, τη 
+                <strong>λήψη αποφάσεων με βάση δεδομένα</strong> και τη <strong>συνεχή βελτίωση</strong> 
+                (Kaizen). Αναπτύχθηκε από τους W. Edwards Deming, Joseph Juran και Philip Crosby.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Ποιότητα</span>
+                <span class="keyword">Συνεχής Βελτίωση</span>
+                <span class="keyword">Kaizen</span>
+                <span class="keyword">Ικανοποίηση Πελατών</span>
+                <span class="keyword">Deming</span>
+                <span class="keyword">Συμμετοχή Όλων</span>
+                <span class="keyword">Μηδενικά Ελαττώματα</span>
+                <span class="keyword">PDCA</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Βασικές Αρχές του TQM</h2>
+
+            <div class="principle-box">
+                <strong>1. Εστίαση στον Πελάτη (Customer Focus)</strong>
+                <p style="margin-top: 0.5rem;">
+                    Η ποιότητα ορίζεται από τις ανάγκες και προσδοκίες των πελατών. Στην εκπαίδευση, 
+                    οι "πελάτες" είναι οι μαθητές, οι γονείς, η κοινότητα και η αγορά εργασίας.
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <strong>2. Συνεχής Βελτίωση (Continuous Improvement - Kaizen)</strong>
+                <p style="margin-top: 0.5rem;">
+                    Η βελτίωση δεν είναι εφάπαξ, αλλά μια <strong>συνεχής διαδικασία</strong>. Κάθε μέρα 
+                    πρέπει να αναζητούνται τρόποι να γίνουν τα πράγματα καλύτερα.
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <strong>3. Συμμετοχή & Ενδυνάμωση Όλων (Total Involvement)</strong>
+                <p style="margin-top: 0.5rem;">
+                    Όλοι οι εργαζόμενοι (από τον διευθυντή έως το βοηθητικό προσωπικό) συμμετέχουν 
+                    στην προσπάθεια βελτίωσης της ποιότητας.
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <strong>4. Λήψη Αποφάσεων με Βάση Δεδομένα</strong>
+                <p style="margin-top: 0.5rem;">
+                    Οι αποφάσεις βασίζονται σε <strong>μετρήσεις, στατιστικές και δεδομένα</strong>, όχι 
+                    σε υποθέσεις ή αισθήσεις.
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <strong>5. Πρόληψη αντί Διόρθωσης</strong>
+                <p style="margin-top: 0.5rem;">
+                    Καλύτερα να προλαμβάνουμε τα προβλήματα παρά να τα διορθώνουμε μετά. "Do it right 
+                    the first time".
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <strong>6. Συστημική Προσέγγιση</strong>
+                <p style="margin-top: 0.5rem;">
+                    Ο οργανισμός είναι ένα <strong>σύστημα αλληλεξαρτώμενων διαδικασιών</strong>. Η 
+                    βελτίωση μιας διαδικασίας επηρεάζει το σύνολο.
+                </p>
+            </div>
+
+            <div class="principle-box">
+                <strong>7. Μακροπρόθεσμη Δέσμευση της Ηγεσίας</strong>
+                <p style="margin-top: 0.5rem;">
+                    Η ηγεσία πρέπει να δεσμεύεται μακροπρόθεσμα στην ποιότητα και να δίνει το παράδειγμα.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔑 Βασικά Στοιχεία του TQM</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Στοιχείο</th>
+                        <th>Περιγραφή</th>
+                        <th>Παράδειγμα στην Εκπαίδευση</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Kaizen<br>(Συνεχής Βελτίωση)</strong></td>
+                        <td>Μικρές, σταδιακές, καθημερινές βελτιώσεις</td>
+                        <td>Εβδομαδιαίες συναντήσεις για βελτίωση μαθημάτων</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Benchmarking</strong></td>
+                        <td>Σύγκριση με τους καλύτερους</td>
+                        <td>Μελέτη πρακτικών από κορυφαία σχολεία</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ομάδες Ποιότητας<br>(Quality Circles)</strong></td>
+                        <td>Ομάδες εργαζομένων που λύνουν προβλήματα</td>
+                        <td>Ομάδα εκπαιδευτικών για βελτίωση διδακτικών μεθόδων</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Στατιστικός Έλεγχος<br>Διαδικασιών</strong></td>
+                        <td>Χρήση στατιστικών για παρακολούθηση ποιότητας</td>
+                        <td>Ανάλυση επιδόσεων μαθητών με διαγράμματα</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ενδυνάμωση<br>(Empowerment)</strong></td>
+                        <td>Εξουσιοδότηση εργαζομένων να λαμβάνουν αποφάσεις</td>
+                        <td>Εκπαιδευτικοί παίρνουν πρωτοβουλίες χωρίς έγκριση</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Just-in-Time</strong></td>
+                        <td>Αποφυγή σπατάλης πόρων</td>
+                        <td>Αποτελεσματική χρήση υλικών και χρόνου</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: TQM σε Δημοτικό Σχολείο</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Εστίαση στον πελάτη:</strong> Ερωτηματολόγια ικανοποίησης γονέων και μαθητών</li>
+                    <li><strong>Συνεχής βελτίωση:</strong> Μηνιαίες συναντήσεις εκπαιδευτικών για ανταλλαγή 
+                    καλών πρακτικών</li>
+                    <li><strong>Συμμετοχή όλων:</strong> Διοικητικό προσωπικό, καθαριστές, γονείς συμμετέχουν 
+                    σε επιτροπές ποιότητας</li>
+                    <li><strong>Δεδομένα:</strong> Παρακολούθηση επιδόσεων, απουσιών, ικανοποίησης με δείκτες</li>
+                    <li><strong>Πρόληψη:</strong> Πρόγραμμα πρώιμης παρέμβασης για μαθητές με δυσκολίες</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: Ομάδες Ποιότητας (Quality Circles)</strong>
+                <p style="margin-top: 0.5rem;">
+                    Ομάδα 5-6 εκπαιδευτικών συναντιέται κάθε βδομάδα για 1 ώρα:
+                </p>
+                <ul style="margin-top: 1rem;">
+                    <li>Εντοπίζουν πρόβλημα: "Χαμηλή συμμετοχή μαθητών στο μάθημα"</li>
+                    <li>Αναλύουν τις αιτίες με διάγραμμα αιτίας-αποτελέσματος (fishbone)</li>
+                    <li>Προτείνουν λύσεις: Διαδραστικές μέθοδοι, gamification, project-based learning</li>
+                    <li>Δοκιμάζουν και αξιολογούν τα αποτελέσματα</li>
+                    <li>Τεκμηριώνουν και μοιράζονται τις βέλτιστες πρακτικές</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: TQM σε Πανεπιστήμιο</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Εστίαση:</strong> Ικανοποίηση φοιτητών, απορρόφηση αποφοίτων στην αγορά</li>
+                    <li><strong>Ομάδες:</strong> Επιτροπές ποιότητας ανά τμήμα</li>
+                    <li><strong>Δείκτες:</strong> Ποσοστό αποφοίτησης, χρόνος αποφοίτησης, ικανοποίηση από μαθήματα</li>
+                    <li><strong>Benchmarking:</strong> Σύγκριση με κορυφαία ευρωπαϊκά πανεπιστήμια</li>
+                    <li><strong>Βελτίωση:</strong> Αναθεώρηση προγραμμάτων σπουδών βάσει ανατροφοδότησης</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 4: Κύκλος PDCA στην Τάξη</strong>
+                <p style="margin-top: 0.5rem;">
+                    Ο εκπαιδευτικός εφαρμόζει TQM με τον κύκλο PDCA (Plan-Do-Check-Act):
+                </p>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Plan:</strong> Σχεδιάζει νέα μέθοδο διδασκαλίας (π.χ. flipped classroom)</li>
+                    <li><strong>Do:</strong> Εφαρμόζει τη μέθοδο για 1 μήνα</li>
+                    <li><strong>Check:</strong> Αξιολογεί με quiz, ερωτηματολόγια, παρατήρηση</li>
+                    <li><strong>Act:</strong> Αν λειτουργεί, την υιοθετεί - αν όχι, την τροποποιεί</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🏆 Οι 14 Αρχές του Deming</h2>
+            <p>
+                Ο W. Edwards Deming, θεωρούμενος ως "πατέρας" του TQM, διατύπωσε 14 αρχές για τη διοίκηση:
+            </p>
+            <ol>
+                <li>Δημιουργήστε σταθερό σκοπό για βελτίωση</li>
+                <li>Υιοθετήστε τη νέα φιλοσοφία (της ποιότητας)</li>
+                <li>Σταματήστε να εξαρτάστε από μαζικούς ελέγχους</li>
+                <li>Μειώστε τους προμηθευτές - συνεργαστείτε με τους καλύτερους</li>
+                <li>Βελτιώνετε συνεχώς κάθε διαδικασία</li>
+                <li>Θεσμοθετήστε την επιμόρφωση</li>
+                <li>Υιοθετήστε και εφαρμόστε ηγεσία</li>
+                <li>Εξαλείψτε τον φόβο - δημιουργήστε εμπιστοσύνη</li>
+                <li>Σπάστε τα εμπόδια μεταξύ τμημάτων</li>
+                <li>Εξαλείψτε τα συνθήματα και τους στόχους χωρίς μέσα</li>
+                <li>Εξαλείψτε τις ποσοτικές ποσοστώσεις</li>
+                <li>Αφαιρέστε τα εμπόδια από την υπερηφάνεια για καλή δουλειά</li>
+                <li>Ενθαρρύνετε την εκπαίδευση και την αυτο-βελτίωση</li>
+                <li>Θέστε όλους να εργαστούν για τη μεταμόρφωση</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>✅ Πλεονεκτήματα TQM</h2>
+            <ul>
+                <li>Βελτίωση της <strong>ικανοποίησης πελατών</strong> (μαθητές, γονείς)</li>
+                <li>Αύξηση της <strong>αποτελεσματικότητας</strong> και μείωση σπατάλης</li>
+                <li>Ενδυνάμωση και <strong>αύξηση του ηθικού</strong> των εργαζομένων</li>
+                <li><strong>Καλύτερη ποιότητα</strong> υπηρεσιών/προϊόντων</li>
+                <li>Δημιουργία <strong>κουλτούρας συνεχούς βελτίωσης</strong></li>
+                <li>Λιγότερα <strong>λάθη και προβλήματα</strong> (πρόληψη)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Προκλήσεις & Περιορισμοί</h2>
+            <ul>
+                <li><strong>Απαιτεί χρόνο:</strong> Η αλλαγή κουλτούρας δεν γίνεται εν μία νυκτί</li>
+                <li><strong>Αντιστάσεις:</strong> Οι εργαζόμενοι μπορεί να αντιστέκονται στην αλλαγή</li>
+                <li><strong>Κόστος εκπαίδευσης:</strong> Απαιτεί επένδυση σε επιμόρφωση</li>
+                <li><strong>Δέσμευση ηγεσίας:</strong> Χωρίς αυτήν, το TQM αποτυγχάνει</li>
+                <li><strong>Δυσκολία μέτρησης:</strong> Στην εκπαίδευση, η "ποιότητα" είναι δύσκολο να οριστεί</li>
+                <li><strong>Κίνδυνος γραφειοκρατίας:</strong> Υπερβολική έμφαση σε διαδικασίες</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>🔗 Σχέση με Άλλα Εργαλεία</h2>
+            <p>
+                Το TQM δεν είναι ανεξάρτητο - συνδέεται με:
+            </p>
+            <ul>
+                <li><strong>PDCA (Plan-Do-Check-Act):</strong> Κύκλος συνεχούς βελτίωσης</li>
+                <li><strong>Six Sigma:</strong> Μεθοδολογία για μείωση ελαττωμάτων</li>
+                <li><strong>Lean Management:</strong> Εξάλειψη σπατάλης</li>
+                <li><strong>ISO 9000:</strong> Πρότυπα ποιότητας</li>
+                <li><strong>Balanced Scorecard:</strong> Μέτρηση απόδοσης</li>
+                <li><strong>Benchmarking:</strong> Σύγκριση με τους καλύτερους</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>TQM = <strong>φιλοσοφία</strong>, όχι απλώς τεχνική</li>
+                <li>Βασικό: <strong>Συμμετοχή ΟΛΩΝ</strong> (total involvement)</li>
+                <li>Εστίαση στον <strong>πελάτη</strong> και <strong>συνεχή βελτίωση</strong> (Kaizen)</li>
+                <li>Σύνδεση με <strong>Deming, Juran, Crosby</strong></li>
+                <li>Πρόληψη > Διόρθωση ("Do it right the first time")</li>
+                <li>Οι <strong>14 αρχές του Deming</strong> μπορεί να σας ζητηθούν</li>
+                <li>Συχνή ερώτηση: <em>"Πώς θα εφαρμόσετε TQM σε σχολείο; Ποιες αρχές και πρακτικές;"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 7 Έλεγχος.pdf»</strong>, 
+                Διαφάνειες 45-55
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

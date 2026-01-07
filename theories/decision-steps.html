@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Βήματα Λήψης Αποφάσεων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --purple: #7c3aed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--purple) 0%, #6d28d9 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--purple);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #faf5ff;
+            border-left: 4px solid var(--purple);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--purple);
+        }
+
+        .step-box {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border: 3px solid var(--purple);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .step-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            background: var(--purple);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .flow-diagram {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--purple);
+            font-weight: 600;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #faf5ff;
+            border-radius: 8px;
+        }
+
+        .type-box {
+            background: #ecfdf5;
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#decision">Λήψη Αποφάσεων</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">🎯 ΛΗΨΗ ΑΠΟΦΑΣΕΩΝ</div>
+        <h1>Βήματα Λήψης Αποφάσεων</h1>
+        <p class="theorist">Η Ορθολογική Διαδικασία (Rational Decision-Making Process)</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/decision-steps.png" alt="Decision Making Steps" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Η <strong>Λήψη Αποφάσεων (Decision Making)</strong> είναι η διαδικασία <strong>επιλογής 
+                μεταξύ εναλλακτικών λύσεων</strong> για την επίλυση ενός προβλήματος ή την εκμετάλλευση 
+                μιας ευκαιρίας. Είναι μια από τις πιο κρίσιμες δεξιότητες των διοικητών.
+            </p>
+            <p>
+                Η <strong>Ορθολογική Διαδικασία Λήψης Αποφάσεων</strong> αποτελείται από <strong>6 
+                διακριτά βήματα</strong> που καθοδηγούν τον διοικητή από την αναγνώριση του προβλήματος 
+                μέχρι την αξιολόγηση των αποτελεσμάτων. Αν και στην πράξη η διαδικασία μπορεί να είναι 
+                λιγότερο γραμμική, αυτά τα βήματα παρέχουν ένα <strong>συστηματικό πλαίσιο</strong> για 
+                την αποτελεσματική λήψη αποφάσεων.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Απόφαση</span>
+                <span class="keyword">Πρόβλημα</span>
+                <span class="keyword">Εναλλακτικές</span>
+                <span class="keyword">Αξιολόγηση</span>
+                <span class="keyword">Κριτήρια</span>
+                <span class="keyword">Ορθολογισμός</span>
+                <span class="keyword">Επιλογή</span>
+                <span class="keyword">Εφαρμογή</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Η Ροή της Διαδικασίας</h2>
+            <div class="flow-diagram">
+                🔍 Βήμα 1: Αναγνώριση Προβλήματος<br>
+                ⬇️<br>
+                📊 Βήμα 2: Συλλογή Πληροφοριών<br>
+                ⬇️<br>
+                💡 Βήμα 3: Ανάπτυξη Εναλλακτικών<br>
+                ⬇️<br>
+                ⚖️ Βήμα 4: Αξιολόγηση Εναλλακτικών<br>
+                ⬇️<br>
+                ✅ Βήμα 5: Επιλογή & Εφαρμογή<br>
+                ⬇️<br>
+                📈 Βήμα 6: Αξιολόγηση Αποτελεσμάτων<br>
+                ⬇️ (ανατροφοδότηση)<br>
+                🔄 Επιστροφή στο Βήμα 1 αν χρειάζεται
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Τα 6 Βήματα Αναλυτικά</h2>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">1</span>
+                    Αναγνώριση και Διατύπωση του Προβλήματος
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Ο εντοπισμός του <strong>πραγματικού προβλήματος</strong>, όχι απλώς των συμπτωμάτων. 
+                    Το πρόβλημα πρέπει να διατυπωθεί <strong>σαφώς και συγκεκριμένα</strong>.
+                </p>
+                <p><strong>Ερωτήματα-Κλειδιά:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Ποιο είναι ακριβώς το πρόβλημα;</li>
+                    <li>Πότε και πού εμφανίζεται;</li>
+                    <li>Ποιους επηρεάζει;</li>
+                    <li>Ποιες είναι οι αιτίες του; (όχι τα συμπτώματα!)</li>
+                </ul>
+                <p><strong>Προσοχή:</strong> Μην μπερδεύουμε το <em>σύμπτωμα</em> με την <em>αιτία</em>!</p>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    ❌ Λάθος: "Οι μαθητές έχουν χαμηλούς βαθμούς" (σύμπτωμα)<br>
+                    ✅ Σωστό: "Χάσμα μεταξύ διδακτικών μεθόδων και μαθησιακών στυλ μαθητών 
+                    οδηγεί σε χαμηλή απόδοση" (αιτία)
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">2</span>
+                    Συλλογή Πληροφοριών και Δεδομένων
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η συστηματική <strong>συλλογή σχετικών πληροφοριών</strong> για το πρόβλημα. 
+                    Χρειαζόμαστε δεδομένα για να καταλάβουμε το πρόβλημα σε βάθος.
+                </p>
+                <p><strong>Τι συλλέγουμε:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Ποσοτικά δεδομένα:</strong> Στατιστικά, αριθμούς, μετρήσεις</li>
+                    <li><strong>Ποιοτικά δεδομένα:</strong> Απόψεις, εμπειρίες, παρατηρήσεις</li>
+                    <li><strong>Ιστορικά δεδομένα:</strong> Τι έχει γίνει στο παρελθόν;</li>
+                    <li><strong>Συγκριτικά δεδομένα:</strong> Τι κάνουν άλλοι οργανισμοί;</li>
+                </ul>
+                <p><strong>Πηγές:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Αναφορές, έκθεσεις, βάσεις δεδομένων</li>
+                    <li>Συνεντεύξεις με ενδιαφερόμενα μέρη</li>
+                    <li>Ερωτηματολόγια, έρευνες</li>
+                    <li>Άμεση παρατήρηση</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Συλλέγουμε: βαθμολογίες τελευταίας διετίας, ποσοστά απουσιών, feedback από 
+                    μαθητές/γονείς, έρευνα σχετικών μελετών, στατιστικά παρόμοιων σχολείων"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">3</span>
+                    Ανάπτυξη Εναλλακτικών Λύσεων
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>δημιουργική παραγωγή πολλαπλών εναλλακτικών λύσεων</strong>. Όσο περισσότερες 
+                    εναλλακτικές, τόσο πιο πιθανόν να βρούμε την καλύτερη λύση.
+                </p>
+                <p><strong>Τεχνικές:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Brainstorming:</strong> Ελεύθερη παραγωγή ιδεών χωρίς κριτική</li>
+                    <li><strong>Nominal Group Technique:</strong> Δομημένη ομαδική διαδικασία</li>
+                    <li><strong>Delphi Method:</strong> Ανώνυμες εκτιμήσεις ειδικών</li>
+                    <li><strong>Benchmarking:</strong> Μελέτη βέλτιστων πρακτικών</li>
+                </ul>
+                <p><strong>Προσοχή:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Μην περιορίζεστε σε 2-3 εναλλακτικές</li>
+                    <li>Σκεφτείτε "out of the box"</li>
+                    <li>Συμπεριλάβετε διαφορετικές προοπτικές</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Εναλλακτικές: (1) Εισαγωγή διαφοροποιημένης διδασκαλίας, (2) Project-based 
+                    learning, (3) Flipped classroom, (4) Peer tutoring, (5) Εξατομικευμένα 
+                    προγράμματα μάθησης"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">4</span>
+                    Αξιολόγηση των Εναλλακτικών
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>συστηματική αξιολόγηση κάθε εναλλακτικής</strong> με βάση συγκεκριμένα 
+                    κριτήρια. Ζυγίζουμε τα <strong>πλεονεκτήματα και μειονεκτήματα</strong> κάθε επιλογής.
+                </p>
+                <p><strong>Κριτήρια Αξιολόγησης:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Αποτελεσματικότητα:</strong> Πόσο καλά λύνει το πρόβλημα;</li>
+                    <li><strong>Κόστος:</strong> Χρηματικό και σε χρόνο</li>
+                    <li><strong>Εφικτότητα:</strong> Μπορεί να εφαρμοστεί;</li>
+                    <li><strong>Κίνδυνοι:</strong> Τι μπορεί να πάει στραβά;</li>
+                    <li><strong>Αποδοχή:</strong> Θα γίνει αποδεκτή από ενδιαφερόμενους;</li>
+                    <li><strong>Χρονικός ορίζοντας:</strong> Πόσος χρόνος χρειάζεται;</li>
+                </ul>
+                <p><strong>Εργαλεία:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Πίνακας πλεονεκτημάτων/μειονεκτημάτων (Pros & Cons)</li>
+                    <li>Decision Matrix (σταθμισμένα κριτήρια)</li>
+                    <li>Cost-Benefit Analysis</li>
+                    <li>SWOT για κάθε εναλλακτική</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Flipped classroom: Αποτελεσματικότητα 8/10, Κόστος 6/10 (απαιτεί τεχνολογία), 
+                    Εφικτότητα 7/10, Αποδοχή 7/10 (χρειάζεται εκπαίδευση), Συνολικό Score: 7/10"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">5</span>
+                    Επιλογή και Εφαρμογή της Απόφασης
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>επιλογή της βέλτιστης εναλλακτικής</strong> και η <strong>υλοποίησή της</strong>. 
+                    Χρειάζεται σχέδιο δράσης και δέσμευση πόρων.
+                </p>
+                <p><strong>Επιλογή:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Διαλέξτε την εναλλακτική με το <strong>υψηλότερο score</strong></li>
+                    <li>Συνυπολογίστε τη <strong>διαίσθησή</strong> σας (δεν είναι μόνο αριθμοί!)</li>
+                    <li>Ελέγξτε αν η απόφαση <strong>ευθυγραμμίζεται</strong> με τους στόχους του οργανισμού</li>
+                </ul>
+                <p><strong>Εφαρμογή:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Σχέδιο δράσης:</strong> Ποιος κάνει τι, πότε, πού, πώς;</li>
+                    <li><strong>Κατανομή πόρων:</strong> Προσωπικό, χρήμα, χρόνος, εξοπλισμός</li>
+                    <li><strong>Επικοινωνία:</strong> Ενημέρωση όλων των ενδιαφερόμενων μερών</li>
+                    <li><strong>Παρακολούθηση:</strong> Σύστημα monitoring της εφαρμογής</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Επιλογή: Flipped classroom για τα Μαθηματικά. Εφαρμογή: Επιμόρφωση 3 εκπαιδευτικών 
+                    (Σεπτέμβριος), Αγορά tablets (€5000), Δημιουργία βιντεομαθημάτων (Οκτώβριος), 
+                    Πιλοτική εφαρμογή (Νοέμβριος-Ιανουάριος)"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">6</span>
+                    Αξιολόγηση των Αποτελεσμάτων
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>μέτρηση και αξιολόγηση των αποτελεσμάτων</strong> της απόφασης. Ελέγχουμε 
+                    αν το πρόβλημα λύθηκε και τι μαθήματα πήραμε.
+                </p>
+                <p><strong>Ερωτήματα-Κλειδιά:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Λύθηκε το πρόβλημα;</li>
+                    <li>Επιτεύχθηκαν οι στόχοι;</li>
+                    <li>Τι πήγε καλά; Τι όχι;</li>
+                    <li>Υπήρξαν απροσδόκητες συνέπειες;</li>
+                    <li>Τι θα κάναμε διαφορετικά την επόμενη φορά;</li>
+                </ul>
+                <p><strong>Μέθοδοι Αξιολόγησης:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Σύγκριση πριν/μετά (pre-post)</li>
+                    <li>Συλλογή feedback από ενδιαφερόμενα μέρη</li>
+                    <li>Ανάλυση δεικτών απόδοσης (KPIs)</li>
+                    <li>Lessons learned sessions</li>
+                </ul>
+                <p><strong>Ανατροφοδότηση:</strong> Αν η απόφαση δεν πέτυχε, επιστρέφουμε στο Βήμα 1!</p>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Μετά από 6 μήνες: Βαθμολογίες αυξήθηκαν κατά 15%, ικανοποίηση μαθητών 8/10, 
+                    αλλά 30% εκπαιδευτικών αντιμετωπίζουν τεχνικά προβλήματα → Ανάγκη για επιπλέον 
+                    τεχνική υποστήριξη"
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Πίνακας Σύνοψης</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Βήμα</th>
+                        <th>Βασικό Ερώτημα</th>
+                        <th>Εργαλεία/Τεχνικές</th>
+                        <th>Προϊόν (Output)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Αναγνώριση</strong></td>
+                        <td>Ποιο είναι το πρόβλημα;</td>
+                        <td>Problem analysis, 5 Whys</td>
+                        <td>Σαφής διατύπωση προβλήματος</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Συλλογή</strong></td>
+                        <td>Τι πληροφορίες χρειάζομαι;</td>
+                        <td>Έρευνες, Συνεντεύξεις, Δεδομένα</td>
+                        <td>Πλήρης εικόνα προβλήματος</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Ανάπτυξη</strong></td>
+                        <td>Ποιες είναι οι λύσεις;</td>
+                        <td>Brainstorming, Benchmarking</td>
+                        <td>Λίστα εναλλακτικών (5+)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Αξιολόγηση</strong></td>
+                        <td>Ποια είναι η καλύτερη;</td>
+                        <td>Decision Matrix, SWOT</td>
+                        <td>Κατάταξη εναλλακτικών</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Εφαρμογή</strong></td>
+                        <td>Πώς την υλοποιούμε;</td>
+                        <td>Action Plan, Gantt Chart</td>
+                        <td>Υλοποιημένη απόφαση</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Αξιολόγηση</strong></td>
+                        <td>Πέτυχε;</td>
+                        <td>KPIs, Feedback, Pre-post</td>
+                        <td>Μαθήματα για το μέλλον</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Τύποι Αποφάσεων</h2>
+
+            <div class="type-box">
+                <strong>1. Προγραμματισμένες Αποφάσεις (Programmed Decisions)</strong>
+                <p style="margin-top: 0.5rem;">
+                    Επαναλαμβανόμενες, ρουτίνας αποφάσεις για τις οποίες υπάρχουν <strong>καθιερωμένες 
+                    διαδικασίες</strong>. Π.χ. Αποδοχή μαθητή με τα κριτήρια, Διαχείριση απουσιών.
+                </p>
+            </div>
+
+            <div class="type-box">
+                <strong>2. Μη Προγραμματισμένες Αποφάσεις (Non-programmed Decisions)</strong>
+                <p style="margin-top: 0.5rem;">
+                    Μοναδικές, πολύπλοκες αποφάσεις που <strong>δεν έχουν προηγούμενο</strong>. Απαιτούν 
+                    δημιουργικότητα και κρίση. Π.χ. Αλλαγή εκπαιδευτικού μοντέλου, Διαχείριση κρίσης.
+                </p>
+            </div>
+
+            <div class="type-box">
+                <strong>3. Στρατηγικές vs Επιχειρησιακές</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Στρατηγικές:</strong> Μακροπρόθεσμες, επηρεάζουν όλο τον οργανισμό 
+                    (π.χ. Συγχώνευση σχολείων)</li>
+                    <li><strong>Επιχειρησιακές:</strong> Καθημερινές, βραχυπρόθεσμες (π.χ. Καθορισμός 
+                    ωρολογίου προγράμματος)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα Πλήρους Διαδικασίας: Αντιμετώπιση Χαμηλών Επιδόσεων</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Αναγνώριση:</strong> Το 40% των μαθητών Α' Λυκείου αποτυγχάνει στα 
+                    Μαθηματικά (vs 15% πέρυσι). Αιτία: Χάσμα προηγούμενης γνώσης από Γυμνάσιο.</li>
+
+                    <li><strong>Συλλογή:</strong> Ανάλυση βαθμολογιών 3ετίας, συνεντεύξεις με 8 εκπαιδευτικούς, 
+                    ερωτηματολόγιο σε 120 μαθητές, benchmarking 5 παρόμοιων σχολείων.</li>
+
+                    <li><strong>Εναλλακτικές:</strong> 
+                        <ul>
+                            <li>Α. Ενισχυτική διδασκαλία 2ώρες/εβδομάδα</li>
+                            <li>Β. Peer tutoring πρόγραμμα</li>
+                            <li>Γ. Διαφοροποιημένη διδασκαλία στην τάξη</li>
+                            <li>Δ. Online εξατομικευμένη μάθηση</li>
+                            <li>Ε. Συνδυασμός Α+Β</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Αξιολόγηση:</strong> 
+                        <ul>
+                            <li>Α: Score 7/10 (αποτελεσματικό αλλά κοστοβόρο)</li>
+                            <li>Β: Score 6/10 (χαμηλό κόστος, μέτρια αποτελεσματικότητα)</li>
+                            <li>Γ: Score 8/10 (υψηλή αποτελεσματικότητα, χρειάζεται επιμόρφωση)</li>
+                            <li>Δ: Score 5/10 (απαιτεί υποδομή)</li>
+                            <li>Ε: Score 9/10 (βέλτιστος συνδυασμός)</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Εφαρμογή:</strong> Επιλογή Ε. Σχέδιο: Επιμόρφωση εκπαιδευτικών (Σεπτέμβριος), 
+                    εκπαίδευση peer tutors (Οκτώβριος), εφαρμογή στο Α' τετράμηνο, προϋπολογισμός €8000.</li>
+
+                    <li><strong>Αξιολόγηση:</strong> Μετά από 5 μήνες: Αποτυχία μειώθηκε στο 22% (-18%), 
+                    ικανοποίηση μαθητών 7.5/10, εκπαιδευτικών 8/10. Επιτυχία! Επέκταση και σε άλλα μαθήματα.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Συνηθισμένες Παγίδες</h2>
+            <ul>
+                <li><strong>Jumping to solutions:</strong> Βιάστηκα εφαρμογή λύσης χωρίς ανάλυση</li>
+                <li><strong>Analysis paralysis:</strong> Υπερβολική ανάλυση χωρίς απόφαση</li>
+                <li><strong>Confirmation bias:</strong> Αναζητούμε μόνο πληροφορίες που επιβεβαιώνουν 
+                τις προκαταλήψεις μας</li>
+                <li><strong>Groupthink:</strong> Η ομάδα συμφωνεί χωρίς κριτική σκέψη</li>
+                <li><strong>Sunk cost fallacy:</strong> Συνεχίζουμε μια κακή απόφαση επειδή έχουμε 
+                επενδύσει πολλά</li>
+                <li><strong>Lack of follow-up:</strong> Δεν αξιολογούμε τα αποτελέσματα</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε <strong>καλά τα 6 βήματα με τη σειρά</strong></li>
+                <li>Το <strong>Βήμα 1</strong> είναι κρίσιμο: Αν ορίσουμε λάθος το πρόβλημα, όλα τα άλλα θα είναι λάθος!</li>
+                <li>Στο <strong>Βήμα 3</strong> χρειάζονται <strong>πολλές εναλλακτικές</strong> (όχι μόνο 2-3)</li>
+                <li>Στο <strong>Βήμα 4</strong> χρησιμοποιούμε <strong>συγκεκριμένα κριτήρια</strong> (Decision Matrix)</li>
+                <li>Το <strong>Βήμα 6</strong> δίνει <strong>ανατροφοδότηση</strong> για μελλοντικές αποφάσεις</li>
+                <li>Συχνή ερώτηση: <em>"Περιγράψτε τα βήματα λήψης απόφασης με παράδειγμα από σχολείο"</em></li>
+                <li>Συχνά συνδυάζεται με <strong>Στρατηγικό Σχεδιασμό, SWOT, Benchmarking</strong></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 3 Λήψη Αποφάσεων.pdf»</strong>, 
+                Διαφάνειες 15-30
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

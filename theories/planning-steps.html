@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 Βήματα Στρατηγικού Σχεδιασμού | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 3px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .step-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#strategic">Στρατηγικός Σχεδιασμός</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⭐ ΣΤΡΑΤΗΓΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ</div>
+        <h1>6 Βήματα Στρατηγικού Σχεδιασμού</h1>
+        <p class="theorist">Η Διαδικασία Διαμόρφωσης Στρατηγικής</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/strategic-planning.png" alt="Strategic Planning Process" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Ο <strong>Στρατηγικός Σχεδιασμός</strong> είναι μια <strong>συστηματική διαδικασία</strong> 
+                μέσω της οποίας ένας οργανισμός <strong>καθορίζει τη μακροπρόθεσμη κατεύθυνσή του</strong>, 
+                <strong>θέτει στόχους</strong> και <strong>αναπτύσσει σχέδια δράσης</strong> για την επίτευξή τους.
+            </p>
+            <p>
+                Η διαδικασία αυτή περιλαμβάνει <strong>6 διακριτά βήματα</strong> που καθοδηγούν τον 
+                οργανισμό από την ανάλυση της τρέχουσας κατάστασης έως την υλοποίηση και αξιολόγηση 
+                της στρατηγικής. Είναι ένας <strong>κυκλικός και συνεχής</strong> μηχανισμός που προσαρμόζεται 
+                στις αλλαγές του περιβάλλοντος.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Στρατηγική</span>
+                <span class="keyword">Μακροπρόθεσμος Σχεδιασμός</span>
+                <span class="keyword">Όραμα</span>
+                <span class="keyword">Αποστολή</span>
+                <span class="keyword">Στόχοι</span>
+                <span class="keyword">SWOT</span>
+                <span class="keyword">Εφαρμογή</span>
+                <span class="keyword">Αξιολόγηση</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Τα 6 Βήματα Αναλυτικά</h2>
+
+            <div class="step-box">
+                <h3>🎯 ΒΗΜΑ 1: Καθορισμός Αποστολής, Οράματος & Αξιών</h3>
+                <p><strong>Τι είναι:</strong></p>
+                <ul>
+                    <li><strong>Αποστολή (Mission):</strong> Ο λόγος ύπαρξης του οργανισμού - "Γιατί υπάρχουμε;"</li>
+                    <li><strong>Όραμα (Vision):</strong> Η επιθυμητή μελλοντική κατάσταση - "Πού θέλουμε να φτάσουμε;"</li>
+                    <li><strong>Αξίες (Values):</strong> Οι βασικές αρχές που καθοδηγούν τον οργανισμό</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Αποστολή: Παροχή ποιοτικής εκπαίδευσης για όλους. Όραμα: Να γίνουμε το πρότυπο 
+                    σχολείο της περιοχής. Αξίες: Αριστεία, Ισότητα, Καινοτομία."
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>🔎 ΒΗΜΑ 2: Ανάλυση Εσωτερικού & Εξωτερικού Περιβάλλοντος</h3>
+                <p><strong>Τι περιλαμβάνει:</strong></p>
+                <ul>
+                    <li><strong>Εξωτερική Ανάλυση:</strong> PEST, ανταγωνισμός, ευκαιρίες & απειλές</li>
+                    <li><strong>Εσωτερική Ανάλυση:</strong> Πόροι, ικανότητες, δυνάμεις & αδυναμίες</li>
+                    <li><strong>Εργαλείο:</strong> Ανάλυση SWOT</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "SWOT: Δυνάμεις (έμπειροι καθηγητές), Αδυναμίες (παλιές υποδομές), Ευκαιρίες 
+                    (χρηματοδότηση), Απειλές (μείωση μαθητών)."
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>🎯 ΒΗΜΑ 3: Διατύπωση Στρατηγικής</h3>
+                <p><strong>Τι είναι:</strong></p>
+                <ul>
+                    <li>Καθορισμός του <strong>"πώς"</strong> θα επιτευχθεί το όραμα</li>
+                    <li>Επιλογή <strong>στρατηγικών προτεραιοτήτων</strong> και <strong>πρωτοβουλιών</strong></li>
+                    <li>Ανάπτυξη <strong>εναλλακτικών σεναρίων</strong> και επιλογή του βέλτιστου</li>
+                </ul>
+                <p><strong>Τύποι Στρατηγικών:</strong></p>
+                <ul>
+                    <li>Στρατηγική ανάπτυξης (growth)</li>
+                    <li>Στρατηγική σταθερότητας (stability)</li>
+                    <li>Στρατηγική περικοπής (retrenchment)</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Στρατηγική: Βελτίωση ποιότητας μέσω επένδυσης σε τεχνολογία και επιμόρφωση."
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>📝 ΒΗΜΑ 4: Καθορισμός Στόχων & Σχεδίου Δράσης</h3>
+                <p><strong>Τι περιλαμβάνει:</strong></p>
+                <ul>
+                    <li>Μετάφραση της στρατηγικής σε <strong>συγκεκριμένους, μετρήσιμους στόχους</strong> (SMART)</li>
+                    <li>Ανάπτυξη <strong>σχεδίου δράσης</strong>: Ποιος, Τι, Πότε, Πώς</li>
+                    <li>Κατανομή <strong>πόρων</strong> (ανθρώπινοι, οικονομικοί, υλικοί)</li>
+                    <li>Καθορισμός <strong>χρονοδιαγράμματος</strong> και <strong>ορόσημων</strong></li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Στόχος: Αύξηση επιτυχίας στις Πανελλήνιες κατά 20% μέχρι 2027. Δράση: Επιμόρφωση 
+                    10 εκπαιδευτικών σε νέες μεθόδους έως Δεκέμβριο."
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>⚙️ ΒΗΜΑ 5: Εφαρμογή της Στρατηγικής</h3>
+                <p><strong>Τι περιλαμβάνει:</strong></p>
+                <ul>
+                    <li><strong>Επικοινωνία</strong> της στρατηγικής σε όλα τα μέλη</li>
+                    <li><strong>Ανάθεση ευθυνών</strong> και εξουσιοδοτήσεων</li>
+                    <li><strong>Υλοποίηση</strong> των σχεδίων δράσης</li>
+                    <li>Διαχείριση <strong>αντιστάσεων</strong> και προσαρμογή</li>
+                    <li><strong>Συντονισμός</strong> όλων των λειτουργιών</li>
+                </ul>
+                <p><strong>Κρίσιμο:</strong> Η εφαρμογή είναι συχνά το πιο <strong>δύσκολο βήμα</strong> - 
+                απαιτεί ηγεσία, δέσμευση και επικοινωνία!</p>
+            </div>
+
+            <div class="step-box">
+                <h3>📊 ΒΗΜΑ 6: Αξιολόγηση & Έλεγχος</h3>
+                <p><strong>Τι περιλαμβάνει:</strong></p>
+                <ul>
+                    <li><strong>Παρακολούθηση</strong> της προόδου με δείκτες απόδοσης (KPIs)</li>
+                    <li><strong>Σύγκριση</strong> πραγματικών αποτελεσμάτων με στόχους</li>
+                    <li><strong>Εντοπισμός αποκλίσεων</strong> και ανάλυση αιτιών</li>
+                    <li><strong>Διορθωτικές ενέργειες</strong> όπου χρειάζεται</li>
+                    <li><strong>Ανατροφοδότηση</strong> για επόμενο κύκλο σχεδιασμού</li>
+                </ul>
+                <p><strong>Εργαλεία:</strong> Balanced Scorecard (BSC), Dashboards, Αναφορές Προόδου</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Κυκλική Διαδικασία</h2>
+            <p>
+                Ο στρατηγικός σχεδιασμός είναι <strong>συνεχής και κυκλικός</strong>. Μετά την αξιολόγηση, 
+                ο οργανισμός επιστρέφει στο Βήμα 1 ή 2 για να επανεξετάσει την αποστολή/όραμα ή να 
+                αναλύσει εκ νέου το περιβάλλον, προσαρμόζοντας τη στρατηγική στις νέες συνθήκες.
+            </p>
+            <p style="margin-top: 1rem; font-weight: 600; color: var(--danger);">
+                📌 Σημαντικό: Η στρατηγική δεν είναι στατική - πρέπει να αναθεωρείται τακτικά!
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα: Στρατηγικός Σχεδιασμός για Λύκειο</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Αποστολή/Όραμα:</strong> "Να παρέχουμε υψηλής ποιότητας εκπαίδευση που 
+                    προετοιμάζει μαθητές για την τριτοβάθμια εκπαίδευση και τη ζωή"</li>
+                    <li><strong>Ανάλυση:</strong> SWOT - Δυνάμεις: καλοί καθηγητές, Αδυναμίες: παλιό 
+                    εργαστήριο, Ευκαιρίες: χρηματοδότηση, Απειλές: μείωση μαθητών</li>
+                    <li><strong>Στρατηγική:</strong> Εστίαση σε STEM και ψηφιακές δεξιότητες</li>
+                    <li><strong>Στόχοι:</strong> 20% αύξηση εισαγωγών σε πολυτεχνεία, ανακαίνιση 
+                    εργαστηρίου, 100% καθηγητών με ψηφιακές δεξιότητες</li>
+                    <li><strong>Εφαρμογή:</strong> Επιμόρφωση, προμήθεια εξοπλισμού, νέα προγράμματα</li>
+                    <li><strong>Αξιολόγηση:</strong> Τριμηνιαίες αναφορές, ετήσια αξιολόγηση</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε <strong>καλά τα 6 βήματα με τη σειρά</strong></li>
+                <li>Το <strong>Βήμα 2</strong> συχνά περιλαμβάνει SWOT/PEST ανάλυση</li>
+                <li>Οι στόχοι (Βήμα 4) πρέπει να είναι <strong>SMART</strong></li>
+                <li>Η <strong>εφαρμογή</strong> (Βήμα 5) είναι συχνά το πιο δύσκολο βήμα</li>
+                <li>Η διαδικασία είναι <strong>κυκλική</strong> - όχι γραμμική</li>
+                <li>Συχνή ερώτηση: <em>"Περιγράψτε τα 6 βήματα και δώστε παράδειγμα για σχολείο"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 5 Σχεδιασμός.pdf»</strong>, 
+                Διαφάνειες 10-19
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

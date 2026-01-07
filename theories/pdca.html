@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDCA - Plan-Do-Check-Act Cycle | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .cycle-box {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border: 3px solid var(--success);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .cycle-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#control">Έλεγχος</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⚙️ ΕΛΕΓΧΟΣ</div>
+        <h1>PDCA Cycle</h1>
+        <p class="theorist">Plan-Do-Check-Act (Deming Cycle)</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/pdca.png" alt="PDCA Cycle" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Ο <strong>Κύκλος PDCA</strong> (Plan-Do-Check-Act), γνωστός και ως <strong>Κύκλος Deming</strong> 
+                ή <strong>Κύκλος Shewhart</strong>, είναι μια <strong>επαναληπτική μέθοδος</strong> 
+                τεσσάρων βημάτων που χρησιμοποιείται για τη <strong>συνεχή βελτίωση</strong> διαδικασιών, 
+                προϊόντων ή υπηρεσιών.
+            </p>
+            <p>
+                Αναπτύχθηκε από τον <strong>W. Edwards Deming</strong> και αποτελεί τη βάση της 
+                <strong>φιλοσοφίας της συνεχούς βελτίωσης (Continuous Improvement)</strong>. Είναι ένας 
+                <strong>κυκλικός μηχανισμός</strong> που επαναλαμβάνεται συνεχώς, με κάθε κύκλο να οδηγεί 
+                σε περαιτέρω βελτιώσεις.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Deming</span>
+                <span class="keyword">Συνεχής Βελτίωση</span>
+                <span class="keyword">Κυκλική Διαδικασία</span>
+                <span class="keyword">Plan (Σχεδίασε)</span>
+                <span class="keyword">Do (Κάνε)</span>
+                <span class="keyword">Check (Έλεγξε)</span>
+                <span class="keyword">Act (Δράσε)</span>
+                <span class="keyword">Kaizen</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Τα 4 Βήματα του PDCA</h2>
+
+            <div class="cycle-box">
+                <h3>1️⃣ PLAN (Σχεδίασε)</h3>
+                <p><strong>Τι κάνουμε:</strong></p>
+                <ul>
+                    <li>Αναγνωρίζουμε το <strong>πρόβλημα</strong> ή την <strong>ευκαιρία βελτίωσης</strong></li>
+                    <li>Αναλύουμε την <strong>τρέχουσα κατάσταση</strong></li>
+                    <li>Καθορίζουμε <strong>στόχους</strong> (τι θέλουμε να επιτύχουμε)</li>
+                    <li>Αναπτύσσουμε <strong>σχέδιο δράσης</strong> (πώς θα το πετύχουμε)</li>
+                    <li>Προβλέπουμε <strong>αποτελέσματα</strong></li>
+                </ul>
+                <p style="margin-top: 0.8rem; font-style: italic;">
+                    <strong>Παράδειγμα:</strong> "Θέλουμε να μειώσουμε τις απουσίες μαθητών κατά 20%. 
+                    Θα εφαρμόσουμε σύστημα επικοινωνίας με γονείς και πρόγραμμα κινήτρων."
+                </p>
+            </div>
+
+            <div class="cycle-box">
+                <h3>2️⃣ DO (Κάνε / Εφάρμοσε)</h3>
+                <p><strong>Τι κάνουμε:</strong></p>
+                <ul>
+                    <li><strong>Υλοποιούμε</strong> το σχέδιο δράσης</li>
+                    <li>Εφαρμόζουμε σε <strong>μικρή κλίμακα</strong> (πιλοτικό πρόγραμμα)</li>
+                    <li><strong>Συλλέγουμε δεδομένα</strong> κατά τη διάρκεια της εφαρμογής</li>
+                    <li><strong>Καταγράφουμε</strong> όλα τα βήματα και παρατηρήσεις</li>
+                </ul>
+                <p style="margin-top: 0.8rem; font-style: italic;">
+                    <strong>Παράδειγμα:</strong> "Εφαρμόζουμε το σύστημα επικοινωνίας για 2 μήνες σε μία 
+                    τάξη και καταγράφουμε τις απουσίες."
+                </p>
+            </div>
+
+            <div class="cycle-box">
+                <h3>3️⃣ CHECK (Έλεγξε / Αξιολόγησε)</h3>
+                <p><strong>Τι κάνουμε:</strong></p>
+                <ul>
+                    <li><strong>Αναλύουμε τα δεδομένα</strong> που συλλέξαμε</li>
+                    <li><strong>Συγκρίνουμε</strong> πραγματικά αποτελέσματα με προσδοκώμενα</li>
+                    <li><strong>Εντοπίζουμε αποκλίσεις</strong> και αιτίες</li>
+                    <li><strong>Αξιολογούμε</strong> τι λειτούργησε και τι όχι</li>
+                </ul>
+                <p style="margin-top: 0.8rem; font-style: italic;">
+                    <strong>Παράδειγμα:</strong> "Οι απουσίες μειώθηκαν κατά 15% (όχι 20%). Τι πήγε καλά; 
+                    Τι χρειάζεται βελτίωση;"
+                </p>
+            </div>
+
+            <div class="cycle-box">
+                <h3>4️⃣ ACT (Δράσε / Τυποποίησε)</h3>
+                <p><strong>Τι κάνουμε:</strong></p>
+                <ul>
+                    <li><strong>Αν επιτύχαμε:</strong> Τυποποιούμε τη βελτίωση και την εφαρμόζουμε ευρέως</li>
+                    <li><strong>Αν αποτύχαμε:</strong> Αναθεωρούμε το σχέδιο και ξεκινάμε νέο κύκλο PDCA</li>
+                    <li><strong>Ενσωματώνουμε</strong> τα διδάγματα στις διαδικασίες</li>
+                    <li><strong>Προετοιμάζουμε</strong> τον επόμενο κύκλο βελτίωσης</li>
+                </ul>
+                <p style="margin-top: 0.8rem; font-style: italic;">
+                    <strong>Παράδειγμα:</strong> "Εφαρμόζουμε το σύστημα σε όλες τις τάξεις με μικρές 
+                    προσαρμογές. Νέος στόχος: 25% μείωση."
+                </p>
+            </div>
+
+            <p style="margin-top: 1.5rem; font-weight: 600; color: var(--success);">
+                🔄 <strong>Ο κύκλος επαναλαμβάνεται συνεχώς</strong> - κάθε φορά σε υψηλότερο επίπεδο!
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: Βελτίωση Διδακτικών Μεθόδων</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Plan:</strong> Οι μαθητές δυσκολεύονται στα Μαθηματικά. Σχέδιο: εφαρμογή 
+                    διαφοροποιημένης διδασκαλίας</li>
+                    <li><strong>Do:</strong> Εφαρμόζουμε νέες μεθόδους για 1 τρίμηνο, καταγράφουμε επιδόσεις</li>
+                    <li><strong>Check:</strong> Οι επιδόσεις βελτιώθηκαν κατά 18% - κάποιες μέθοδοι 
+                    λειτούργησαν καλύτερα</li>
+                    <li><strong>Act:</strong> Υιοθετούμε τις πιο αποτελεσματικές μεθόδους μόνιμα</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: Βελτίωση Σχολικού Κλίματος</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Plan:</strong> Πρόβλημα: αυξημένα περιστατικά bullying. Σχέδιο: πρόγραμμα 
+                    ευαισθητοποίησης και peer mentoring</li>
+                    <li><strong>Do:</strong> Υλοποίηση προγράμματος για 3 μήνες</li>
+                    <li><strong>Check:</strong> Μείωση περιστατικών κατά 40%, βελτίωση κλίματος</li>
+                    <li><strong>Act:</strong> Το πρόγραμμα γίνεται μόνιμο, επέκταση σε όλες τις τάξεις</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: Βελτίωση Διοικητικών Διαδικασιών</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Plan:</strong> Η διαδικασία εγγραφής μαθητών παίρνει πολύ χρόνο. 
+                    Σχέδιο: ψηφιοποίηση</li>
+                    <li><strong>Do:</strong> Δημιουργία online φόρμας, δοκιμή με 50 γονείς</li>
+                    <li><strong>Check:</strong> Ο χρόνος μειώθηκε κατά 60%, αλλά κάποια πεδία ήταν ασαφή</li>
+                    <li><strong>Act:</strong> Βελτιώνουμε τη φόρμα και την εφαρμόζουμε για όλους</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 4: Βελτίωση Αποτελεσμάτων Αξιολόγησης</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Plan:</strong> Χαμηλή επίδοση σε εθνικές εξετάσεις. Σχέδιο: πρόσθετα 
+                    μαθήματα ενίσχυσης</li>
+                    <li><strong>Do:</strong> 2ωρη ενίσχυση/εβδομάδα για 20 μαθητές</li>
+                    <li><strong>Check:</strong> Οι μαθητές βελτιώθηκαν κατά μέσο όρο 1,5 μονάδες</li>
+                    <li><strong>Act:</strong> Επέκταση προγράμματος, προσθήκη online πόρων</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✅ Πλεονεκτήματα PDCA</h2>
+            <ul>
+                <li><strong>Απλότητα:</strong> Εύκολο στην κατανόηση και εφαρμογή</li>
+                <li><strong>Συνεχής βελτίωση:</strong> Ενθαρρύνει τη σταδιακή πρόοδο</li>
+                <li><strong>Βασίζεται σε δεδομένα:</strong> Όχι σε υποθέσεις</li>
+                <li><strong>Ευελιξία:</strong> Μπορεί να εφαρμοστεί σε οποιαδήποτε διαδικασία</li>
+                <li><strong>Μειώνει κινδύνους:</strong> Πιλοτική εφαρμογή πριν την ευρεία υιοθέτηση</li>
+                <li><strong>Προάγει τη μάθηση:</strong> Από επιτυχίες και αποτυχίες</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>🔗 Σχέση με Άλλες Θεωρίες</h2>
+            <ul>
+                <li><strong>TQM (Total Quality Management):</strong> Το PDCA είναι βασικό εργαλείο του TQM</li>
+                <li><strong>Kaizen:</strong> Η ιαπωνική φιλοσοφία συνεχούς βελτίωσης χρησιμοποιεί PDCA</li>
+                <li><strong>Six Sigma:</strong> Ενσωματώνει PDCA στη μεθοδολογία DMAIC</li>
+                <li><strong>Lean:</strong> Χρησιμοποιεί PDCA για εξάλειψη σπατάλης</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε τα <strong>4 βήματα με τη σειρά</strong>: Plan → Do → Check → Act</li>
+                <li>Το PDCA είναι <strong>κυκλικό</strong>, όχι γραμμικό</li>
+                <li>Το "Do" γίνεται συχνά σε <strong>μικρή κλίμακα</strong> (pilot)</li>
+                <li>Το "Check" βασίζεται σε <strong>δεδομένα</strong>, όχι εντυπώσεις</li>
+                <li>Το "Act" μπορεί να σημαίνει <strong>τυποποίηση</strong> (αν επιτύχαμε) ή 
+                <strong>επανεκκίνηση</strong> (αν αποτύχαμε)</li>
+                <li>Συχνή ερώτηση: <em>"Περιγράψτε τον κύκλο PDCA με παράδειγμα από σχολείο"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 7 Έλεγχος.pdf»</strong>, 
+                Διαφάνειες 15-20
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmarking - Συγκριτική Αξιολόγηση | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#strategic">Στρατηγικός Σχεδιασμός</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⭐ ΣΤΡΑΤΗΓΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ</div>
+        <h1>Benchmarking</h1>
+        <p class="theorist">Συγκριτική Αξιολόγηση Βέλτιστων Πρακτικών</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/benchmarking.png" alt="Benchmarking Process" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Το <strong>Benchmarking</strong> (Συγκριτική Αξιολόγηση) είναι μια <strong>συστηματική διαδικασία</strong> 
+                μέτρησης και σύγκρισης των πρακτικών, διαδικασιών και αποτελεσμάτων ενός οργανισμού με αυτά 
+                <strong>άλλων οργανισμών που θεωρούνται "καλύτεροι" ή "πρότυπα"</strong> (best practices).
+            </p>
+            <p>
+                Στόχος του benchmarking είναι η <strong>αναγνώριση κενών απόδοσης</strong>, η <strong>μάθηση 
+                από τους καλύτερους</strong> και η <strong>εφαρμογή βελτιωμένων πρακτικών</strong> για την 
+                ενίσχυση της αποτελεσματικότητας και ανταγωνιστικότητας του οργανισμού.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Σύγκριση</span>
+                <span class="keyword">Best Practices</span>
+                <span class="keyword">Βελτίωση</span>
+                <span class="keyword">Μέτρηση Απόδοσης</span>
+                <span class="keyword">Καινοτομία</span>
+                <span class="keyword">Μάθηση</span>
+                <span class="keyword">Ανταγωνιστικότητα</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Τύποι Benchmarking</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Τύπος</th>
+                        <th>Περιγραφή</th>
+                        <th>Παράδειγμα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Εσωτερικό<br>(Internal)</strong></td>
+                        <td>Σύγκριση μεταξύ τμημάτων του ίδιου οργανισμού</td>
+                        <td>Σύγκριση επίδοσης μεταξύ 3 υποκαταστημάτων του ίδιου σχολείου</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ανταγωνιστικό<br>(Competitive)</strong></td>
+                        <td>Σύγκριση με άμεσους ανταγωνιστές</td>
+                        <td>Ιδιωτικό σχολείο συγκρίνεται με άλλα ιδιωτικά της περιοχής</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Λειτουργικό<br>(Functional)</strong></td>
+                        <td>Σύγκριση παρόμοιων λειτουργιών με άλλους κλάδους</td>
+                        <td>Σύγκριση συστήματος εξυπηρέτησης γονέων με ξενοδοχείο</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Γενικό<br>(Generic)</strong></td>
+                        <td>Σύγκριση βασικών διαδικασιών ανεξάρτητα από κλάδο</td>
+                        <td>Σύγκριση διαδικασίας λήψης αποφάσεων με οποιονδήποτε οργανισμό</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>📋 Βήματα Διαδικασίας Benchmarking</h2>
+            <ol>
+                <li><strong>Προσδιορισμός τι θα αξιολογηθεί:</strong> Ποια διαδικασία, πρακτική ή δείκτης;</li>
+                <li><strong>Προσδιορισμός οργανισμών σύγκρισης:</strong> Ποιοι είναι οι "καλύτεροι";</li>
+                <li><strong>Συλλογή δεδομένων:</strong> Συγκέντρωση πληροφοριών από τον οργανισμό και 
+                τους benchmarks</li>
+                <li><strong>Ανάλυση κενών:</strong> Εντοπισμός διαφορών στην απόδοση (performance gaps)</li>
+                <li><strong>Ανάπτυξη σχεδίου δράσης:</strong> Πώς θα υιοθετήσουμε τις βέλτιστες πρακτικές;</li>
+                <li><strong>Εφαρμογή και παρακολούθηση:</strong> Υλοποίηση και μέτρηση αποτελεσμάτων</li>
+                <li><strong>Επανεξέταση:</strong> Το benchmarking είναι συνεχής διαδικασία</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: Benchmarking Μαθησιακών Αποτελεσμάτων</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Αντικείμενο:</strong> Επίδοση μαθητών στα Μαθηματικά</li>
+                    <li><strong>Σύγκριση:</strong> Με σχολεία παρόμοιου κοινωνικοοικονομικού προφίλ που 
+                    έχουν εξαιρετικές επιδόσεις</li>
+                    <li><strong>Ανάλυση:</strong> Το δικό μας σχολείο έχει 70% επιτυχία, το πρότυπο 90%</li>
+                    <li><strong>Ευρήματα:</strong> Το πρότυπο χρησιμοποιεί διαφοροποιημένη διδασκαλία, 
+                    peer tutoring, και ψηφιακά εργαλεία</li>
+                    <li><strong>Δράση:</strong> Υιοθέτηση αυτών των πρακτικών</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: Benchmarking Επικοινωνίας με Γονείς</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Αντικείμενο:</strong> Σύστημα επικοινωνίας σχολείου-γονέων</li>
+                    <li><strong>Σύγκριση:</strong> Με σχολείο που έχει βραβευτεί για την επικοινωνία του</li>
+                    <li><strong>Ευρήματα:</strong> Χρήση εφαρμογής, εβδομαδιαία ενημέρωση, online πλατφόρμα</li>
+                    <li><strong>Δράση:</strong> Εγκατάσταση παρόμοιου συστήματος</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: Benchmarking Διοικητικών Διαδικασιών</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Αντικείμενο:</strong> Διαδικασία εγγραφής νέων μαθητών</li>
+                    <li><strong>Σύγκριση:</strong> Με άλλα σχολεία (ακόμα και ιδιωτικά ή διεθνή)</li>
+                    <li><strong>Ευρήματα:</strong> Online εγγραφή, αυτόματα emails, ψηφιακός φάκελος</li>
+                    <li><strong>Δράση:</strong> Ψηφιοποίηση διαδικασίας</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 4: Benchmarking σε Πανεπιστήμιο</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Αντικείμενο:</strong> Ποσοστό απορρόφησης αποφοίτων στην αγορά εργασίας</li>
+                    <li><strong>Σύγκριση:</strong> Με κορυφαία ευρωπαϊκά πανεπιστήμια</li>
+                    <li><strong>Ανάλυση:</strong> Το δικό μας 60%, το πρότυπο 85%</li>
+                    <li><strong>Ευρήματα:</strong> Σύνδεση με επιχειρήσεις, πρακτική άσκηση, career services</li>
+                    <li><strong>Δράση:</strong> Ενίσχυση γραφείου σταδιοδρομίας και συνεργασιών</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✅ Πλεονεκτήματα Benchmarking</h2>
+            <ul>
+                <li>Προσδιορισμός <strong>ρεαλιστικών στόχων</strong> βάσει αποδεδειγμένων αποτελεσμάτων</li>
+                <li><strong>Μάθηση από τους καλύτερους</strong> χωρίς να "εφεύρουμε τον τροχό"</li>
+                <li>Ενθαρρύνει την <strong>καινοτομία και τη συνεχή βελτίωση</strong></li>
+                <li>Αντικειμενική <strong>αξιολόγηση της θέσης μας</strong> σε σχέση με άλλους</li>
+                <li>Δημιουργεί <strong>κουλτούρα αριστείας</strong></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Προκλήσεις & Περιορισμοί</h2>
+            <ul>
+                <li><strong>Δυσκολία πρόσβασης σε δεδομένα:</strong> Άλλοι οργανισμοί μπορεί να μην 
+                μοιράζονται πληροφορίες</li>
+                <li><strong>Διαφορές πλαισίου:</strong> Μια πρακτική που λειτουργεί αλλού μπορεί να μην 
+                ταιριάζει στο δικό μας περιβάλλον</li>
+                <li><strong>Χρόνος και κόστος:</strong> Απαιτεί πόρους για συλλογή και ανάλυση δεδομένων</li>
+                <li><strong>Κίνδυνος απομίμησης:</strong> Αντί για δημιουργική προσαρμογή</li>
+                <li><strong>Αντιστάσεις:</strong> "Δεν είμαστε σαν αυτούς"</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Benchmarking ≠ αντιγραφή - είναι <strong>προσαρμογή βέλτιστων πρακτικών</strong></li>
+                <li>Είναι <strong>συνεχής διαδικασία</strong>, όχι μία φορά</li>
+                <li>Μπορεί να εφαρμοστεί σε <strong>όλες τις πτυχές</strong> (διδασκαλία, διοίκηση, 
+                υποδομές κ.λπ.)</li>
+                <li>Συνδυάζεται με άλλα εργαλεία (SWOT, MBO, TQM)</li>
+                <li>Συχνή ερώτηση: <em>"Πώς θα χρησιμοποιούσατε benchmarking για να βελτιώσετε 
+                συγκεκριμένη πτυχή του σχολείου;"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 5 Σχεδιασμός.pdf»</strong>, 
+                Διαφάνειες 43-50
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

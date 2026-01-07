@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEST Analysis - Πολιτική, Οικονομική, Κοινωνική, Τεχνολογική Ανάλυση | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#strategic">Στρατηγικός Σχεδιασμός</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⭐ ΣΤΡΑΤΗΓΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ</div>
+        <h1>PEST Analysis</h1>
+        <p class="theorist">Political, Economic, Social, Technological</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/pest.png" alt="PEST Analysis Framework" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Η <strong>Ανάλυση PEST</strong> είναι ένα στρατηγικό εργαλείο που εξετάζει το 
+                <strong>εξωτερικό μακροπεριβάλλον</strong> ενός οργανισμού μέσα από τέσσερις βασικές διαστάσεις: 
+                <strong>Πολιτική (Political), Οικονομική (Economic), Κοινωνική (Social) και Τεχνολογική (Technological)</strong>.
+            </p>
+            <p>
+                Το εργαλείο αυτό βοηθά τους οργανισμούς να <strong>κατανοήσουν τις εξωτερικές δυνάμεις</strong> 
+                που επηρεάζουν τη λειτουργία τους, να <strong>προβλέψουν μελλοντικές τάσεις</strong> και να 
+                <strong>προσαρμόσουν τη στρατηγική τους</strong> ανάλογα. Συχνά συνδυάζεται με την ανάλυση SWOT.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Εξωτερικό Περιβάλλον</span>
+                <span class="keyword">Μακροπεριβάλλον</span>
+                <span class="keyword">Political (Πολιτικό)</span>
+                <span class="keyword">Economic (Οικονομικό)</span>
+                <span class="keyword">Social (Κοινωνικό)</span>
+                <span class="keyword">Technological (Τεχνολογικό)</span>
+                <span class="keyword">PESTLE</span>
+                <span class="keyword">Στρατηγική Ανάλυση</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Οι 4 Διαστάσεις της PEST</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Διάσταση</th>
+                        <th>Περιγραφή</th>
+                        <th>Παραδείγματα Παραγόντων</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Political<br>(Πολιτικό)</strong></td>
+                        <td>Κυβερνητικές πολιτικές και νομοθεσία</td>
+                        <td>Εκπαιδευτική πολιτική, νομοθεσία, κανονισμοί, πολιτική σταθερότητα, φορολογία</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Economic<br>(Οικονομικό)</strong></td>
+                        <td>Οικονομικές συνθήκες και τάσεις</td>
+                        <td>Οικονομική ανάπτυξη, ανεργία, επιδοτήσεις, πληθωρισμός, προϋπολογισμοί</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Social<br>(Κοινωνικό)</strong></td>
+                        <td>Δημογραφικά και πολιτισμικά χαρακτηριστικά</td>
+                        <td>Δημογραφία, πολιτιστικές αξίες, επίπεδο εκπαίδευσης, κοινωνικές τάσεις</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Technological<br>(Τεχνολογικό)</strong></td>
+                        <td>Τεχνολογική εξέλιξη και καινοτομία</td>
+                        <td>Νέες τεχνολογίες, ψηφιακά εργαλεία, έρευνα, αυτοματοποίηση, e-learning</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 1.5rem;">
+                <strong>Παραλλαγές:</strong> PESTLE (προσθέτει Legal - Νομικό, Environmental - Περιβαλλοντικό), 
+                PESTELI (προσθέτει Legal, Environmental, Industry)
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: PEST Ανάλυση για Δημόσιο Σχολείο στην Ελλάδα</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Political:</strong> Νέο νομοθετικό πλαίσιο για αξιολόγηση εκπαιδευτικών, 
+                    αλλαγές στα αναλυτικά προγράμματα, πολιτικές ένταξης μεταναστών</li>
+                    <li><strong>Economic:</strong> Περικοπές στον εκπαιδευτικό προϋπολογισμό, ευρωπαϊκά 
+                    προγράμματα χρηματοδότησης (ΕΣΠΑ), ανεργία γονέων που επηρεάζει μαθητές</li>
+                    <li><strong>Social:</strong> Γήρανση πληθυσμού, πολυπολιτισμικά σχολεία, αυξημένη 
+                    ευαισθητοποίηση για ψυχική υγεία μαθητών</li>
+                    <li><strong>Technological:</strong> Εισαγωγή tablets και ψηφιακών βιβλίων, 
+                    πλατφόρμες τηλεκπαίδευσης, ανάγκη επιμόρφωσης σε ψηφιακές δεξιότητες</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: PEST για Ιδιωτικό Φροντιστήριο</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Political:</strong> Αλλαγές στο σύστημα εισαγωγής στα ΑΕΙ, νομοθεσία για 
+                    λειτουργία φροντιστηρίων</li>
+                    <li><strong>Economic:</strong> Μείωση οικογενειακού εισοδήματος, ανταγωνισμός τιμών, 
+                    δωρεάν online πόροι</li>
+                    <li><strong>Social:</strong> Αυξημένη ζήτηση για ξένες γλώσσες, προτίμηση για 
+                    προσωποποιημένη εκπαίδευση</li>
+                    <li><strong>Technological:</strong> Online μαθήματα, AI-based learning tools, 
+                    ψηφιακό marketing</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: PEST για Πανεπιστήμιο</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Political:</strong> Πολιτική για διεθνοποίηση, χρηματοδότηση έρευνας, 
+                    αυτονομία ιδρυμάτων</li>
+                    <li><strong>Economic:</strong> Μείωση κρατικής χρηματοδότησης, αύξηση δικτύων συνεργασίας 
+                    με βιομηχανία</li>
+                    <li><strong>Social:</strong> Αύξηση διεθνών φοιτητών, αλλαγή προφίλ φοιτητών 
+                    (lifelong learning), ανάγκες αγοράς εργασίας</li>
+                    <li><strong>Technological:</strong> MOOCs, virtual labs, έρευνα σε AI και data science</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📋 Πώς Διεξάγεται η PEST</h2>
+            <ol>
+                <li><strong>Προσδιορισμός σκοπού:</strong> Για ποιον σκοπό γίνεται η ανάλυση;</li>
+                <li><strong>Συλλογή δεδομένων:</strong> Έρευνα για κάθε διάσταση (P, E, S, T)</li>
+                <li><strong>Καταγραφή παραγόντων:</strong> Listing όλων των σχετικών παραγόντων ανά κατηγορία</li>
+                <li><strong>Αξιολόγηση επίδρασης:</strong> Ποιοι παράγοντες έχουν μεγαλύτερη επιρροή;</li>
+                <li><strong>Σύνδεση με στρατηγική:</strong> Πώς αυτοί οι παράγοντες επηρεάζουν τη στρατηγική;</li>
+                <li><strong>Παρακολούθηση:</strong> Τακτική επανεξέταση (το περιβάλλον αλλάζει!)</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Η PEST εστιάζει στο <strong>εξωτερικό μακροπεριβάλλον</strong> (σε αντίθεση με το SWOT 
+                που εξετάζει και εσωτερικούς παράγοντες)</li>
+                <li>Όλοι οι παράγοντες είναι <strong>εκτός ελέγχου</strong> του οργανισμού</li>
+                <li>Χρησιμοποιείται συχνά <strong>μαζί με SWOT</strong>: PEST→ εξωτερικά + εσωτερικά = SWOT</li>
+                <li>Συχνή ερώτηση: <em>"Κάντε PEST ανάλυση για σχολείο/πανεπιστήμιο/εκπαιδευτικό πρόγραμμα"</em></li>
+                <li>Προσοχή: Μην μπερδεύετε το <strong>Political</strong> με το <strong>Legal</strong> (PESTLE)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 5 Σχεδιασμός.pdf»</strong>, 
+                Διαφάνειες 26-30
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

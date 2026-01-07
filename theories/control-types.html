@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Είδη Ελέγχου - Πρόδρασης, Παράλληλης, Ανάδρασης | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .type-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid var(--warning);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .type-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#control">Έλεγχος</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">⚙️ ΕΛΕΓΧΟΣ</div>
+        <h1>Είδη Ελέγχου</h1>
+        <p class="theorist">Feedforward, Concurrent, Feedback Control</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/control-types.png" alt="Types of Control" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Ο <strong>έλεγχος</strong> είναι η διαδικασία με την οποία οι διοικητές <strong>παρακολουθούν</strong> 
+                και <strong>διασφαλίζουν</strong> ότι οι δραστηριότητες του οργανισμού προχωρούν όπως σχεδιάστηκε. 
+                Υπάρχουν <strong>τρεις βασικοί τύποι ελέγχου</strong> ανάλογα με τη <strong>χρονική στιγμή</strong> 
+                που πραγματοποιείται ο έλεγχος σε σχέση με τη διαδικασία.
+            </p>
+            <p>
+                Κάθε τύπος ελέγχου έχει <strong>διαφορετικό σκοπό</strong> και <strong>διαφορετική χρησιμότητα</strong>. 
+                Οι αποτελεσματικοί οργανισμοί χρησιμοποιούν <strong>συνδυασμό και των τριών</strong>.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Πρόδρασης (Feedforward)</span>
+                <span class="keyword">Παράλληλης (Concurrent)</span>
+                <span class="keyword">Ανάδρασης (Feedback)</span>
+                <span class="keyword">Προληπτικός</span>
+                <span class="keyword">Τρέχων</span>
+                <span class="keyword">Διορθωτικός</span>
+                <span class="keyword">Χρονική Στιγμή</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Οι 3 Τύποι Ελέγχου</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Τύπος</th>
+                        <th>Χρονική Στιγμή</th>
+                        <th>Σκοπός</th>
+                        <th>Παράδειγμα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Πρόδρασης<br>(Feedforward)</strong></td>
+                        <td>ΠΡΙΝ τη διαδικασία</td>
+                        <td>Πρόληψη προβλημάτων</td>
+                        <td>Επιλογή κατάλληλων εκπαιδευτικών</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Παράλληλης<br>(Concurrent)</strong></td>
+                        <td>ΚΑΤΑ τη διάρκεια</td>
+                        <td>Άμεση διόρθωση</td>
+                        <td>Παρατήρηση διδασκαλίας σε εξέλιξη</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ανάδρασης<br>(Feedback)</strong></td>
+                        <td>ΜΕΤΑ τη διαδικασία</td>
+                        <td>Μάθηση για το μέλλον</td>
+                        <td>Αξιολόγηση μαθησιακών αποτελεσμάτων</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>📊 Αναλυτική Παρουσίαση</h2>
+
+            <div class="type-box">
+                <h3>1️⃣ Έλεγχος Πρόδρασης (Feedforward Control)</h3>
+                <p><strong>Χαρακτηριστικά:</strong></p>
+                <ul>
+                    <li>Πραγματοποιείται <strong>ΠΡΙΝ</strong> την έναρξη της διαδικασίας</li>
+                    <li><strong>Προληπτικός</strong> χαρακτήρας - στόχος η <strong>αποφυγή προβλημάτων</strong></li>
+                    <li>Εστιάζει στους <strong>πόρους εισόδου</strong> (inputs): ανθρώπινους, υλικούς, οικονομικούς</li>
+                    <li>Διασφαλίζει ότι τα <strong>προαπαιτούμενα</strong> είναι σωστά</li>
+                </ul>
+                <p><strong>Παραδείγματα στην Εκπαίδευση:</strong></p>
+                <ul>
+                    <li>Προσεκτική <strong>επιλογή και πρόσληψη</strong> εκπαιδευτικών με κατάλληλα προσόντα</li>
+                    <li><strong>Εισαγωγικά κριτήρια</strong> για μαθητές σε ειδικά προγράμματα</li>
+                    <li><strong>Προϋπολογισμός</strong> και κατανομή πόρων πριν το σχολικό έτος</li>
+                    <li><strong>Σχεδιασμός αναλυτικού προγράμματος</strong> πριν την έναρξη μαθημάτων</li>
+                    <li><strong>Επιμόρφωση</strong> εκπαιδευτικών πριν εφαρμόσουν νέο πρόγραμμα</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Πλεονέκτημα:</strong> Αποφυγή προβλημάτων | 
+                <strong>Μειονέκτημα:</strong> Δύσκολη πρόβλεψη όλων των προβλημάτων</p>
+            </div>
+
+            <div class="type-box">
+                <h3>2️⃣ Έλεγχος Παράλληλης (Concurrent Control)</h3>
+                <p><strong>Χαρακτηριστικά:</strong></p>
+                <ul>
+                    <li>Πραγματοποιείται <strong>ΚΑΤΑ ΤΗ ΔΙΑΡΚΕΙΑ</strong> της διαδικασίας</li>
+                    <li><strong>Τρέχων/άμεσος</strong> χαρακτήρας - <strong>παρακολούθηση σε πραγματικό χρόνο</strong></li>
+                    <li>Επιτρέπει <strong>άμεσες διορθώσεις</strong> προτού ολοκληρωθεί η διαδικασία</li>
+                    <li>Εστιάζει στη <strong>διαδικασία</strong> (process)</li>
+                </ul>
+                <p><strong>Παραδείγματα στην Εκπαίδευση:</strong></p>
+                <ul>
+                    <li><strong>Παρατήρηση μαθήματος</strong> από τον διευθυντή ενώ διεξάγεται</li>
+                    <li><strong>Διαμορφωτική αξιολόγηση</strong> - έλεγχος κατανόησης κατά τη διάρκεια διδασκαλίας</li>
+                    <li><strong>Επίβλεψη διαλειμμάτων</strong> για διασφάλιση ασφάλειας</li>
+                    <li><strong>Monitoring συμπεριφοράς</strong> μαθητών σε εξέλιξη</li>
+                    <li><strong>Τεχνολογικά συστήματα</strong> παρακολούθησης (π.χ. παρουσίες real-time)</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Πλεονέκτημα:</strong> Άμεση αντίδραση | 
+                <strong>Μειονέκτημα:</strong> Χρονοβόρο, απαιτεί συνεχή παρουσία</p>
+            </div>
+
+            <div class="type-box">
+                <h3>3️⃣ Έλεγχος Ανάδρασης (Feedback Control)</h3>
+                <p><strong>Χαρακτηριστικά:</strong></p>
+                <ul>
+                    <li>Πραγματοποιείται <strong>ΜΕΤΑ</strong> την ολοκλήρωση της διαδικασίας</li>
+                    <li><strong>Διορθωτικός</strong> χαρακτήρας - <strong>μάθηση από το παρελθόν</strong></li>
+                    <li>Εστιάζει στα <strong>αποτελέσματα</strong> (outputs)</li>
+                    <li>Σύγκριση <strong>πραγματικών με προσδοκώμενα</strong> αποτελέσματα</li>
+                </ul>
+                <p><strong>Παραδείγματα στην Εκπαίδευση:</strong></p>
+                <ul>
+                    <li><strong>Τελικές εξετάσεις</strong> και αξιολόγηση μαθητών</li>
+                    <li><strong>Ετήσια αξιολόγηση</strong> εκπαιδευτικών</li>
+                    <li><strong>Ερωτηματολόγια</strong> ικανοποίησης γονέων/μαθητών</li>
+                    <li><strong>Ανάλυση στατιστικών</strong> (επιδόσεις, απουσίες, αποχωρήσεις)</li>
+                    <li><strong>Αξιολόγηση προγραμμάτων</strong> στο τέλος του έτους</li>
+                    <li><strong>Οικονομικοί απολογισμοί</strong></li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Πλεονέκτημα:</strong> Μάθηση για βελτίωση | 
+                <strong>Μειονέκτημα:</strong> Αργά για άμεση διόρθωση, ζημιά ήδη έγινε</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Σενάριο: Εφαρμογή Νέου Εκπαιδευτικού Προγράμματος</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Feedforward:</strong> Επιμόρφωση εκπαιδευτικών, προμήθεια υλικών, 
+                    σχεδιασμός προγράμματος ΠΡΙΝ την έναρξη</li>
+                    <li><strong>Concurrent:</strong> Παρατήρηση μαθημάτων, συναντήσεις παρακολούθησης, 
+                    άμεση υποστήριξη ΚΑΤΑ τη διάρκεια</li>
+                    <li><strong>Feedback:</strong> Αξιολόγηση αποτελεσμάτων, ανατροφοδότηση από μαθητές/γονείς, 
+                    προσαρμογές για το επόμενο έτος ΜΕΤΑ την ολοκλήρωση</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>Σενάριο: Βελτίωση Μαθησιακών Αποτελεσμάτων</strong>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Feedforward:</strong> Διαγνωστικά τεστ στην αρχή, προσδιορισμός αναγκών, 
+                    ομαδοποίηση μαθητών</li>
+                    <li><strong>Concurrent:</strong> Συνεχής αξιολόγηση, quizzes, προσαρμογή διδασκαλίας 
+                    βάσει ανταπόκρισης</li>
+                    <li><strong>Feedback:</strong> Τελικές εξετάσεις, σύγκριση με στόχους, προγραμματισμός 
+                    παρεμβάσεων</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚖️ Σύγκριση & Επιλογή</h2>
+            <p>
+                Δεν υπάρχει "καλύτερος" τύπος ελέγχου - ο κάθε ένας έχει τη θέση του:
+            </p>
+            <ul>
+                <li><strong>Feedforward:</strong> Ιδανικός όταν τα προβλήματα μπορούν να προβλεφθούν και είναι 
+                κρίσιμο να αποφευχθούν</li>
+                <li><strong>Concurrent:</strong> Χρήσιμος όταν η διαδικασία είναι μακρά και απαιτεί συνεχή 
+                προσαρμογή</li>
+                <li><strong>Feedback:</strong> Απαραίτητος για μάθηση και βελτίωση, αλλά όχι αρκετός μόνος του</li>
+            </ul>
+            <p style="margin-top: 1rem; font-weight: 600; color: var(--success);">
+                🎯 <strong>Βέλτιστη Προσέγγιση:</strong> Συνδυασμός και των τριών τύπων!
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε τη <strong>χρονική στιγμή</strong> κάθε τύπου: Πριν, Κατά, Μετά</li>
+                <li><strong>Feedforward = Πρόληψη</strong>, <strong>Concurrent = Άμεση διόρθωση</strong>, 
+                <strong>Feedback = Μάθηση</strong></li>
+                <li>Feedforward → Inputs, Concurrent → Process, Feedback → Outputs</li>
+                <li>Ο πιο συνηθισμένος στην πράξη είναι ο <strong>Feedback</strong>, αλλά ο πιο αποτελεσματικός 
+                είναι ο <strong>Feedforward</strong></li>
+                <li>Συχνή ερώτηση: <em>"Δώστε παραδείγματα των 3 τύπων ελέγχου σε σχολείο"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 7 Έλεγχος.pdf»</strong>, 
+                Διαφάνειες 8-14
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

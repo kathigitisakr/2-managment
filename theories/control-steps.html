@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Βήματα Διαδικασίας Ελέγχου | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--info);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--info);
+        }
+
+        .step-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 3px solid var(--info);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .step-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            background: var(--info);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .flow-diagram {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--info);
+            font-weight: 600;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f0f9ff;
+            border-radius: 8px;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#control">Έλεγχος</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">✅ ΕΛΕΓΧΟΣ</div>
+        <h1>4 Βήματα Διαδικασίας Ελέγχου</h1>
+        <p class="theorist">Η Κλασική Διαδικασία του Διοικητικού Ελέγχου</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/control-process.png" alt="Control Process - 4 Steps" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Η <strong>Διαδικασία Ελέγχου (Control Process)</strong> είναι μια <strong>συστηματική διαδικασία</strong> 
+                με την οποία οι διοικητές <strong>παρακολουθούν και ρυθμίζουν</strong> τις δραστηριότητες του 
+                οργανισμού για να διασφαλίσουν ότι οι <strong>πραγματικές επιδόσεις συμφωνούν με τα σχέδια 
+                και τους στόχους</strong>.
+            </p>
+            <p>
+                Ο έλεγχος είναι μια από τις <strong>τέσσερις βασικές διοικητικές λειτουργίες</strong> 
+                (Planning → Organizing → Leading → <strong>Controlling</strong>) και αποτελείται από 
+                <strong>4 διακριτά βήματα</strong> που επαναλαμβάνονται συνεχώς. Η διαδικασία αυτή 
+                βοηθά στον εντοπισμό αποκλίσεων και στη λήψη διορθωτικών μέτρων.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Έλεγχος</span>
+                <span class="keyword">Πρότυπα</span>
+                <span class="keyword">Μέτρηση Απόδοσης</span>
+                <span class="keyword">Αποκλίσεις</span>
+                <span class="keyword">Διορθωτικές Ενέργειες</span>
+                <span class="keyword">Ανατροφοδότηση</span>
+                <span class="keyword">KPIs</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Η Ροή της Διαδικασίας</h2>
+            <div class="flow-diagram">
+                📊 Βήμα 1: Καθορισμός Προτύπων<br>
+                ⬇️<br>
+                📏 Βήμα 2: Μέτρηση Πραγματικής Απόδοσης<br>
+                ⬇️<br>
+                ⚖️ Βήμα 3: Σύγκριση & Ανάλυση Αποκλίσεων<br>
+                ⬇️<br>
+                🔧 Βήμα 4: Διορθωτικές Ενέργειες<br>
+                ⬇️ (επαναλαμβάνεται)<br>
+                🔄 Επιστροφή στο Βήμα 1
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Τα 4 Βήματα Αναλυτικά</h2>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">1</span>
+                    Καθορισμός Προτύπων (Standards)
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Ο καθορισμός <strong>συγκεκριμένων, μετρήσιμων κριτηρίων</strong> που θα χρησιμοποιηθούν 
+                    για να αξιολογηθεί η απόδοση. Τα πρότυπα απορρέουν από τους στόχους του οργανισμού.
+                </p>
+                <p><strong>Τύποι Προτύπων:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Ποσοτικά:</strong> Αριθμητικοί δείκτες (π.χ. ποσοστό επιτυχίας 85%, 
+                    απουσίες <5%)</li>
+                    <li><strong>Ποιοτικά:</strong> Περιγραφικά κριτήρια (π.χ. ικανοποίηση μαθητών, 
+                    σχολικό κλίμα)</li>
+                    <li><strong>Χρονικά:</strong> Deadlines (π.χ. ολοκλήρωση έργου μέχρι 30/6)</li>
+                    <li><strong>Κόστους:</strong> Οικονομικοί δείκτες (π.χ. προϋπολογισμός €50,000)</li>
+                </ul>
+                <p><strong>Παράδειγμα στην Εκπαίδευση:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Πρότυπο: Ποσοστό επιτυχίας μαθητών στις Πανελλήνιες ≥80%, Απουσίες ≤3% ανά τρίμηνο, 
+                    Ικανοποίηση γονέων ≥4/5"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">2</span>
+                    Μέτρηση Πραγματικής Απόδοσης
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>συστηματική συλλογή δεδομένων</strong> σχετικά με την τρέχουσα απόδοση. 
+                    Απαιτεί αξιόπιστα συστήματα μέτρησης και τακτική παρακολούθηση.
+                </p>
+                <p><strong>Μέθοδοι Μέτρησης:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Άμεση παρατήρηση:</strong> Επισκέψεις σε τάξεις, παρακολούθηση μαθημάτων</li>
+                    <li><strong>Αναφορές:</strong> Έκθεση από εκπαιδευτικούς, γραπτές αναφορές</li>
+                    <li><strong>Στατιστικά δεδομένα:</strong> Βαθμολογίες, παρουσιολόγια, αποτελέσματα τεστ</li>
+                    <li><strong>Ερωτηματολόγια:</strong> Feedback από μαθητές, γονείς, εκπαιδευτικούς</li>
+                    <li><strong>Συναντήσεις:</strong> Ατομικές συνεντεύξεις, ομαδικές συναντήσεις</li>
+                </ul>
+                <p><strong>Προσοχή:</strong> Η μέτρηση πρέπει να είναι <strong>αντικειμενική, αξιόπιστη 
+                και έγκαιρη</strong>!</p>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Συλλογή βαθμολογιών Πανελληνίων (78%), στατιστικά απουσιών (4.2%), ερωτηματολόγιο 
+                    γονέων (3.8/5)"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">3</span>
+                    Σύγκριση και Ανάλυση Αποκλίσεων
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>σύγκριση της πραγματικής απόδοσης με τα πρότυπα</strong> και ο εντοπισμός 
+                    τυχόν αποκλίσεων. Αναλύονται οι αιτίες και η σημαντικότητα των αποκλίσεων.
+                </p>
+                <p><strong>Τύποι Αποκλίσεων:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Θετικές αποκλίσεις:</strong> Η απόδοση ξεπερνά το πρότυπο (καλό σημάδι!)</li>
+                    <li><strong>Αρνητικές αποκλίσεις:</strong> Η απόδοση υστερεί του προτύπου (χρειάζεται δράση)</li>
+                    <li><strong>Μικρές vs Μεγάλες:</strong> Πόσο σημαντική είναι η απόκλιση;</li>
+                </ul>
+                <p><strong>Ανάλυση Αιτιών:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Εσωτερικοί παράγοντες (π.χ. ανεπαρκής προετοιμασία, έλλειψη πόρων)</li>
+                    <li>Εξωτερικοί παράγοντες (π.χ. αλλαγή νομοθεσίας, οικονομική κρίση)</li>
+                    <li>Μη ρεαλιστικά πρότυπα (ίσως το πρότυπο ήταν υπερβολικά φιλόδοξο)</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Επιτυχία Πανελληνίων: 78% vs Πρότυπο 80% = -2% (μικρή αρνητική απόκλιση)<br>
+                    Απουσίες: 4.2% vs Πρότυπο 3% = +1.2% (μέτρια αρνητική απόκλιση - χρειάζεται προσοχή)<br>
+                    Ικανοποίηση: 3.8/5 vs Πρότυπο 4/5 = -0.2 (μικρή αρνητική απόκλιση)"
+                </p>
+            </div>
+
+            <div class="step-box">
+                <h3>
+                    <span class="step-number">4</span>
+                    Λήψη Διορθωτικών Ενεργειών
+                </h3>
+                <p><strong>Τι είναι:</strong></p>
+                <p style="margin-top: 0.5rem;">
+                    Η <strong>λήψη μέτρων για να διορθωθούν οι αποκλίσεις</strong> και να επιτευχθούν 
+                    οι στόχοι. Υπάρχουν τρεις βασικές επιλογές:
+                </p>
+                <ol style="margin-top: 0.5rem;">
+                    <li><strong>Μη δράση:</strong> Αν η απόκλιση είναι αμελητέα, δεν χρειάζεται τίποτα</li>
+                    <li><strong>Διόρθωση της απόδοσης:</strong> Αλλαγή διαδικασιών, προσθήκη πόρων, 
+                    επιμόρφωση</li>
+                    <li><strong>Αναθεώρηση του προτύπου:</strong> Αν το πρότυπο ήταν μη ρεαλιστικό, 
+                    τροποποίησή του</li>
+                </ol>
+                <p><strong>Παραδείγματα Διορθωτικών Ενεργειών:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Πρόσληψη επιπλέον προσωπικού</li>
+                    <li>Επιμόρφωση εκπαιδευτικών</li>
+                    <li>Αλλαγή διδακτικών μεθόδων</li>
+                    <li>Αναδιάρθρωση διαδικασιών</li>
+                    <li>Αύξηση προϋπολογισμού</li>
+                    <li>Επανακαθορισμός στόχων (αν είναι μη ρεαλιστικοί)</li>
+                </ul>
+                <p><strong>Παράδειγμα:</strong></p>
+                <p style="font-style: italic; margin-top: 0.5rem;">
+                    "Για τις αυξημένες απουσίες (4.2% vs 3%): Ανάλυση αιτιών → Πρόγραμμα υποστήριξης 
+                    μαθητών → Επικοινωνία με γονείς → Παρακίνηση με δραστηριότητες"
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Πίνακας Σύνοψης</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Βήμα</th>
+                        <th>Ερώτημα-Κλειδί</th>
+                        <th>Δράση</th>
+                        <th>Εργαλεία/Μέθοδοι</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Πρότυπα</strong></td>
+                        <td>Τι θέλουμε να επιτύχουμε;</td>
+                        <td>Ορισμός συγκεκριμένων στόχων</td>
+                        <td>SMART goals, KPIs, Benchmarks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Μέτρηση</strong></td>
+                        <td>Τι πετύχαμε;</td>
+                        <td>Συλλογή δεδομένων απόδοσης</td>
+                        <td>Παρατήρηση, Αναφορές, Στατιστικά</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Σύγκριση</strong></td>
+                        <td>Πόσο απέχουμε από τον στόχο;</td>
+                        <td>Ανάλυση αποκλίσεων</td>
+                        <td>Variance Analysis, Dashboards</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Διόρθωση</strong></td>
+                        <td>Τι κάνουμε για να φτάσουμε τον στόχο;</td>
+                        <td>Λήψη διορθωτικών μέτρων</td>
+                        <td>Action Plans, Ανατροφοδότηση</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Εφαρμογή στην Εκπαιδευτική Διαδικασία</h2>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 1: Έλεγχος Μαθησιακών Αποτελεσμάτων</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Πρότυπα:</strong> Στόχος: 85% των μαθητών να πετύχουν βαθμό ≥15/20 στα Μαθηματικά</li>
+                    <li><strong>Μέτρηση:</strong> Διαγωνίσματα, τεστ αξιολόγησης → Αποτέλεσμα: 72% των μαθητών</li>
+                    <li><strong>Σύγκριση:</strong> 72% vs 85% = -13% (σημαντική αρνητική απόκλιση)</li>
+                    <li><strong>Διόρθωση:</strong> Εντοπισμός αδύναμων μαθητών → Πρόγραμμα ενισχυτικής 
+                    διδασκαλίας → Νέες διδακτικές μέθοδοι → Επανέλεγχος σε 2 μήνες</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 2: Έλεγχος Απουσιών Μαθητών</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Πρότυπα:</strong> Μέσος όρος απουσιών ≤2 ημέρες/μαθητή/μήνα</li>
+                    <li><strong>Μέτρηση:</strong> Ανάλυση παρουσιολογίων → 3.5 ημέρες/μαθητή/μήνα</li>
+                    <li><strong>Σύγκριση:</strong> 3.5 vs 2 = +1.5 ημέρες (αρνητική απόκλιση)</li>
+                    <li><strong>Διόρθωση:</strong> Έρευνα αιτιών (ασθένειες, αδιαφορία, bullying) → 
+                    Επικοινωνία με γονείς → Παρεμβάσεις ψυχολόγου → Δελεαστικές δραστηριότητες</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 3: Έλεγχος Προϋπολογισμού</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Πρότυπα:</strong> Προϋπολογισμός εκδηλώσεων: €5,000 για το τρίμηνο</li>
+                    <li><strong>Μέτρηση:</strong> Καταγραφή δαπανών → Πραγματική δαπάνη: €6,200</li>
+                    <li><strong>Σύγκριση:</strong> €6,200 vs €5,000 = +€1,200 υπέρβαση (24%)</li>
+                    <li><strong>Διόρθωση:</strong> Ανάλυση υπερβάσεων → Αυστηρότερη προέγκριση δαπανών → 
+                    Εύρεση οικονομικότερων λύσεων → Επαναπροϋπολογισμός αν χρειάζεται</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα 4: Έλεγχος Ικανοποίησης Εκπαιδευτικών</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Πρότυπα:</strong> Ικανοποίηση εκπαιδευτικών ≥4/5 (ερωτηματολόγιο)</li>
+                    <li><strong>Μέτρηση:</strong> Ετήσιο ερωτηματολόγιο → Μέσος όρος: 3.2/5</li>
+                    <li><strong>Σύγκριση:</strong> 3.2 vs 4 = -0.8 (σημαντική απόκλιση)</li>
+                    <li><strong>Διόρθωση:</strong> Ανάλυση αιτιών (φόρτος εργασίας, έλλειψη υποστήριξης) → 
+                    Μείωση διοικητικών καθηκόντων → Επιμόρφωση → Βελτίωση εργασιακού περιβάλλοντος</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔑 Βασικές Αρχές Αποτελεσματικού Ελέγχου</h2>
+            <ul>
+                <li><strong>Έγκαιρος:</strong> Ο έλεγχος πρέπει να γίνεται στη σωστή στιγμή (όχι πολύ αργά!)</li>
+                <li><strong>Αντικειμενικός:</strong> Βασισμένος σε δεδομένα, όχι υποκειμενικές εντυπώσεις</li>
+                <li><strong>Οικονομικός:</strong> Το κόστος ελέγχου δεν πρέπει να ξεπερνά τα οφέλη</li>
+                <li><strong>Ευέλικτος:</strong> Προσαρμόζεται σε αλλαγές</li>
+                <li><strong>Κατανοητός:</strong> Όλοι πρέπει να καταλαβαίνουν τι ελέγχεται και γιατί</li>
+                <li><strong>Προληπτικός:</strong> Εντοπίζει προβλήματα πριν γίνουν σοβαρά</li>
+                <li><strong>Εστιασμένος:</strong> Ελέγχει τα πιο σημαντικά (principle of exception)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Συνηθισμένα Λάθη</h2>
+            <ul>
+                <li><strong>Ασαφή πρότυπα:</strong> Πρότυπα που δεν είναι μετρήσιμα ή συγκεκριμένα</li>
+                <li><strong>Ανεπαρκής μέτρηση:</strong> Λίγες ή αναξιόπιστες μετρήσεις</li>
+                <li><strong>Καθυστερημένος έλεγχος:</strong> Εντοπισμός προβλημάτων πολύ αργά</li>
+                <li><strong>Υπερβολικός έλεγχος:</strong> Πολύς έλεγχος δημιουργεί γραφειοκρατία και άγχος</li>
+                <li><strong>Έλλειψη follow-up:</strong> Δεν λαμβάνονται διορθωτικά μέτρα</li>
+                <li><strong>Τιμωρητική προσέγγιση:</strong> Ο έλεγχος δεν πρέπει να είναι τιμωρία, αλλά βελτίωση</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε <strong>καλά τα 4 βήματα με τη σειρά</strong>: Πρότυπα → Μέτρηση → Σύγκριση → Διόρθωση</li>
+                <li>Το <strong>Βήμα 1</strong> απορρέει από τον <strong>σχεδιασμό</strong> (Planning → Controlling)</li>
+                <li>Το <strong>Βήμα 4</strong> μπορεί να οδηγήσει σε νέο <strong>σχεδιασμό</strong> (κυκλική διαδικασία)</li>
+                <li>Προσοχή: <strong>Θετικές αποκλίσεις</strong> (υπεραπόδοση) δεν απαιτούν πάντα διόρθωση!</li>
+                <li>Συχνά συνδυάζεται με <strong>PDCA, BSC, TQM</strong></li>
+                <li>Συχνή ερώτηση: <em>"Περιγράψτε τα 4 βήματα ελέγχου με παράδειγμα από εκπαίδευση"</em></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 7 Έλεγχος.pdf»</strong>, 
+                Διαφάνειες 10-20
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>
