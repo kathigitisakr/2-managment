@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ομαδικές Τεχνικές Λήψης Αποφάσεων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --orange: #ea580c;
+            --blue: #0284c7;
+            --green: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--orange) 0%, #c2410c 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--orange);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #fff7ed;
+            border-left: 4px solid var(--orange);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--orange);
+        }
+
+        .technique-box {
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            border: 3px solid;
+        }
+
+        .brainstorming-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            border-color: var(--orange);
+        }
+
+        .delphi-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: var(--blue);
+        }
+
+        .ngt-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: var(--green);
+        }
+
+        .technique-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+        }
+
+        .step-list {
+            background: rgba(255,255,255,0.7);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pros {
+            background: #ecfdf5;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .cons {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#decision">Λήψη Αποφάσεων</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">🎯 ΛΗΨΗ ΑΠΟΦΑΣΕΩΝ</div>
+        <h1>Ομαδικές Τεχνικές Λήψης Αποφάσεων</h1>
+        <p class="theorist">Brainstorming, Delphi Method, Nominal Group Technique</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/group-decisions.png" alt="Group Decision Techniques" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Οι <strong>ομαδικές τεχνικές λήψης αποφάσεων</strong> είναι δομημένες μέθοδοι που 
+                βοηθούν τις ομάδες να <strong>λαμβάνουν αποτελεσματικές αποφάσεις</strong> αξιοποιώντας 
+                τη <strong>συλλογική σοφία</strong> και την <strong>ποικιλία προοπτικών</strong> των μελών.
+            </p>
+            <p>
+                Οι ομαδικές αποφάσεις μπορεί να είναι <strong>καλύτερες από τις ατομικές</strong> όταν:
+            </p>
+            <ul>
+                <li>Το πρόβλημα είναι <strong>πολύπλοκο</strong> και απαιτεί διαφορετικές εξειδικεύσεις</li>
+                <li>Χρειάζεται <strong>δημιουργικότητα</strong> και νέες ιδέες</li>
+                <li>Η <strong>αποδοχή της απόφασης</strong> από πολλούς είναι σημαντική</li>
+                <li>Θέλουμε να <strong>μειώσουμε τον κίνδυνο λάθους</strong> (πολλαπλά μάτια)</li>
+            </ul>
+            <p style="margin-top: 1rem;">
+                Οι τρεις πιο γνωστές τεχνικές είναι: <strong>Brainstorming</strong> (ελεύθερη δημιουργικότητα), 
+                <strong>Delphi Method</strong> (δομημένη ανώνυμη διαδικασία) και <strong>Nominal Group Technique</strong> 
+                (συνδυασμός ατομικής και ομαδικής εργασίας).
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Ομαδικές Αποφάσεις</span>
+                <span class="keyword">Brainstorming</span>
+                <span class="keyword">Delphi</span>
+                <span class="keyword">NGT</span>
+                <span class="keyword">Συλλογική Σοφία</span>
+                <span class="keyword">Δημιουργικότητα</span>
+                <span class="keyword">Συναίνεση</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🧠 1. Brainstorming (Καταιγισμός Ιδεών)</h2>
+
+            <div class="technique-box brainstorming-box">
+                <h3>📊 Ορισμός</h3>
+                <p>
+                    Το <strong>Brainstorming</strong> είναι μια τεχνική <strong>ελεύθερης παραγωγής ιδεών</strong> 
+                    σε ομαδικό πλαίσιο, όπου τα μέλη προτείνουν λύσεις <strong>χωρίς κριτική ή κρίση</strong>. 
+                    Στόχος είναι να δημιουργηθούν <strong>όσο το δυνατόν περισσότερες ιδέες</strong>, ακόμα και 
+                    "τρελές" ή ασυνήθιστες.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Δημιουργός:</strong> Alex Osborn (1953)
+                </p>
+
+                <div class="step-list">
+                    <h4>Τα 4 Βασικά Βήματα:</h4>
+                    <ol>
+                        <li><strong>Ορισμός Προβλήματος:</strong> Διατύπωση σαφούς ερωτήματος/προβλήματος</li>
+                        <li><strong>Παραγωγή Ιδεών:</strong> Όλοι προτείνουν ιδέες ελεύθερα (15-30 λεπτά)</li>
+                        <li><strong>Συλλογή & Καταγραφή:</strong> Όλες οι ιδέες καταγράφονται (χωρίς κριτική!)</li>
+                        <li><strong>Αξιολόγηση:</strong> Μετά το brainstorming, αξιολογούνται και επιλέγονται 
+                        οι καλύτερες</li>
+                    </ol>
+                </div>
+
+                <h4 style="margin-top: 1.5rem;">Οι 4 Χρυσοί Κανόνες:</h4>
+                <ul>
+                    <li><strong>1. Αναβολή κρίσης (Defer Judgment):</strong> Καμία κριτική κατά τη διαδικασία</li>
+                    <li><strong>2. Ποσότητα (Quantity):</strong> Όσο περισσότερες ιδέες, τόσο καλύτερα</li>
+                    <li><strong>3. Ελευθερία (Freewheeling):</strong> Και οι "τρελές" ιδέες είναι ευπρόσδεκτες</li>
+                    <li><strong>4. Συνδυασμός (Combine & Improve):</strong> Βελτιώνουμε και συνδυάζουμε ιδέες</li>
+                </ul>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>✅ Πλεονεκτήματα:</strong>
+                        <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+                            <li>Δημιουργία <strong>πολλών ιδεών</strong> γρήγορα</li>
+                            <li>Ενθαρρύνει <strong>δημιουργικότητα</strong></li>
+                            <li>Εύκολη εφαρμογή</li>
+                            <li>Προάγει τη <strong>συμμετοχή</strong></li>
+                            <li>Διασκεδαστική διαδικασία</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <strong>❌ Μειονεκτήματα:</strong>
+                        <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+                            <li><strong>Groupthink:</strong> Κυριαρχία συγκεκριμένων μελών</li>
+                            <li>Φόβος κρίσης (παρά τους κανόνες)</li>
+                            <li>Πολλές ιδέες, λίγες <strong>πρακτικές</strong></li>
+                            <li>Μπορεί να γίνει <strong>χαοτική</strong></li>
+                            <li>Δεν εξασφαλίζει <strong>ποιότητα</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα Brainstorming στην Εκπαίδευση:</strong>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Πρόβλημα:</strong> "Πώς μπορούμε να αυξήσουμε τη συμμετοχή των μαθητών στο μάθημα;"
+                </p>
+                <p><strong>Ιδέες που προέκυψαν (30 λεπτά):</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Gamification (παιχνιδοποίηση)</li>
+                    <li>Flipped classroom</li>
+                    <li>Διαγωνισμοί με βραβεία</li>
+                    <li>Project-based learning</li>
+                    <li>Χρήση VR/AR</li>
+                    <li>Peer teaching</li>
+                    <li>Συνδέσεις με πραγματική ζωή</li>
+                    <li>Μαθητές ως "εκπαιδευτές για μια μέρα"</li>
+                    <li>Podcasts/videos από μαθητές</li>
+                    <li>Escape rooms εκπαιδευτικά</li>
+                </ul>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Αποτέλεσμα:</strong> Επιλέχθηκαν οι 3 πιο εφικτές ιδέες για πιλοτική εφαρμογή.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔮 2. Delphi Method (Μέθοδος Δελφών)</h2>
+
+            <div class="technique-box delphi-box">
+                <h3>📊 Ορισμός</h3>
+                <p>
+                    Η <strong>Μέθοδος Δελφών</strong> είναι μια <strong>δομημένη, ανώνυμη διαδικασία</strong> 
+                    συλλογής και σύνθεσης γνώμης <strong>ειδικών</strong> μέσω διαδοχικών γύρων ερωτηματολογίων. 
+                    Η ανωνυμία και η επαναληπτική ανατροφοδότηση βοηθούν στη σύγκλιση προς <strong>συναίνεση</strong>.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Προέλευση:</strong> RAND Corporation (1950s-60s) για στρατιωτικές προβλέψεις<br>
+                    <strong>Όνομα:</strong> Από το μαντείο των Δελφών (αρχαία Ελλάδα)
+                </p>
+
+                <div class="step-list">
+                    <h4>Τα 5 Βήματα της Διαδικασίας:</h4>
+                    <ol>
+                        <li><strong>Επιλογή Ειδικών:</strong> Προσκαλούνται 10-20 ειδικοί (ανώνυμα)</li>
+                        <li><strong>Γύρος 1 - Ερωτηματολόγιο:</strong> Στέλνεται το πρώτο ερωτηματολόγιο με 
+                        ανοιχτές ερωτήσεις</li>
+                        <li><strong>Ανάλυση & Σύνθεση:</strong> Ο συντονιστής αναλύει τις απαντήσεις και 
+                        δημιουργεί σύνοψη</li>
+                        <li><strong>Γύρος 2+ - Ανατροφοδότηση:</strong> Οι ειδικοί βλέπουν τις συγκεντρωτικές 
+                        απόψεις και επανεκτιμούν τις δικές τους (2-4 γύροι)</li>
+                        <li><strong>Τελική Σύνοψη:</strong> Εξαγωγή συμπερασμάτων από τις συγκλίνουσες απόψεις</li>
+                    </ol>
+                </div>
+
+                <h4 style="margin-top: 1.5rem;">Χαρακτηριστικά:</h4>
+                <ul>
+                    <li><strong>Ανωνυμία:</strong> Οι ειδικοί δεν γνωρίζουν ποιοι είναι οι άλλοι</li>
+                    <li><strong>Επαναλαμβανόμενοι γύροι:</strong> Συνήθως 2-4 γύροι</li>
+                    <li><strong>Ελεγχόμενη ανατροφοδότηση:</strong> Στατιστική σύνοψη απόψεων</li>
+                    <li><strong>Στατιστική σύγκριση:</strong> Μέσοι όροι, διασπορά απόψεων</li>
+                    <li><strong>Σύγκλιση:</strong> Οι απόψεις τείνουν να συγκλίνουν</li>
+                </ul>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>✅ Πλεονεκτήματα:</strong>
+                        <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+                            <li><strong>Ανωνυμία</strong> αποφεύγει groupthink</li>
+                            <li>Εξάλειψη κυριαρχίας συγκεκριμένων</li>
+                            <li>Συμμετοχή <strong>γεωγραφικά διασκορπισμένων</strong></li>
+                            <li>Οι ειδικοί έχουν χρόνο να <strong>σκεφτούν</strong></li>
+                            <li>Αξιοποίηση <strong>εξειδικευμένης γνώσης</strong></li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <strong>❌ Μειονεκτήματα:</strong>
+                        <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+                            <li><strong>Χρονοβόρα:</strong> Μήνες για ολοκλήρωση</li>
+                            <li>Απαιτεί <strong>έμπειρο συντονιστή</strong></li>
+                            <li>Κίνδυνος <strong>χαμηλής συμμετοχής</strong></li>
+                            <li>Μπορεί να είναι <strong>ακριβή</strong></li>
+                            <li>Έλλειψη άμεσης <strong>διαδραστικότητας</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα Delphi στην Εκπαίδευση:</strong>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Πρόβλημα:</strong> "Ποιες δεξιότητες θα χρειάζονται οι μαθητές το 2035;"
+                </p>
+                <p><strong>Διαδικασία:</strong></p>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong>Ειδικοί:</strong> 15 εκπαιδευτικοί, 5 εργοδότες, 5 ερευνητές (ανώνυμα)</li>
+                    <li><strong>Γύρος 1:</strong> Ανοιχτή ερώτηση → 50 διαφορετικές δεξιότητες</li>
+                    <li><strong>Γύρος 2:</strong> Βαθμολόγηση 1-5 για κάθε δεξιότητα → Κορυφαίες: 
+                    Κριτική σκέψη (4.8), Ψηφιακή γραμματοσύνη (4.7), Συναισθηματική νοημοσύνη (4.6)</li>
+                    <li><strong>Γύρος 3:</strong> Επανεκτίμηση βλέποντας τον μέσο όρο → Σύγκλιση απόψεων</li>
+                    <li><strong>Αποτέλεσμα:</strong> Λίστα 10 κρίσιμων δεξιοτήτων για αναδιάρθρωση προγράμματος</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 3. Nominal Group Technique (NGT)</h2>
+
+            <div class="technique-box ngt-box">
+                <h3>📊 Ορισμός</h3>
+                <p>
+                    Η <strong>Nominal Group Technique</strong> είναι μια <strong>δομημένη ομαδική διαδικασία</strong> 
+                    που συνδυάζει <strong>ατομική σκέψη με ομαδική συζήτηση</strong>. Τα μέλη είναι παρόντα 
+                    ("nominal group") αλλά αρχικά εργάζονται <strong>ατομικά</strong>, μετά μοιράζονται ιδέες 
+                    και τέλος ψηφίζουν.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Δημιουργοί:</strong> Andre Delbecq & Andrew Van de Ven (1968)
+                </p>
+
+                <div class="step-list">
+                    <h4>Τα 5 Βήματα της Διαδικασίας:</h4>
+                    <ol>
+                        <li><strong>Σιωπηλή Παραγωγή Ιδεών:</strong> Κάθε μέλος γράφει ιδέες ατομικά 
+                        (5-10 λεπτά) - χωρίς συζήτηση!</li>
+
+                        <li><strong>Round-Robin Καταγραφή:</strong> Κάθε μέλος με τη σειρά παρουσιάζει 
+                        μία ιδέα (χωρίς συζήτηση) → Όλες καταγράφονται σε flipchart</li>
+
+                        <li><strong>Διευκρίνιση:</strong> Συζήτηση για διευκρίνιση κάθε ιδέας (όχι κριτική!)</li>
+
+                        <li><strong>Ψηφοφορία & Κατάταξη:</strong> Κάθε μέλος ψηφίζει/κατατάσσει τις 5 
+                        καλύτερες ιδέες ατομικά</li>
+
+                        <li><strong>Συγκέντρωση & Συζήτηση:</strong> Οι ψήφοι συγκεντρώνονται και συζητούνται 
+                        τα αποτελέσματα → Τελική απόφαση</li>
+                    </ol>
+                </div>
+
+                <h4 style="margin-top: 1.5rem;">Χαρακτηριστικά:</h4>
+                <ul>
+                    <li><strong>Δομημένη διαδικασία:</strong> Σαφή βήματα</li>
+                    <li><strong>Ισότιμη συμμετοχή:</strong> Όλοι έχουν φωνή</li>
+                    <li><strong>Σιωπηλή φάση:</strong> Αποφυγή groupthink</li>
+                    <li><strong>Round-robin:</strong> Όλοι παρουσιάζουν</li>
+                    <li><strong>Δημοκρατική ψηφοφορία:</strong> Αριθμητικά αποτελέσματα</li>
+                    <li><strong>Ταχεία:</strong> 60-90 λεπτά συνολικά</li>
+                </ul>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>✅ Πλεονεκτήματα:</strong>
+                        <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+                            <li><strong>Ισότιμη συμμετοχή</strong> όλων</li>
+                            <li>Αποφυγή κυριαρχίας συγκεκριμένων</li>
+                            <li><strong>Γρήγορη</strong> διαδικασία</li>
+                            <li>Συνδυασμός <strong>ατομικής & ομαδικής</strong> σκέψης</li>
+                            <li><strong>Ποσοτικά</strong> αποτελέσματα</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <strong>❌ Μειονεκτήματα:</strong>
+                        <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+                            <li>Απαιτεί <strong>έμπειρο συντονιστή</strong></li>
+                            <li>Η δομή μπορεί να αναστέλλει <strong>δημιουργικότητα</strong></li>
+                            <li>Δεν επιτρέπει <strong>βαθιά συζήτηση</strong></li>
+                            <li>Περιορισμένος <strong>χρόνος</strong></li>
+                            <li>Μπορεί να είναι <strong>τυπική</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <strong>Παράδειγμα NGT στην Εκπαίδευση:</strong>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Πρόβλημα:</strong> "Ποιοι είναι οι 5 πιο σημαντικοί τομείς για επιμόρφωση 
+                    εκπαιδευτικών;"
+                </p>
+                <p><strong>Ομάδα:</strong> 12 εκπαιδευτικοί + διευθυντής</p>
+                <p><strong>Διαδικασία (90 λεπτά):</strong></p>
+                <ol style="margin-top: 0.5rem;">
+                    <li><strong>Σιωπηλή φάση (10'):</strong> Κάθε εκπαιδευτικός γράφει 5-10 τομείς</li>
+
+                    <li><strong>Round-robin (20'):</strong> Καταγράφηκαν 35 διαφορετικοί τομείς στον πίνακα</li>
+
+                    <li><strong>Διευκρίνιση (20'):</strong> Συζήτηση για κάθε τομέα - ομαδοποίηση παρόμοιων 
+                    → Τελικά 15 τομείς</li>
+
+                    <li><strong>Ψηφοφορία (10'):</strong> Κάθε εκπαιδευτικός δίνει 5 βαθμούς στον 1ο, 
+                    4 στον 2ο, κλπ.</li>
+
+                    <li><strong>Αποτελέσματα (30'):</strong>
+                        <ul>
+                            <li>1ος: Ψηφιακές δεξιότητες (48 βαθμοί)</li>
+                            <li>2ος: Διαφοροποιημένη διδασκαλία (42)</li>
+                            <li>3ος: Διαχείριση τάξης (38)</li>
+                            <li>4ος: Αξιολόγηση μάθησης (35)</li>
+                            <li>5ος: Συναισθηματική νοημοσύνη (30)</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p style="margin-top: 0.5rem;">
+                    <strong>Αποτέλεσμα:</strong> Σαφής κατάταξη προτεραιοτήτων για το πρόγραμμα επιμόρφωσης.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚖️ Συγκριτικός Πίνακας</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Κριτήριο</th>
+                        <th style="background: var(--orange);">Brainstorming</th>
+                        <th style="background: var(--blue);">Delphi</th>
+                        <th style="background: var(--green);">NGT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Χρόνος</strong></td>
+                        <td>30-60 λεπτά</td>
+                        <td>Εβδομάδες/μήνες</td>
+                        <td>60-90 λεπτά</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Αλληλεπίδραση</strong></td>
+                        <td>Υψηλή, άμεση</td>
+                        <td>Καμία (ανώνυμη)</td>
+                        <td>Μέτρια, δομημένη</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Δομή</strong></td>
+                        <td>Χαμηλή</td>
+                        <td>Υψηλή</td>
+                        <td>Υψηλή</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ανωνυμία</strong></td>
+                        <td>Όχι</td>
+                        <td>Ναι</td>
+                        <td>Μερική</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Μέγεθος Ομάδας</strong></td>
+                        <td>5-12 άτομα</td>
+                        <td>10-30 ειδικοί</td>
+                        <td>7-15 άτομα</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Κύριος Στόχος</strong></td>
+                        <td>Ποσότητα ιδεών</td>
+                        <td>Συναίνεση ειδικών</td>
+                        <td>Κατάταξη προτεραιοτήτων</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Groupthink</strong></td>
+                        <td>Υψηλός κίνδυνος</td>
+                        <td>Χαμηλός</td>
+                        <td>Χαμηλός</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Κόστος</strong></td>
+                        <td>Χαμηλό</td>
+                        <td>Υψηλό</td>
+                        <td>Μέτριο</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ψηφοφορία</strong></td>
+                        <td>Όχι απαραίτητη</td>
+                        <td>Έμμεση</td>
+                        <td>Ναι, δομημένη</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Καλύτερη για</strong></td>
+                        <td>Δημιουργικές ιδέες</td>
+                        <td>Προβλέψεις, στρατηγική</td>
+                        <td>Προτεραιότητες, συναίνεση</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Πότε να Χρησιμοποιούμε Κάθε Τεχνική</h2>
+
+            <h3 style="color: var(--orange);">🧠 Brainstorming - Χρήση:</h3>
+            <ul>
+                <li>Όταν θέλουμε <strong>πολλές δημιουργικές ιδέες</strong> γρήγορα</li>
+                <li>Για <strong>ανοιχτά προβλήματα</strong> χωρίς προφανείς λύσεις</li>
+                <li>Σε <strong>άτυπο περιβάλλον</strong> με εμπιστοσύνη</li>
+                <li>Όταν ο <strong>χρόνος είναι περιορισμένος</strong></li>
+            </ul>
+
+            <h3 style="color: var(--blue); margin-top: 1.5rem;">🔮 Delphi - Χρήση:</h3>
+            <ul>
+                <li>Για <strong>προβλέψεις</strong> και μακροπρόθεσμο σχεδιασμό</li>
+                <li>Όταν χρειάζεται <strong>εξειδικευμένη γνώση</strong></li>
+                <li>Οι ειδικοί είναι <strong>γεωγραφικά διασκορπισμένοι</strong></li>
+                <li>Όταν η <strong>ανωνυμία</strong> είναι σημαντική</li>
+                <li>Για <strong>ευαίσθητα θέματα</strong></li>
+            </ul>
+
+            <h3 style="color: var(--green); margin-top: 1.5rem;">🎯 NGT - Χρήση:</h3>
+            <ul>
+                <li>Όταν χρειάζεται <strong>κατάταξη προτεραιοτήτων</strong></li>
+                <li>Για <strong>ισότιμη συμμετοχή</strong> όλων</li>
+                <li>Όταν υπάρχουν <strong>κυρίαρχα μέλη</strong> που πρέπει να ελεγχθούν</li>
+                <li>Χρειάζονται <strong>μετρήσιμα αποτελέσματα</strong></li>
+                <li>Σε <strong>μέτριο χρόνο</strong> (1-2 ώρες)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>⚠️ Κοινές Παγίδες & Πώς να τις Αποφύγουμε</h2>
+            <ul>
+                <li><strong>Groupthink:</strong> Αποφύγετε με Delphi ή NGT</li>
+                <li><strong>Κυριαρχία συγκεκριμένων:</strong> Χρήση NGT με round-robin</li>
+                <li><strong>Φόβος κρίσης:</strong> Έμφαση στους κανόνες του brainstorming</li>
+                <li><strong>Χαμηλή συμμετοχή:</strong> Ενεργός συντονιστής, κίνητρα</li>
+                <li><strong>Analysis paralysis:</strong> Χρονικά όρια, σαφείς στόχοι</li>
+                <li><strong>Έλλειψη follow-up:</strong> Σαφές σχέδιο δράσης μετά</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε τις <strong>3 τεχνικές</strong>: Brainstorming, Delphi, NGT</li>
+                <li>Για κάθε τεχνική γνωρίζετε: <strong>Ορισμό, Βήματα, Πλεονεκτήματα/Μειονεκτήματα</strong></li>
+                <li><strong>Brainstorming:</strong> 4 χρυσοί κανόνες, Alex Osborn</li>
+                <li><strong>Delphi:</strong> Ανωνυμία, επαναλαμβανόμενοι γύροι, ειδικοί</li>
+                <li><strong>NGT:</strong> 5 βήματα, συνδυασμός ατομικής/ομαδικής, ψηφοφορία</li>
+                <li>Μάθετε <strong>πότε χρησιμοποιούμε</strong> κάθε τεχνική</li>
+                <li>Συχνές ερωτήσεις:
+                    <ul>
+                        <li><em>"Περιγράψτε τις 3 τεχνικές ομαδικής λήψης αποφάσεων"</em></li>
+                        <li><em>"Συγκρίνετε Brainstorming και NGT"</em></li>
+                        <li><em>"Πότε θα χρησιμοποιούσατε Delphi σε εκπαιδευτικό οργανισμό;"</em></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 3 Λήψη Αποφάσεων.pdf»</strong>, 
+                Διαφάνειες 35-50
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>

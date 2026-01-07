@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Τύποι Αποφάσεων | MST352</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-cream: #faf8f5;
+            --bg-paper: #f7f4ef;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --success: #38a169;
+            --info: #3182ce;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --teal: #0d9488;
+            --indigo: #4f46e5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        nav.top-nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav.top-nav a:hover {
+            opacity: 0.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--teal) 0%, #0f766e 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header .sos-badge {
+            display: inline-block;
+            background: var(--indigo);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .theorist {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theory-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .keyword {
+            background: var(--accent-light);
+            color: var(--secondary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--teal);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-paper);
+        }
+
+        .example-box {
+            background: #f0fdfa;
+            border-left: 4px solid var(--teal);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--teal);
+        }
+
+        .type-box {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border: 3px solid var(--teal);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .type-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+        }
+
+        .vs-divider {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--teal);
+            margin: 2rem 0;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .programmed-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .nonprogrammed-badge {
+            background: var(--danger);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        @media print {
+            nav.top-nav, footer, .back-link {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html">📚 MST352 - Μάνατζμεντ Εκπαίδευσης</a>
+        <a href="../index.html#decision">Λήψη Αποφάσεων</a>
+    </nav>
+
+    <header>
+        <div class="sos-badge">🎯 ΛΗΨΗ ΑΠΟΦΑΣΕΩΝ</div>
+        <h1>Τύποι Αποφάσεων</h1>
+        <p class="theorist">Προγραμματισμένες vs Μη Προγραμματισμένες Αποφάσεις</p>
+    </header>
+
+    <div class="container">
+
+        <img src="../assets/decision-types.png" alt="Types of Decisions" class="theory-image">
+
+        <section class="section">
+            <h2>📖 Έννοια</h2>
+            <p>
+                Οι <strong>αποφάσεις</strong> που λαμβάνονται σε έναν οργανισμό δεν είναι όλες ίδιες. 
+                Ανάλογα με τη <strong>φύση του προβλήματος</strong>, τη <strong>συχνότητα</strong> και την 
+                <strong>πολυπλοκότητα</strong>, διακρίνουμε δύο βασικές κατηγορίες αποφάσεων:
+            </p>
+            <ul style="margin-top: 1rem;">
+                <li><strong>Προγραμματισμένες Αποφάσεις (Programmed Decisions):</strong> Ρουτίνας, 
+                επαναλαμβανόμενες αποφάσεις με καθιερωμένες διαδικασίες</li>
+                <li><strong>Μη Προγραμματισμένες Αποφάσεις (Non-programmed Decisions):</strong> Μοναδικές, 
+                πολύπλοκες αποφάσεις που απαιτούν δημιουργικότητα και κρίση</li>
+            </ul>
+            <p style="margin-top: 1rem;">
+                Η κατηγοριοποίηση αυτή προτάθηκε από τον <strong>Herbert Simon</strong> (Νόμπελ Οικονομίας 1978) 
+                και βοηθά τους διοικητές να κατανοήσουν ποια προσέγγιση είναι καταλληλότερη για κάθε 
+                περίπτωση.
+            </p>
+
+            <div class="keywords">
+                <span class="keyword">Προγραμματισμένες</span>
+                <span class="keyword">Μη Προγραμματισμένες</span>
+                <span class="keyword">Ρουτίνα</span>
+                <span class="keyword">Δημιουργικότητα</span>
+                <span class="keyword">Herbert Simon</span>
+                <span class="keyword">Διαδικασίες</span>
+                <span class="keyword">Κρίση</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>✅ Προγραμματισμένες Αποφάσεις</h2>
+
+            <div class="type-box">
+                <h3><span class="programmed-badge">ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΕΣ</span> Ορισμός</h3>
+                <p style="margin-top: 0.5rem;">
+                    Οι προγραμματισμένες αποφάσεις είναι <strong>επαναλαμβανόμενες, ρουτίνας αποφάσεις</strong> 
+                    για τις οποίες υπάρχουν <strong>καθιερωμένες διαδικασίες, κανόνες ή πολιτικές</strong>. 
+                    Το πρόβλημα είναι γνωστό και έχει αντιμετωπιστεί στο παρελθόν.
+                </p>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Χαρακτηριστικά</h3>
+            <ul>
+                <li><strong>Επαναληψιμότητα:</strong> Το πρόβλημα εμφανίζεται συχνά</li>
+                <li><strong>Προβλεψιμότητα:</strong> Η κατάσταση είναι γνωστή και σταθερή</li>
+                <li><strong>Δομημένη διαδικασία:</strong> Υπάρχουν σαφείς κανόνες και βήματα</li>
+                <li><strong>Περιορισμένη κρίση:</strong> Δεν απαιτείται δημιουργική σκέψη</li>
+                <li><strong>Αυτοματοποίηση:</strong> Μπορεί να γίνει με διαδικασίες ή συστήματα</li>
+                <li><strong>Γρήγορη λήψη:</strong> Η απόφαση λαμβάνεται γρήγορα</li>
+            </ul>
+
+            <h3 style="margin-top: 2rem;">Μέθοδοι & Εργαλεία</h3>
+            <ul>
+                <li><strong>Πολιτικές (Policies):</strong> Γενικές οδηγίες για δράση</li>
+                <li><strong>Κανόνες (Rules):</strong> Συγκεκριμένες οδηγίες "αν-τότε"</li>
+                <li><strong>Διαδικασίες (Procedures):</strong> Βήμα-προς-βήμα οδηγίες</li>
+                <li><strong>Πρότυπα (Standards):</strong> Κριτήρια απόδοσης</li>
+                <li><strong>Αλγόριθμοι:</strong> Μαθηματικοί τύποι για απόφαση</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Παραδείγματα Προγραμματισμένων Αποφάσεων στην Εκπαίδευση:</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Εγγραφή μαθητών:</strong> Κριτήρια εγγραφής είναι προκαθορισμένα 
+                    (ηλικία, περιοχή, δικαιολογητικά)</li>
+
+                    <li><strong>Διαχείριση απουσιών:</strong> Αν μαθητής έχει >30 απουσίες, 
+                    ενεργοποιείται διαδικασία ειδοποίησης γονέων</li>
+
+                    <li><strong>Αναπλήρωση καθηγητή:</strong> Υπάρχει λίστα αναπληρωτών και 
+                    καθορισμένη διαδικασία κλήσης</li>
+
+                    <li><strong>Παραγγελία υλικών:</strong> Όταν τα αποθέματα πέσουν κάτω από X, 
+                    παραγγέλνονται νέα</li>
+
+                    <li><strong>Προγραμματισμός εξετάσεων:</strong> Οι εξετάσεις γίνονται κάθε 
+                    τρίμηνο σε καθορισμένες ημερομηνίες</li>
+
+                    <li><strong>Έγκριση εκδρομών:</strong> Υπάρχει checklist κριτηρίων 
+                    (ασφάλεια, κόστος, παιδαγωγική αξία)</li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="vs-divider">VS</div>
+
+        <section class="section">
+            <h2>⚡ Μη Προγραμματισμένες Αποφάσεις</h2>
+
+            <div class="type-box" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-color: var(--danger);">
+                <h3><span class="nonprogrammed-badge">ΜΗ ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΕΣ</span> Ορισμός</h3>
+                <p style="margin-top: 0.5rem;">
+                    Οι μη προγραμματισμένες αποφάσεις είναι <strong>μοναδικές, πολύπλοκες αποφάσεις</strong> 
+                    που <strong>δεν έχουν προηγούμενο</strong> και δεν υπάρχουν καθιερωμένες διαδικασίες 
+                    γι' αυτές. Απαιτούν <strong>δημιουργικότητα, κρίση και ανάλυση</strong>.
+                </p>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Χαρακτηριστικά</h3>
+            <ul>
+                <li><strong>Μοναδικότητα:</strong> Το πρόβλημα είναι νέο ή σπάνιο</li>
+                <li><strong>Αβεβαιότητα:</strong> Δεν είναι σαφείς οι επιπτώσεις</li>
+                <li><strong>Πολυπλοκότητα:</strong> Πολλοί παράγοντες και ενδιαφερόμενοι</li>
+                <li><strong>Υψηλός κίνδυνος:</strong> Μεγάλες επιπτώσεις σε περίπτωση λάθους</li>
+                <li><strong>Απαιτεί κρίση:</strong> Δημιουργική σκέψη και διαίσθηση</li>
+                <li><strong>Χρονοβόρα:</strong> Απαιτεί ανάλυση και συζήτηση</li>
+            </ul>
+
+            <h3 style="margin-top: 2rem;">Μέθοδοι & Εργαλεία</h3>
+            <ul>
+                <li><strong>Brainstorming:</strong> Δημιουργική παραγωγή λύσεων</li>
+                <li><strong>SWOT Analysis:</strong> Ανάλυση εσωτερικών/εξωτερικών παραγόντων</li>
+                <li><strong>Decision Matrix:</strong> Σταθμισμένη αξιολόγηση εναλλακτικών</li>
+                <li><strong>Scenario Planning:</strong> Ανάλυση διαφορετικών σεναρίων</li>
+                <li><strong>Delphi Method:</strong> Συλλογική σοφία ειδικών</li>
+                <li><strong>Cost-Benefit Analysis:</strong> Οικονομική αξιολόγηση</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Παραδείγματα Μη Προγραμματισμένων Αποφάσεων στην Εκπαίδευση:</strong>
+                <ol style="margin-top: 1rem;">
+                    <li><strong>Συγχώνευση σχολείων:</strong> Στρατηγική απόφαση με μεγάλες 
+                    κοινωνικές, οικονομικές και παιδαγωγικές επιπτώσεις</li>
+
+                    <li><strong>Εισαγωγή νέου εκπαιδευτικού μοντέλου:</strong> Π.χ. μετάβαση από 
+                    παραδοσιακή σε project-based learning</li>
+
+                    <li><strong>Διαχείριση κρίσης:</strong> Π.χ. σοβαρό περιστατικό βίας, φυσική 
+                    καταστροφή, πανδημία</li>
+
+                    <li><strong>Αλλαγή ωρολογίου προγράμματος:</strong> Από 45λεπτα σε 60λεπτα 
+                    μαθήματα - επηρεάζει όλη τη λειτουργία</li>
+
+                    <li><strong>Απόλυση/μετακίνηση διευθυντή:</strong> Ευαίσθητη απόφαση με 
+                    πολλές επιπτώσεις</li>
+
+                    <li><strong>Επένδυση σε τεχνολογία:</strong> Π.χ. αγορά tablets για όλους 
+                    τους μαθητές (κόστος, εκπαίδευση, υποδομή)</li>
+
+                    <li><strong>Αντιμετώπιση πτώσης εγγραφών:</strong> Στρατηγική αναδιάρθρωσης 
+                    για να προσελκυστούν μαθητές</li>
+
+                    <li><strong>Δημιουργία νέου τμήματος/ειδικότητας:</strong> Ανάλυση ζήτησης, 
+                    πόρων, ανταγωνισμού</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚖️ Συγκριτικός Πίνακας</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Κριτήριο</th>
+                        <th><span class="programmed-badge">Προγραμματισμένες</span></th>
+                        <th><span class="nonprogrammed-badge">Μη Προγραμματισμένες</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Συχνότητα</strong></td>
+                        <td>Συχνές, επαναλαμβανόμενες</td>
+                        <td>Σπάνιες, μοναδικές</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Πολυπλοκότητα</strong></td>
+                        <td>Απλές, δομημένες</td>
+                        <td>Πολύπλοκες, αδόμητες</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Προηγούμενο</strong></td>
+                        <td>Έχει αντιμετωπιστεί στο παρελθόν</td>
+                        <td>Νέο πρόβλημα</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Διαδικασία</strong></td>
+                        <td>Καθορισμένη (κανόνες, πολιτικές)</td>
+                        <td>Δεν υπάρχει - πρέπει να δημιουργηθεί</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Πληροφορίες</strong></td>
+                        <td>Εύκολα διαθέσιμες</td>
+                        <td>Δύσκολο να βρεθούν, ελλιπείς</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Αβεβαιότητα</strong></td>
+                        <td>Χαμηλή</td>
+                        <td>Υψηλή</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Κίνδυνος</strong></td>
+                        <td>Χαμηλός</td>
+                        <td>Υψηλός</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Χρόνος</strong></td>
+                        <td>Γρήγορη λήψη</td>
+                        <td>Χρονοβόρα διαδικασία</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ποιος αποφασίζει</strong></td>
+                        <td>Χαμηλότερα επίπεδα διοίκησης</td>
+                        <td>Ανώτερα επίπεδα διοίκησης</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Δεξιότητες</strong></td>
+                        <td>Εφαρμογή κανόνων</td>
+                        <td>Δημιουργικότητα, κρίση, ανάλυση</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Παράδειγμα</strong></td>
+                        <td>Εγγραφή μαθητή</td>
+                        <td>Συγχώνευση σχολείων</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Συνεχές Φάσμα (Continuum)</h2>
+            <p>
+                Στην πραγματικότητα, οι αποφάσεις δεν είναι πάντα αυστηρά προγραμματισμένες ή μη 
+                προγραμματισμένες. Υπάρχει ένα <strong>συνεχές φάσμα</strong>:
+            </p>
+
+            <div class="highlight-box">
+                <p style="text-align: center; font-weight: 600; font-size: 1.1rem;">
+                    <span class="programmed-badge">Πλήρως Προγραμματισμένες</span> 
+                    ←→ 
+                    <span style="background: var(--warning); color: white; padding: 0.3rem 0.8rem; border-radius: 15px;">Ημι-προγραμματισμένες</span>
+                    ←→ 
+                    <span class="nonprogrammed-badge">Μη Προγραμματισμένες</span>
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Παράδειγμα:</strong> Η "διαχείριση προβληματικής συμπεριφοράς μαθητή" 
+                    μπορεί να έχει κάποιες γενικές πολιτικές (προγραμματισμένο), αλλά κάθε περίπτωση 
+                    απαιτεί και ατομική κρίση (μη προγραμματισμένο).
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Επιλογή Κατάλληλης Προσέγγισης</h2>
+
+            <h3>Πότε να χρησιμοποιούμε Προγραμματισμένες Αποφάσεις:</h3>
+            <ul>
+                <li>Όταν το πρόβλημα είναι <strong>επαναλαμβανόμενο</strong></li>
+                <li>Όταν η <strong>ταχύτητα</strong> είναι σημαντική</li>
+                <li>Όταν η <strong>συνέπεια</strong> (consistency) είναι κρίσιμη</li>
+                <li>Όταν ο <strong>κίνδυνος είναι χαμηλός</strong></li>
+                <li>Για <strong>διοικητική αποτελεσματικότητα</strong></li>
+            </ul>
+
+            <h3 style="margin-top: 1.5rem;">Πότε να χρησιμοποιούμε Μη Προγραμματισμένες Αποφάσεις:</h3>
+            <ul>
+                <li>Όταν το πρόβλημα είναι <strong>νέο ή μοναδικό</strong></li>
+                <li>Όταν υπάρχει <strong>υψηλή αβεβαιότητα</strong></li>
+                <li>Όταν οι <strong>επιπτώσεις είναι σημαντικές</strong></li>
+                <li>Όταν απαιτείται <strong>στρατηγική σκέψη</strong></li>
+                <li>Όταν δεν υπάρχουν <strong>προηγούμενες λύσεις</strong></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>🧠 Σχέση με Μοντέλο του Simon</h2>
+            <p>
+                Ο Herbert Simon διέκρινε τρία επίπεδα λήψης αποφάσεων:
+            </p>
+            <ol>
+                <li><strong>Ορθολογική (Rational):</strong> Πλήρης πληροφόρηση, βέλτιστη λύση 
+                (θεωρητικό - σπάνιο στην πράξη)</li>
+                <li><strong>Περιορισμένης Ορθολογικότητας (Bounded Rationality):</strong> Περιορισμένη 
+                πληροφόρηση, "ικανοποιητική" λύση (πιο ρεαλιστικό)</li>
+                <li><strong>Διαισθητική (Intuitive):</strong> Βασισμένη σε εμπειρία και διαίσθηση</li>
+            </ol>
+            <p style="margin-top: 1rem;">
+                Οι <strong>προγραμματισμένες αποφάσεις</strong> τείνουν προς ορθολογική/περιορισμένης 
+                ορθολογικότητας προσέγγιση, ενώ οι <strong>μη προγραμματισμένες</strong> μπορεί να 
+                συνδυάζουν όλα τα επίπεδα.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Πλήρες Παράδειγμα από την Εκπαίδευση</h2>
+
+            <div class="example-box">
+                <strong>Σενάριο: Χαμηλά Αποτελέσματα στις Εξετάσεις</strong>
+
+                <h4 style="margin-top: 1rem; color: var(--success);">Προγραμματισμένο Κομμάτι:</h4>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Η <strong>ανακοίνωση αποτελεσμάτων</strong> γίνεται με καθορισμένη διαδικασία</li>
+                    <li>Οι <strong>αναθέσεις ενισχυτικών μαθημάτων</strong> ακολουθούν πρότυπο</li>
+                    <li>Η <strong>ενημέρωση γονέων</strong> γίνεται με συγκεκριμένο τρόπο</li>
+                </ul>
+
+                <h4 style="margin-top: 1rem; color: var(--danger);">Μη Προγραμματισμένο Κομμάτι:</h4>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Η <strong>ανάλυση των αιτιών</strong> της πτώσης (νέο φαινόμενο φέτος)</li>
+                    <li>Η <strong>απόφαση για αλλαγή διδακτικών μεθόδων</strong> (στρατηγική)</li>
+                    <li>Ο <strong>επανασχεδιασμός του προγράμματος σπουδών</strong> (πολύπλοκο)</li>
+                    <li>Η <strong>κατανομή πόρων</strong> για επιμόρφωση εκπαιδευτικών (χρειάζεται ανάλυση)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 Tips για την Εξέταση</h2>
+            <ul>
+                <li>Μάθετε τη <strong>διάκριση Προγραμματισμένες vs Μη Προγραμματισμένες</strong></li>
+                <li>Χρήσιμο να γνωρίζετε τον <strong>Herbert Simon</strong> και το μοντέλο του</li>
+                <li>Σημαντικό: Οι προγραμματισμένες = <strong>ρουτίνα, κανόνες</strong> / 
+                Μη προγραμματισμένες = <strong>μοναδικές, δημιουργικότητα</strong></li>
+                <li>Μάθετε <strong>3-4 παραδείγματα</strong> από κάθε κατηγορία</li>
+                <li>Προσοχή: Υπάρχει <strong>συνεχές φάσμα</strong>, όχι απόλυτη διάκριση</li>
+                <li>Συχνά ερωτήματα:
+                    <ul>
+                        <li><em>"Διακρίνετε προγραμματισμένες από μη προγραμματισμένες αποφάσεις"</em></li>
+                        <li><em>"Δώστε παραδείγματα από σχολείο"</em></li>
+                        <li><em>"Πώς αποφασίζουμε ποια προσέγγιση να χρησιμοποιήσουμε;"</em></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📄 Αναφορά στο Υλικό</h2>
+            <p>
+                Αναλυτική παρουσίαση στο αρχείο: <strong>«ΔΕ 3 Λήψη Αποφάσεων.pdf»</strong>, 
+                Διαφάνειες 8-14
+            </p>
+        </section>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="../index.html" class="back-link">
+                ← Επιστροφή στην Αρχική
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>📚 Μάνατζμεντ Εκπαίδευσης - MST352</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Διοίκησης Εκπαίδευσης
+        </p>
+    </footer>
+
+</body>
+</html>
